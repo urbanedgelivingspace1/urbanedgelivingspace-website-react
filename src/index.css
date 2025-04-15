@@ -1,13 +1,427 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* src/index.css - Global Styles for a Premium, Professional Real Estate Website */
+
+/* Import Premium Fonts and Animation Library */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+/* ==================================================
+   Root Variables: Color Palette, Typography & Layout
+================================================== */
+:root {
+  /* Color Palette */
+  --primary-color: #1A237E;       /* Deep Navy for trust & elegance */
+  --accent-color:  #daba52;        /* Luxurious, muted Gold accent */
+  --background-color: #FFFFFF;    /* Clean, pure white background */
+  --neutral-light: #f0f0f0;       /* Light neutral for subtle dividers */
+  --white: #ffffff;
+  --charcoal: #222222;           /* Rich dark tone for enhanced text contrast */
+
+  /* Button Colors - Premium Dark Golden */
+  --btn-bg-start: #B8860B;
+  --btn-bg-end: #CD950C;
+  --btn-hover-bg-start: #CD950C;
+  --btn-hover-bg-end: #B8860B;
+
+  /* Shadows & Effects */
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --gradient-divider: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  
+  /* Typography */
+  --heading-font: 'Playfair Display', serif;
+  --body-font: 'Montserrat', sans-serif;
+  
+  /* Layout & Spacing */
+  --max-width: 1200px;
+  --base-spacing: 20px;
+  --section-spacing: 60px;
+  
+  /* Animation */
+  --transition-speed: 0.3s;
+  --animation-delay: 0.2s;
+  --perspective: 1000px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* ==================================================
+   Global Resets & Base Styles
+================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+body {
+  font-family: var(--body-font);
+  background-color: var(--background-color);
+  color: var(--charcoal);
+  line-height: 1.8;              /* Increased for enhanced readability */
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utility: Subtle text shadow for busy backgrounds */
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==================================================
+   Typography & Links
+================================================== */
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+  transition: color var(--transition-speed) ease;
+}
+
+a:hover {
+  color: var(--white);
+}
+
+/* ==================================================
+   Utility Container for Layout
+================================================== */
+.container {
+  width: 90%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--base-spacing);
+}
+
+/* ==================================================
+   Header & Sticky Navigation
+================================================== */
+header {
+  position: sticky;
+  top: 0;
+  background-color: var(--white);
+  box-shadow: 0 2px 5px var(--shadow-medium);
+  padding: var(--base-spacing) 0;
+  z-index: 1000;
+}
+header .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--base-spacing);
+}
+header h1 {
+  font-family: var(--heading-font);
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+header h1 span {
+  color: var(--accent-color);
+}
+header nav {
+  display: flex;
+  gap: var(--base-spacing);
+}
+header nav a {
+  font-size: 1.2rem;
+  color: var(--charcoal);
+  padding: var(--base-spacing);
+  border-radius: 30px;
+  transition: background-color var(--transition-speed) ease;
+}
+header nav a:hover {
+  background-color: var(--accent-color);
+  color: var(--white);
+}
+
+/* ==================================================
+   Footer: Expanded & Professional
+================================================== */
+footer {
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: var(--section-spacing) 0;
+  text-align: center;
+}
+footer .footer-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: var(--base-spacing);
+  padding: 0 var(--base-spacing);
+}
+footer .footer-content div {
+  flex: 1 1 200px;
+}
+footer p {
+  margin: var(--base-spacing) 0 0;
+  font-size: 0.9rem;
+}
+footer a {
+  color: var(--white);
+  font-weight: bold;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==================================================
+   Button Base Styles with Ripple Effect
+================================================== */
+.btn {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 12px 24px;
+  border: none;
+  background: linear-gradient(45deg, var(--btn-bg-start), var(--btn-bg-end));
+  color: var(--white);
+  border-radius: 30px;
+  font-size: 1rem;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn:hover {
+  background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+.btn:active::after {
+  content: "";
+  position: absolute;
+  background: var(--white);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: inherit;
+  opacity: 0.3;
+  animation: ripple 0.6s ease-out;
+}
+@keyframes ripple {
+  from {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ==================================================
+   Animation Utilities
+================================================== */
+.transition {
+  transition: all var(--transition-speed) ease;
+}
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-slide-in-left {
+  animation: slideInLeft var(--transition-speed) ease-out forwards;
+}
+.animate-slide-in-right {
+  animation: slideInRight var(--transition-speed) ease-out forwards;
+}
+.animate-fade-in {
+  animation: fadeIn var(--transition-speed) ease-out forwards;
+}
+
+/* ==================================================
+   Form & Card Components
+================================================== */
+form {
+  background-color: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px var(--shadow-light);
+  padding: var(--base-spacing);
+  margin: var(--base-spacing) 0;
+}
+form input,
+form textarea {
+  width: 100%;
+  padding: var(--base-spacing);
+  border: 1px solid var(--neutral-light);
+  border-radius: 5px;
+  margin-bottom: var(--base-spacing);
+  font-size: 1rem;
+}
+form input:focus,
+form textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 5px var(--shadow-light);
+}
+form button {
+  background: linear-gradient(45deg, var(--btn-bg-start), var(--btn-bg-end));
+  color: var(--white);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+form button:hover {
+  background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ==================================================
+   Card Styles
+================================================== */
+.card {
+  background-color: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px var(--shadow-light);
+  padding: var(--base-spacing);
+  margin: var(--base-spacing) 0;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px var(--shadow-medium);
+}
+.card img {
+  border-radius: 15px 15px 0 0;
+  width: 100%;
+  height: auto;
+}
+.card h2 {
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: var(--base-spacing);
+}
+.card p {
+  font-size: 1rem;
+  color: var(--charcoal);
+  line-height: 1.8;
+}
+.card a {
+  display: block;
+  margin-top: var(--base-spacing);
+  text-align: center;
+}
+.card a.btn {
+  background: linear-gradient(45deg, var(--btn-bg-start), var(--btn-bg-end));
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 1rem;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card a.btn:hover {
+  background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ==================================================
+   Hero Section Enhancements for All Pages
+================================================== */
+/* Gradient overlay and subtle texture */
+.hero-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(245,245,245,0.3));
+  pointer-events: none;
+  z-index: 1;
+}
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.15;
+}
+
+/* ==================================================
+   Section Dividers
+================================================== */
+.section-divider {
+  height: 1px;
+  background-color: var(--neutral-light);
+  margin: var(--section-spacing) 0;
+}
+
+/* ==================================================
+   Responsive Design: Mobile & Tablet Adjustments
+================================================== */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 0 var(--base-spacing);
+  }
+  header h1 {
+    font-size: 2rem;
+  }
+  header nav a {
+    font-size: 1rem;
+  }
+  .card h2 {
+    font-size: 1.25rem;
+  }
+  .btn {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+}
+@media (max-width: 480px) {
+  body {
+    font-size: 0.9rem;
+  }
+  header h1 {
+    font-size: 1.5rem;
+  }
+  header nav a {
+    font-size: 0.9rem;
+  }
+  .card h2 {
+    font-size: 1.1rem;
+  }
+  .btn {
+    font-size: 0.8rem;
+    padding: 8px 16px;
+  }
+}
+
+/* ==================================================
+   End of Global Styles
+================================================== */

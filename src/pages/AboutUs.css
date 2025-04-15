@@ -1,0 +1,373 @@
+/* ===================================
+   CSS Variables & Global Styles
+==================================== */
+:root {
+  --primary-color: #002d62;       /* Modern deep navy for trust & authority */
+  --secondary-color: #d4af37;       /* Luxurious gold for accents */
+  --accent-color: #b08d57;          /* Warm, complementary accent */
+  --light-color: #fafafa;           /* Clean, soft background tone */
+  --dark-color: #333333;            /* Refined dark grey for text */
+  --white: #ffffff;
+  --transition-speed: 0.6s;
+  --card-radius: 12px;
+  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  --base-spacing: 20px;
+  --section-spacing: 80px;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --primary-font: 'Merriweather', serif;
+}
+
+/* Global resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Utility Container */
+.aboutus-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--base-spacing);
+}
+
+/* Smooth Fade-In Animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp var(--transition-speed) ease-out forwards;
+}
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+   Hero Section with Parallax & Fade-In
+==================================== */
+.aboutus-hero {
+  position: relative;
+  height: 80vh;
+  background: var(--background-gradient, url('../assets/property.jpg') center/cover no-repeat);
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.aboutus-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+.aboutus-hero-content {
+  position: relative;
+  z-index: 2;
+  color: var(--white);
+  padding: 0 var(--base-spacing);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+.aboutus-hero h1 {
+  font-size: 3.4rem;
+  margin-bottom: var(--base-spacing);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  font-family: var(--primary-font);
+}
+.aboutus-hero-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: var(--base-spacing);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* CTA Button Styling */
+.aboutus-cta-button {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 40px;
+  background: linear-gradient(145deg, var(--secondary-color), var(--accent-color));
+  color: var(--white);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  text-decoration: none;
+}
+.aboutus-cta-button:hover {
+  background: linear-gradient(145deg, var(--accent-color), var(--secondary-color));
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ===================================
+   About Story Section
+==================================== */
+.aboutus-story-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--base-spacing);
+  padding: var(--section-spacing) 0;
+}
+.aboutus-story-image,
+.aboutus-story-content {
+  flex: 1 1 400px;
+}
+.aboutus-story-image img {
+  width: 100%;
+  border-radius: var(--card-radius);
+  transition: transform 0.4s ease;
+}
+.aboutus-story-image img:hover {
+  transform: scale(1.02);
+}
+.aboutus-story-content h2 {
+  font-size: 2rem;
+  margin-bottom: var(--base-spacing);
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+.aboutus-story-content p {
+  font-size: 1.1rem;
+  margin-bottom: var(--base-spacing);
+}
+/* Video/Animation Placeholder */
+.aboutus-video-placeholder {
+  background: #000;
+  height: 300px;
+  border-radius: var(--card-radius);
+  margin-bottom: var(--base-spacing);
+}
+
+/* ===================================
+   Who We Are Section (Reverse Layout)
+==================================== */
+.aboutus-who-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--base-spacing);
+  padding: var(--section-spacing) 0;
+}
+.aboutus-section--reverse {
+  flex-direction: row-reverse;
+}
+.aboutus-who-content,
+.aboutus-who-image {
+  flex: 1 1 400px;
+}
+.aboutus-who-content h2 {
+  font-size: 2rem;
+  margin-bottom: var(--base-spacing);
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+.aboutus-who-content p {
+  font-size: 1.1rem;
+  margin-bottom: var(--base-spacing);
+}
+.aboutus-who-image img {
+  width: 100%;
+  border-radius: var(--card-radius);
+  transition: transform 0.4s ease;
+}
+.aboutus-who-image img:hover {
+  transform: scale(1.02);
+}
+
+/* ===================================
+   What We Offer Section with Service Cards
+==================================== */
+.aboutus-offer-section {
+  padding: var(--section-spacing) 0;
+  text-align: center;
+}
+.section-title {
+  font-size: 2rem;
+  margin-bottom: var(--base-spacing);
+  color: var(--primary-color);
+  position: relative;
+  font-family: var(--primary-font);
+}
+.section-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--secondary-color);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+.aboutus-offer-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--base-spacing);
+  justify-content: center;
+  margin-top: var(--base-spacing);
+}
+.aboutus-offer-card {
+  background-color: var(--white);
+  border-radius: var(--card-radius);
+  box-shadow: var(--box-shadow);
+  width: 320px;
+  overflow: hidden;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  margin: 0 auto;
+}
+.aboutus-offer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.aboutus-offer-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.aboutus-offer-card h3 {
+  font-size: 1.5rem;
+  margin: var(--base-spacing) 0;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+.aboutus-offer-card p {
+  font-size: 1rem;
+  padding: 0 var(--base-spacing) var(--base-spacing);
+}
+
+/* ===================================
+   Testimonials Section
+==================================== */
+.aboutus-testimonials {
+  padding: var(--section-spacing) 0;
+  background-color: var(--light-color);
+  text-align: center;
+}
+.aboutus-testimonial-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--base-spacing);
+  justify-content: center;
+  margin-top: var(--base-spacing);
+}
+
+/* ===================================
+   Contact Us Section with Form & Map
+==================================== */
+.aboutus-contact-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--base-spacing);
+  padding: var(--section-spacing) 0;
+}
+.aboutus-contact-form,
+.aboutus-contact-map {
+  flex: 1 1 400px;
+  background-color: var(--white);
+  border-radius: var(--card-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--base-spacing);
+}
+.aboutus-contact-form h2 {
+  font-size: 2rem;
+  margin-bottom: var(--base-spacing);
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+.aboutus-contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--base-spacing);
+}
+.aboutus-contact-form label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.aboutus-contact-form input,
+.aboutus-contact-form textarea {
+  padding: var(--base-spacing);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+.aboutus-contact-form input:focus,
+.aboutus-contact-form textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+.aboutus-contact-form button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(145deg, var(--secondary-color), var(--accent-color));
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+.aboutus-contact-form button:hover {
+  background: linear-gradient(145deg, var(--accent-color), var(--secondary-color));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+.aboutus-contact-map p {
+  font-size: 1rem;
+  color: var(--dark-color);
+  padding: var(--base-spacing);
+  text-align: center;
+}
+
+/* ===================================
+   Hover & Animation Utilities
+==================================== */
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+  transition: color var(--transition-speed) ease;
+}
+a:hover {
+  color: var(--accent-color);
+}
+
+/* ===================================
+   Responsive Design
+==================================== */
+@media (max-width: 768px) {
+  .aboutus-hero h1 {
+    font-size: 2.5rem;
+  }
+  .aboutus-hero-subtitle {
+    font-size: 1rem;
+  }
+  .aboutus-story-section,
+  .aboutus-who-section,
+  .aboutus-contact-section {
+    flex-direction: column;
+    text-align: center;
+  }
+  .aboutus-story-image,
+  .aboutus-story-content,
+  .aboutus-who-content,
+  .aboutus-who-image,
+  .aboutus-contact-form,
+  .aboutus-contact-map {
+    flex: 1 1 100%;
+  }
+}

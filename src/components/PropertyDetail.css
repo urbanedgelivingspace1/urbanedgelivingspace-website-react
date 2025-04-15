@@ -1,0 +1,238 @@
+/* Font and color system */
+.pd-page {
+    font-family: 'Poppins', sans-serif;
+    color: #1e1e1e;
+    background-color: #f4f6f9;
+    padding-bottom: 5rem;
+  }
+  
+  /* Hero Section */
+  .pd-hero {
+    position: relative;
+    width: 100%;
+    height: 55vh;
+    overflow: hidden;
+  }
+  
+  .pd-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65);
+  }
+  
+  .pd-hero-text {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    color: #fff;
+    z-index: 2;
+    text-shadow: 1px 1px 12px rgba(0, 0, 0, 0.7);
+  }
+  
+  .pd-hero-text h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    margin-bottom: 0.4rem;
+  }
+  
+  .pd-hero-text p {
+    font-size: 1.2rem;
+  }
+  
+  /* Content */
+  .pd-content {
+    max-width: 1200px;
+    margin: -4rem auto 0;
+    padding: 3rem;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.07);
+  }
+  
+  /* Description */
+  .pd-description {
+    margin-bottom: 2.5rem;
+  }
+  
+  .pd-description h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+  }
+  
+  .pd-description p {
+    font-size: 1.1rem;
+    color: #444;
+    line-height: 1.75;
+  }
+  
+  /* Quick Info */
+  .pd-quick-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: #f8f9fc;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.03);
+  }
+  
+  .pd-quick-info div {
+    flex: 1 1 200px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2e2e2e;
+  }
+  
+  /* Configurations */
+  .pd-config {
+    margin-bottom: 3rem;
+  }
+  
+  .pd-config h2 {
+    font-size: 1.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .pd-config table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .pd-config th,
+  .pd-config td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .pd-config th {
+    background-color: #f4f6f8;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Amenities */
+  .pd-amenities {
+    margin-bottom: 3rem;
+  }
+  
+  .pd-amenities h2 {
+    font-size: 1.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .pd-amenities ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: 1rem;
+    padding: 0;
+  }
+  
+  .pd-amenities li {
+    background: #eaf5ef;
+    color: #1b5e20;
+    padding: 0.8rem 1.3rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+    font-weight: 500;
+  }
+  
+  /* Brochure */
+  .pd-brochure {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .pd-download-brochure {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #007bff, #0041a8);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .pd-download-brochure:hover {
+    background: linear-gradient(135deg, #0041a8, #002d7a);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  /* Map */
+  .pd-map {
+    margin-top: 3rem;
+  }
+  
+  .pd-map h2 {
+    margin-bottom: 1rem;
+    font-size: 1.9rem;
+    font-weight: 600;
+  }
+  
+  .pd-map iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .pd-content {
+      padding: 1.5rem;
+    }
+  
+    .pd-hero-text h1 {
+      font-size: 2rem;
+    }
+  
+    .pd-quick-info {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+  .pd-amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .pd-amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: #f8f9fc;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .pd-icon {
+    font-size: 1.5rem;
+    color: #2e8b57; /* Elegant green */
+  }
+  
+  .pd-label {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+  }
+  

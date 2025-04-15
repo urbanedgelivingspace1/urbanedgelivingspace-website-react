@@ -1,0 +1,118 @@
+/* src/components/NavigationBar.css */
+:root {
+  --primary-color: #001f3f;
+  --secondary-color: #d4af37;
+  --text-color: #ffffff;
+  --bg-nav: #001f3f;
+  --transition-speed: 0.3s;
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 50px;
+  background-color: var(--bg-nav);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all var(--transition-speed) ease;
+}
+
+.navbar.scrolled {
+  background-color: rgba(0, 31, 63, 0.85);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-logo a {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  text-decoration: none;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-logo a span {
+  color: #ffffff;
+  font-weight: 300;
+}
+
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all var(--transition-speed);
+}
+
+.hamburger:hover {
+  color: var(--secondary-color);
+  transform: scale(1.1);
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li a {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+  transition: all var(--transition-speed);
+}
+
+.navbar-menu li a:hover,
+.navbar-menu li a.active {
+  color: var(--secondary-color);
+  transform: translateY(-2px);
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .navbar-menu {
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: var(--bg-nav);
+    width: 260px;
+    padding: 25px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+    transition: all var(--transition-speed);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .navbar-menu.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .navbar-menu li {
+    margin-bottom: 20px;
+  }
+}

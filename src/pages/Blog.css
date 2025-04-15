@@ -1,0 +1,182 @@
+/* Override Global Header Styles for Blog Page */
+.blog-header {
+  position: relative !important;
+  top: auto !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: var(--base-spacing, 20px) 0 !important;
+}
+
+/* ===================================
+   CSS Variables & Global Styles
+=================================== */
+:root {
+  --primary-color: #002d62;       /* Modern deep navy for trust & authority */
+  --secondary-color: #d4af37;       /* Luxurious gold for accents */
+  --accent-color: #b08d57;          /* Warm complementary accent for CTAs */
+  --light-color: #fafafa;           /* Soft background tone */
+  --dark-color: #444444;            /* Refined dark grey for text */
+  --white: #ffffff;
+  --transition-speed: 0.6s;
+  --card-radius: 12px;
+  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  --base-spacing: 20px;
+  --section-spacing: 80px;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --primary-font: 'Merriweather', serif;
+}
+
+/* Global resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Utility Classes & Transitions */
+.transition {
+  transition: all var(--transition-speed) ease;
+}
+
+/* ===================================
+   Blog Page Layout
+=================================== */
+.blog-page {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--section-spacing) 0;
+}
+
+/* Blog Header */
+.blog-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: var(--base-spacing);
+}
+.blog-header h1 {
+  font-size: 3rem;
+  margin-bottom: var(--base-spacing);
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+.blog-header p {
+  font-size: 1.2rem;
+  color: var(--dark-color);
+}
+
+/* ===================================
+   Blog Posts Container
+=================================== */
+.blog-posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--base-spacing);
+  margin-top: var(--base-spacing);
+}
+
+/* ===================================
+   Individual Blog Post Card
+=================================== */
+.blog-post {
+  background-color: var(--white);
+  border-radius: var(--card-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--base-spacing);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.blog-post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* Blog Post Title */
+.blog-post h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5em;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+
+/* Date Styling */
+.blog-post .date {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  margin-bottom: 1em;
+}
+
+/* Blog Post Excerpt */
+.blog-post .excerpt {
+  font-size: 1rem;
+  margin-bottom: 1em;
+  color: var(--dark-color);
+}
+
+/* ===================================
+   Button Styles
+=================================== */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: linear-gradient(145deg, var(--secondary-color), var(--accent-color));
+  color: var(--white);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  text-align: center;
+}
+
+.btn:hover {
+  background: linear-gradient(145deg, var(--accent-color), var(--secondary-color));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Primary Button Variation */
+.btn-primary {
+  margin-top: auto;
+}
+
+/* ===================================
+   Thumbnail Image Styling
+=================================== */
+.blog-thumbnail {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+/* ===================================
+   Responsive Design
+=================================== */
+@media (max-width: 768px) {
+  .blog-header h1 {
+    font-size: 2.5rem;
+  }
+  .blog-post h2 {
+    font-size: 1.5rem;
+  }
+  .blog-post p,
+  .blog-post .date {
+    font-size: 0.95rem;
+  }
+}

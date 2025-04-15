@@ -1,0 +1,76 @@
+/* src/components/HeroSection.css */
+.hero-section {
+  position: relative;
+  height: 90vh;
+  background:
+              url('C:\Users\halak\Desktop\urbanedge-website\urbanedge-website\src\assets\pexels-cmoon-12558848.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+  padding: 60px;
+  border-radius: 12px;
+  text-align: center;
+  color: var(--white);
+  transform: perspective(800px) translateZ(0);
+}
+
+.hero-overlay h1 {
+  font-size: 56px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-overlay p {
+  font-size: 22px;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+
+.hero-cta .btn {
+  padding: 14px 32px;
+  margin: 0 12px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: #b3922f;
+  transform: scale(1.06);
+}
+
+.btn-secondary {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btn-secondary:hover {
+  background-color: #1f2527;
+  transform: scale(1.06);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  color: var(--white);
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}

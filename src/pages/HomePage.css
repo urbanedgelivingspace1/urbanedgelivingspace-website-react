@@ -1,0 +1,652 @@
+/* ==================================================
+   Global Variables & Base Styles
+================================================== */
+:root {
+  /* Colors & Gradients */
+  --primary-color: #002d62;           /* Modern deep navy for authority */
+  --secondary-color: #d4af37;         /* Luxurious gold accent */
+  --accent-color: #a67c52;            /* Warm, muted complementary accent */
+  --background-gradient: linear-gradient(135deg, #002d62, #003e7e); /* Refined gradient */
+  --light-color: #f7f7f7;             /* Off-white for a clean background */
+  --dark-color: #2b2b2b;              /* Rich dark gray for softer contrast */
+  --white: #ffffff;
+
+  /* Animation & Transition */
+  --transition-speed: 1.5s;           /* Smooth, deliberate animations */
+  --card-radius: 12px;                /* Elegant rounded corners */
+  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+
+  /* Spacing */
+  --section-spacing: 40px;            /* Vertical spacing for sections */
+  --base-spacing: 20px;
+
+  /* Typography */
+  --primary-font: 'Merriweather', serif;  /* Classic serif for headings */
+  --body-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ==================================================
+   Reset & Box Sizing
+================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ==================================================
+   Base Typography & Background
+================================================== */
+body {
+  margin: 0;
+  font-family: var(--body-font);
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  line-height: 1.8;
+  overflow-x: hidden;
+  /* Subtle dotted radial pattern for a polished texture */
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.03) 1px, transparent 1px), var(--light-color);
+  background-size: 30px 30px;
+}
+
+/* Enhanced typography for headers */
+h1, h2, h3 {
+  letter-spacing: 1px;
+}
+
+/* Global Text Readability Enhancements */
+body,
+.homepage-welcome-content p,
+.homepage-guaranteed-rent-content p,
+.homepage-why-choose-list li {
+  color: var(--dark-color);
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+/* Subtle text shadow for extra pop on complex backgrounds */
+.homepage-hero p,
+.homepage-welcome-content p,
+.homepage-guaranteed-rent-content p {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* ==================================================
+   Background Overlays for Text Sections
+================================================== */
+.text-background-overlay {
+  background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent for glassmorphism */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  border-radius: var(--card-radius);
+}
+
+.dark-text-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: var(--card-radius);
+  color: var(--white);
+  text-shadow: none;
+}
+
+/* ==================================================
+   Layout Container
+================================================== */
+.homepage-container {
+  width: 95%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+/* ==================================================
+   Keyframe Animations
+================================================== */
+/* Slide in from left with overshoot */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-150px) translateY(60px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(20px) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* Slide in from right with overshoot */
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(150px) translateY(60px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* Enhanced rise animation for main header with subtle scale */
+@keyframes riseIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Fade and scale effect for scroll reveal */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ==================================================
+   Scroll Animations & Slide Effects
+================================================== */
+/* Base: elements start hidden */
+.scroll-animate {
+  opacity: 0;
+}
+
+/* When element is in view */
+.scroll-animate.in-view {
+  opacity: 1;
+}
+
+/* Slide animations when in view */
+.slide-left.in-view {
+  animation: slideInLeft 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.slide-right.in-view {
+  animation: slideInRight 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Fade-in with scale variation */
+.fade-in.in-view,
+.fade-in-scale.in-view {
+  animation: fadeInScale 1.6s ease forwards;
+}
+
+/* ==================================================
+   Hero Section with Enhanced Background & Parallax
+================================================== */
+.homepage-hero {
+  position: relative;
+  height: 70vh;
+  background: var(--background-gradient),
+    url('../assets/property.jpg') center/cover no-repeat;
+  background-blend-mode: multiply;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  overflow: hidden;
+  padding: 0 32px;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  /* Darker tinted overlay for prominence */
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 45, 98, 0.4));
+  opacity: 0.7;
+}
+
+/* Hero content on top: fade-in effect */
+.homepage-hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 900px;
+  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+}
+
+.homepage-hero-content.in-view {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Main header with rise animation */
+.homepage-hero h1 {
+  font-size: 3.4rem;
+  margin-bottom: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  animation: riseIn 1.5s ease-out forwards;
+}
+
+.homepage-hero p {
+  font-size: 1.25rem;
+  max-width: 640px;
+  margin: 0 auto 36px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* ==================================================
+   CTA Buttons
+================================================== */
+.homepage-cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.homepage-cta-button {
+  padding: 16px 36px;
+  border-radius: 50px;
+  background: linear-gradient(145deg, var(--secondary-color), var(--accent-color));
+  color: var(--white);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background var(--transition-speed), transform var(--transition-speed),
+              box-shadow var(--transition-speed);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.homepage-cta-button:hover {
+  background: linear-gradient(145deg, var(--accent-color), var(--secondary-color));
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); /* soft gold glow */
+}
+
+.homepage-cta-button.homepage-secondary {
+  background: transparent;
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.homepage-cta-button.homepage-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--accent-color);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* ==================================================
+   Section Headings with Elegant Underline
+================================================== */
+.homepage-section-title {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+  font-family: var(--primary-font);
+  position: relative;
+  text-align: center;
+}
+
+.homepage-section-title::after {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 4px;
+  background: var(--secondary-color);
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+/* ==================================================
+   Section Dividers
+================================================== */
+.section-divider {
+  height: 1px;
+  background-color: var(--primary-color);
+  margin: 30px 0;
+  opacity: 0.15;
+}
+
+/* ==================================================
+   Welcome / About Section
+================================================== */
+.homepage-welcome-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  padding: var(--section-spacing) 0;
+}
+
+.homepage-welcome-image,
+.homepage-welcome-content {
+  flex: 1 1 400px;
+}
+
+.homepage-welcome-image img {
+  width: 100%;
+  border-radius: var(--card-radius);
+  transition: transform 0.6s ease;
+}
+
+.homepage-welcome-image img:hover {
+  transform: scale(1.02);
+}
+
+.homepage-welcome-content h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+
+.homepage-welcome-content p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+/* ==================================================
+   Featured Properties Section
+================================================== */
+.homepage-featured-properties {
+  text-align: center;
+  padding: var(--section-spacing) 0 40px;
+}
+
+.homepage-property-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+/* ==================================================
+   Property Card
+================================================== */
+.card-hover {
+  width: 320px;
+  min-height: 440px;
+  background-color: var(--white);
+  border-radius: var(--card-radius);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+
+.card-hover img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
+}
+
+.card-hover .card-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.homepage-cta-container {
+  margin-top: 20px;
+}
+
+/* ==================================================
+   Why Choose Us Section
+================================================== */
+.homepage-why-choose {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  padding: var(--section-spacing) 0;
+}
+
+.homepage-why-choose-content,
+.homepage-why-choose-image {
+  flex: 1 1 400px;
+}
+
+.homepage-why-choose-content h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+
+.homepage-why-choose-list {
+  list-style: none;
+  padding: 0;
+}
+
+.homepage-why-choose-list li {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.homepage-why-choose-list li::before {
+  content: '✔';
+  position: absolute;
+  left: 0;
+  color: var(--secondary-color);
+}
+
+.homepage-why-choose-image img {
+  width: 100%;
+  border-radius: var(--card-radius);
+  transition: transform 0.6s ease;
+}
+
+.homepage-why-choose-image img:hover {
+  transform: scale(1.02);
+}
+
+/* ==================================================
+   Guaranteed Rent Section
+================================================== */
+.homepage-guaranteed-rent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  padding: var(--section-spacing) 0;
+}
+
+.homepage-guaranteed-rent-image,
+.homepage-guaranteed-rent-content {
+  flex: 1 1 400px;
+}
+
+.homepage-guaranteed-rent-image img {
+  width: 100%;
+  border-radius: var(--card-radius);
+  transition: transform 0.6s ease;
+}
+
+.homepage-guaranteed-rent-image img:hover {
+  transform: scale(1.02);
+}
+
+.homepage-guaranteed-rent-content h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+
+.homepage-guaranteed-rent-content p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+/* ==================================================
+   New Bordered Text Section
+   (Applies to text in "Why Choose Us" and "Guaranteed Rent")
+================================================== */
+.text-border {
+  border: 1px solid var(--primary-color);
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.text-border.connected-right {
+  border-right: none;
+  margin-right: -20px;
+  padding-right: 20px;
+}
+
+.text-border.connected-left {
+  border-left: none;
+  margin-left: -20px;
+  padding-left: 20px;
+}
+
+/* ==================================================
+   Testimonials Section
+================================================== */
+.homepage-testimonials {
+  text-align: center;
+  padding: var(--section-spacing) 0;
+}
+
+.homepage-testimonial-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+/* ==================================================
+   Latest News Section
+================================================== */
+.homepage-latest-news {
+  text-align: center;
+  padding: var(--section-spacing) 0;
+}
+
+.homepage-news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.homepage-news-item {
+  background-color: var(--white);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.homepage-news-item:hover {
+  transform: translateY(-5px) rotateX(1deg) rotateY(1deg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.homepage-news-item img {
+  width: 100%;
+  height: auto;
+  transition: opacity 0.4s ease;
+}
+
+.homepage-news-item img:hover {
+  opacity: 0.9;
+}
+
+.homepage-news-item h3 {
+  font-size: 1.5rem;
+  margin: 20px 15px 10px;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+
+.homepage-news-item p {
+  font-size: 1rem;
+  margin: 0 15px 20px;
+  color: var(--dark-color);
+}
+
+/* ==================================================
+   Responsive Design
+================================================== */
+@media (max-width: 768px) {
+  .homepage-hero h1 {
+    font-size: 2.5rem;
+  }
+  .homepage-hero p {
+    font-size: 1.1rem;
+  }
+  .homepage-welcome-section,
+  .homepage-why-choose,
+  .homepage-guaranteed-rent {
+    flex-direction: column;
+    text-align: center;
+  }
+  .homepage-welcome-image,
+  .homepage-welcome-content,
+  .homepage-why-choose-content,
+  .homepage-why-choose-image,
+  .homepage-guaranteed-rent-image,
+  .homepage-guaranteed-rent-content {
+    flex: 1 1 100%;
+  }
+  .homepage-hero p {
+    font-size: 1.3rem;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-hero h1 {
+    font-size: 2rem;
+  }
+  .homepage-hero p {
+    font-size: 1.1rem;
+  }
+  .homepage-welcome-section,
+  .homepage-why-choose,
+  .homepage-guaranteed-rent {
+    padding: var(--section-spacing) 0;
+  }
+  .homepage-welcome-image img,
+  .homepage-why-choose-image img,
+  .homepage-guaranteed-rent-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--card-radius);
+  }
+}

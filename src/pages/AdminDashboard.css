@@ -1,0 +1,74 @@
+/* src/pages/AdminDashboard.css */
+
+/* Admin Dashboard Container */
+.admin-dashboard {
+    padding: 2rem;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  /* Dashboard Header */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 1rem;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 2rem;
+    color: #333;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  /* Logout Button */
+  .logout-button {
+    padding: 0.5rem 1rem;
+    background: #e74c3c;
+    color: white;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .logout-button:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+  }
+  
+  /* Dashboard Navigation */
+  .dashboard-nav {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 1rem;
+  }
+  
+  /* Tab Button Styles */
+  .tab-button {
+    padding: 1rem 2rem;
+    background: #f4f4f4;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .tab-button.active {
+    background: #3498db;
+    color: white;
+  }
+  
+  /* Dashboard Main Content */
+  .dashboard-main {
+    margin-top: 2rem;
+  }
+  

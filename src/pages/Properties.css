@@ -1,0 +1,199 @@
+/* ================================================
+   CSS: src/pages/Properties.css
+=============================================== */
+:root {
+  --primary-color: #002d62;          /* Modern deep navy */
+  --secondary-color: #d4af37;         /* Luxurious gold accent */
+  --accent-color: #a78347;            /* Warm complementary accent */
+  --light-color: #f5f5f5;             /* Soft, clean background tone */
+  --dark-color: #444444;             /* Refined dark grey for text */
+  --white: #ffffff;
+  --transition-speed: 0.6s;
+  --card-radius: 12px;
+  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  --section-spacing: 80px;
+  --base-spacing: 20px;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --primary-font: 'Merriweather', serif;
+  --background-gradient: linear-gradient(135deg, #002d62, #003e7e);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--base-spacing);
+}
+
+.properties-page {
+  overflow-x: hidden;
+}
+
+/* ----------------------------------------------
+   Hero Section
+----------------------------------------------- */
+.properties-hero {
+  position: relative;
+  height: 55vh;
+  background: 
+    var(--background-gradient),
+    url('../assets/pexels-cmoon-12558848.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  padding: 0 var(--base-spacing);
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 31, 63, 0.7);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp var(--transition-speed) ease-out forwards;
+}
+
+.properties-hero h1 {
+  font-size: 3.25rem;
+  margin-bottom: var(--base-spacing);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  font-family: var(--primary-font);
+}
+
+.properties-hero p {
+  font-size: 1.25rem;
+  max-width: 720px;
+  margin: 0 auto;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ----------------------------------------------
+   Explore Section
+----------------------------------------------- */
+.explore-properties {
+  padding: var(--section-spacing) 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--base-spacing);
+}
+
+.section-header h2 {
+  font-size: 2.75rem;
+  color: var(--primary-color);
+  margin-bottom: var(--base-spacing);
+  font-family: var(--primary-font);
+}
+
+.section-header p {
+  font-size: 1.15rem;
+  color: #666666;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: var(--base-spacing) 0;
+}
+
+.search-bar {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* ----------------------------------------------
+   Property Grid
+----------------------------------------------- */
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--base-spacing);
+  margin-top: var(--base-spacing);
+}
+
+.property-grid .property-card {
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.property-grid .property-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--dark-color);
+  margin-top: 40px;
+}
+
+/* ----------------------------------------------
+   Fade In Animation
+----------------------------------------------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------------------------------
+   Responsive Adjustments
+----------------------------------------------- */
+@media (max-width: 768px) {
+  .properties-hero {
+    height: 40vh;
+  }
+
+  .properties-hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .properties-hero p {
+    font-size: 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .section-header p {
+    font-size: 1rem;
+  }
+}
