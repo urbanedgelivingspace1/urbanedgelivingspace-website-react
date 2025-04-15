@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/urbanedgelivingspace-website-react/static/css/main.11d7252d.css",
-    "main.js": "/urbanedgelivingspace-website-react/static/js/main.dedc900d.js",
+    "main.css": "/urbanedgelivingspace-website-react/static/css/main.86a1c286.css",
+    "main.js": "/urbanedgelivingspace-website-react/static/js/main.e380c38c.js",
     "static/js/952.9a2e65b5.chunk.js": "/urbanedgelivingspace-website-react/static/js/952.9a2e65b5.chunk.js",
     "static/media/property.jpg": "/urbanedgelivingspace-website-react/static/media/property.37e2fb7fa6af32a4ae1d.jpg",
     "static/media/pexels-cmoon-12558848.jpg": "/urbanedgelivingspace-website-react/static/media/pexels-cmoon-12558848.dd4f9dc2d4ec6eaa19c9.jpg",
     "static/media/review1.jpg": "/urbanedgelivingspace-website-react/static/media/review1.1ed855c1dadb18231811.jpg",
     "static/media/reviewfemale.jpg": "/urbanedgelivingspace-website-react/static/media/reviewfemale.11d0053cfaaced6a81f6.jpg",
     "index.html": "/urbanedgelivingspace-website-react/index.html",
-    "main.11d7252d.css.map": "/urbanedgelivingspace-website-react/static/css/main.11d7252d.css.map",
-    "main.dedc900d.js.map": "/urbanedgelivingspace-website-react/static/js/main.dedc900d.js.map",
+    "main.86a1c286.css.map": "/urbanedgelivingspace-website-react/static/css/main.86a1c286.css.map",
+    "main.e380c38c.js.map": "/urbanedgelivingspace-website-react/static/js/main.e380c38c.js.map",
     "952.9a2e65b5.chunk.js.map": "/urbanedgelivingspace-website-react/static/js/952.9a2e65b5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.11d7252d.css",
-    "static/js/main.dedc900d.js"
+    "static/css/main.86a1c286.css",
+    "static/js/main.e380c38c.js"
   ]
 }
