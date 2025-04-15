@@ -42,6 +42,15 @@ body {
   color: var(--secondary-color);
   text-decoration: none;
   text-shadow: 0.5px 0.5px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.navbar-logo a span {
+  color: var(--text-color);
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 .navbar-logo a span {

@@ -40,7 +40,7 @@ const NavigationBar = () => {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="navbar-logo">
         <Link to="/" onClick={() => setMenuOpen(false)}>
-          UrbanEdge <span>Living</span>
+          Urban Edge <span>Living Space</span>
         </Link>
       </div>
       <div className="hamburger" onClick={toggleMenu} aria-label="Toggle navigation">
