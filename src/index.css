@@ -57,8 +57,13 @@ body {
   color: var(--charcoal);
   line-height: 1.8;              /* Increased for enhanced readability */
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; Disabled for unsupported browsers */
   -webkit-font-smoothing: antialiased;
+}
+
+/* Global container for the entire app with smooth transitions */
+.app-container {
+  transition: all var(--transition-speed) ease;
 }
 
 /* Utility: Subtle text shadow for busy backgrounds */
@@ -66,7 +71,8 @@ body {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-img {
+img,
+video {
   max-width: 100%;
   height: auto;
   display: block;
@@ -99,6 +105,7 @@ a:hover {
    Header & Sticky Navigation
 ================================================== */
 header {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   background-color: var(--white);
@@ -106,6 +113,7 @@ header {
   padding: var(--base-spacing) 0;
   z-index: 1000;
 }
+
 header .header-inner {
   display: flex;
   align-items: center;
@@ -114,18 +122,22 @@ header .header-inner {
   margin: 0 auto;
   padding: 0 var(--base-spacing);
 }
+
 header h1 {
   font-family: var(--heading-font);
   font-size: 2.5rem;
   color: var(--primary-color);
 }
+
 header h1 span {
   color: var(--accent-color);
 }
+
 header nav {
   display: flex;
   gap: var(--base-spacing);
 }
+
 header nav a {
   font-size: 1.2rem;
   color: var(--charcoal);
@@ -133,6 +145,7 @@ header nav a {
   border-radius: 30px;
   transition: background-color var(--transition-speed) ease;
 }
+
 header nav a:hover {
   background-color: var(--accent-color);
   color: var(--white);
@@ -147,6 +160,7 @@ footer {
   padding: var(--section-spacing) 0;
   text-align: center;
 }
+
 footer .footer-content {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -156,17 +170,21 @@ footer .footer-content {
   gap: var(--base-spacing);
   padding: 0 var(--base-spacing);
 }
+
 footer .footer-content div {
   flex: 1 1 200px;
 }
+
 footer p {
   margin: var(--base-spacing) 0 0;
   font-size: 0.9rem;
 }
+
 footer a {
   color: var(--white);
   font-weight: bold;
 }
+
 footer a:hover {
   text-decoration: underline;
 }
@@ -188,11 +206,13 @@ footer a:hover {
   font-size: 1rem;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .btn:hover {
   background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
   transform: scale(1.05);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
+
 .btn:active::after {
   content: "";
   position: absolute;
@@ -205,6 +225,7 @@ footer a:hover {
   opacity: 0.3;
   animation: ripple 0.6s ease-out;
 }
+
 @keyframes ripple {
   from {
     transform: scale(1);
@@ -222,6 +243,7 @@ footer a:hover {
 .transition {
   transition: all var(--transition-speed) ease;
 }
+
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -232,6 +254,7 @@ footer a:hover {
     transform: translateX(0);
   }
 }
+
 @keyframes slideInRight {
   from {
     opacity: 0;
@@ -242,16 +265,20 @@ footer a:hover {
     transform: translateX(0);
   }
 }
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
 .animate-slide-in-left {
   animation: slideInLeft var(--transition-speed) ease-out forwards;
 }
+
 .animate-slide-in-right {
   animation: slideInRight var(--transition-speed) ease-out forwards;
 }
+
 .animate-fade-in {
   animation: fadeIn var(--transition-speed) ease-out forwards;
 }
@@ -266,6 +293,7 @@ form {
   padding: var(--base-spacing);
   margin: var(--base-spacing) 0;
 }
+
 form input,
 form textarea {
   width: 100%;
@@ -275,12 +303,14 @@ form textarea {
   margin-bottom: var(--base-spacing);
   font-size: 1rem;
 }
+
 form input:focus,
 form textarea:focus {
   border-color: var(--primary-color);
   outline: none;
   box-shadow: 0 0 5px var(--shadow-light);
 }
+
 form button {
   background: linear-gradient(45deg, var(--btn-bg-start), var(--btn-bg-end));
   color: var(--white);
@@ -291,6 +321,7 @@ form button {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 form button:hover {
   background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
   transform: translateY(-2px);
@@ -308,31 +339,37 @@ form button:hover {
   margin: var(--base-spacing) 0;
   transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
+
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px var(--shadow-medium);
 }
+
 .card img {
   border-radius: 15px 15px 0 0;
   width: 100%;
   height: auto;
 }
+
 .card h2 {
   font-family: var(--heading-font);
   font-size: 1.5rem;
   color: var(--primary-color);
   margin-bottom: var(--base-spacing);
 }
+
 .card p {
   font-size: 1rem;
   color: var(--charcoal);
   line-height: 1.8;
 }
+
 .card a {
   display: block;
   margin-top: var(--base-spacing);
   text-align: center;
 }
+
 .card a.btn {
   background: linear-gradient(45deg, var(--btn-bg-start), var(--btn-bg-end));
   color: var(--white);
@@ -341,6 +378,7 @@ form button:hover {
   font-size: 1rem;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .card a.btn:hover {
   background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
   transform: translateY(-2px);
@@ -350,7 +388,7 @@ form button:hover {
 /* ==================================================
    Hero Section Enhancements for All Pages
 ================================================== */
-/* Gradient overlay and subtle texture */
+/* Gradient overlay and subtle texture for a luxury feel */
 .hero-gradient-overlay {
   position: absolute;
   top: 0;
@@ -361,6 +399,7 @@ form button:hover {
   pointer-events: none;
   z-index: 1;
 }
+
 .background-overlay {
   position: absolute;
   top: 0;
@@ -403,6 +442,7 @@ form button:hover {
     padding: 10px 20px;
   }
 }
+
 @media (max-width: 480px) {
   body {
     font-size: 0.9rem;

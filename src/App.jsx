@@ -8,29 +8,36 @@ import AboutUs from './pages/AboutUs';
 import Properties from './pages/Properties';
 import ContactUs from './pages/ContactUs';
 import Blog from './pages/Blog';
-import AdminUpload from './pages/AdminUpload'; // Import the AdminUpload component
+import AdminUpload from './pages/AdminUpload'; // Admin Upload component
 import AdminDashboard from './pages/AdminDashboard';
-import AdminLogin from './pages/AdminLogin'; // Import the AdminLogin component
-import PropertyDetail from './components/PropertyDetail'; // Import the PropertyDetail component
-import './App.css'; // Import global styles
+import AdminLogin from './pages/AdminLogin'; // Admin Login component
+import PropertyDetail from './components/PropertyDetail'; // Property Detail component
+import './App.css'; // App-specific styles
 
-// Main application component with routing
+// Main application component with semantic layout for accessibility
 function App() {
   return (
     <Router>
+      {/* NavigationBar should internally use semantic <nav> tags */}
       <NavigationBar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/properties" element={<Properties />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/admin-secret-upload" element={<AdminUpload />} /> {/* Redirect to HomePage for any unknown routes */}
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/admin-login" element={<AdminLogin />} /> {/* Redirect to HomePage for any unknown routes */}
-        <Route path="/properties/:id" element={<PropertyDetail />} /> {/* Route for property details */}
-        <Route path="*" element={<HomePage />} /> {/* Redirect to HomePage for any unknown routes */}
-      </Routes>
+
+      {/* Main content wrapped in a semantic <main> tag with added transition effects */}
+      <main className="app-main transition">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/properties" element={<Properties />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/admin-secret-upload" element={<AdminUpload />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/properties/:id" element={<PropertyDetail />} />
+          <Route path="*" element={<HomePage />} />
+        </Routes>
+      </main>
+
+      {/* Footer ideally uses a semantic <footer> element internally */}
       <Footer />
     </Router>
   );

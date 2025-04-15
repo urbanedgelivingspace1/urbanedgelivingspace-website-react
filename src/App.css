@@ -1,38 +1,35 @@
+/* src/App.css - App-Specific Styles */
+
+/*
+  Note: Global resets, typography, and responsive utilities are already defined in your index.css.
+  The styles here apply additional tweaks and component-level adjustments for the App.
+*/
+
+/* Ensure the main content area has consistent padding and supports smooth transitions */
+.app-main {
+  padding: var(--base-spacing);
+}
+
+/* Legacy styling removed:
+   - .App-logo and associated keyframes have been removed as they are not used.
+   - .App-header styles (including min-height, flex layout, etc.) are omitted so that global styles take precedence.
+*/
+
+/* Retain .App class only if used by some components or for legacy reasons */
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Global transition effect for smooth interactions */
+.transition {
+  transition: all var(--transition-speed) ease-in-out;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Media query adjustments for App-level content */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 10px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* Additional component or App-specific styles can be added below if needed */

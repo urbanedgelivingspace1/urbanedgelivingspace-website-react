@@ -8,6 +8,9 @@ import './index.css'; // Global styles
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* Global container for smooth transitions and consistent layout */}
+    <div className="app-container">
+      <App />
+    </div>
   </React.StrictMode>
 );

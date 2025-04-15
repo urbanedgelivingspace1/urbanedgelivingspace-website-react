@@ -1,12 +1,18 @@
-// src/components/Testimonial.jsx
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient'; // Adjust the path as needed
-import './Testimonial.css'; // Make sure you have styles for testimonials
+import { supabase } from '../lib/supabaseClient';
+import './Testimonial.css';
 
 const Testimonial = () => {
   const [testimonials, setTestimonials] = useState([]);
 
-  // Fetch testimonials from Supabase
+  // Helper function to display stars (filled/empty stars can be customized)
+  const renderStars = (num) => {
+    const maxStars = 5;
+    const filledStars = '★'.repeat(num);
+    const emptyStars = '☆'.repeat(maxStars - num);
+    return filledStars + emptyStars;
+  };
+
   const fetchTestimonials = async () => {
     const { data, error } = await supabase
       .from('testimonials')
@@ -22,7 +28,7 @@ const Testimonial = () => {
 
   useEffect(() => {
     fetchTestimonials();
-  }, []); // Run once when component mounts
+  }, []);
 
   return (
     <div className="testimonial-container">
@@ -38,7 +44,9 @@ const Testimonial = () => {
                   className="testimonial-photo"
                 />
               )}
-              <div className="testimonial-rating">★★★★★</div>
+              <div className="testimonial-rating">
+                {renderStars(testimonial.stars || 0)}
+              </div>
               <blockquote className="testimonial-text">
                 "{testimonial.feedback}"
               </blockquote>

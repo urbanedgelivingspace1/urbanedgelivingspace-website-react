@@ -35,18 +35,18 @@ const Properties = () => {
   return (
     <div className="properties-page">
       {/* Hero Section */}
-      <section className="properties-hero" role="banner">
-        <div className="hero-overlay"></div>
-        <div className="hero-content fade-in">
+      <header className="properties-hero" role="banner">
+        <div className="hero-overlay" aria-hidden="true"></div>
+        <div className="hero-content fade-in" tabIndex="0">
           <h1>Discover Your Ideal Property</h1>
           <p>Explore premium listings curated for luxury, comfort, and convenience.</p>
         </div>
-      </section>
+      </header>
 
-      {/* Explore Section */}
-      <section className="explore-properties container">
+      {/* Main content wrapper */}
+      <main className="explore-properties container" aria-labelledby="explore-listings-heading">
         <div className="section-header">
-          <h2>Explore Our Latest Listings</h2>
+          <h2 id="explore-listings-heading">Explore Our Latest Listings</h2>
           <p>
             Browse by city, configuration, or lifestyle preferences. All listings are RERA approved and verified.
           </p>
@@ -85,7 +85,7 @@ const Properties = () => {
             <p>No properties match your search. Try a different keyword.</p>
           </div>
         )}
-      </section>
+      </main>
     </div>
   );
 };

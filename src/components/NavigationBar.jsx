@@ -7,6 +7,7 @@ import {
   FaBuilding,
   FaBlog,
   FaEnvelope,
+  FaUser,
   FaBars,
   FaTimes
 } from 'react-icons/fa';
@@ -20,46 +21,44 @@ const NavigationBar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.pageYOffset > 50);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navLinks = [
+    { to: '/', label: 'Home', icon: <FaHome /> },
+    { to: '/about-us', label: 'About Us', icon: <FaInfoCircle /> },
+    { to: '/properties', label: 'Properties', icon: <FaBuilding /> },
+    { to: '/blog', label: 'Blog', icon: <FaBlog /> },
+    { to: '/contact-us', label: 'Contact Us', icon: <FaEnvelope /> },
+    { to: '/admin-login', label: 'Login / Register', icon: <FaUser /> },
+  ];
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="navbar-logo">
-        <Link to="/">Real<span>Estate</span>Pro</Link>
+        <Link to="/" onClick={() => setMenuOpen(false)}>
+          UrbanEdge <span>Living</span>
+        </Link>
       </div>
-      <div className="hamburger" onClick={toggleMenu} aria-label="Toggle navigation menu">
+      <div className="hamburger" onClick={toggleMenu} aria-label="Toggle navigation">
         {menuOpen ? <FaTimes /> : <FaBars />}
       </div>
       <ul className={`navbar-menu ${menuOpen ? 'active' : ''}`}>
-        <li>
-          <NavLink exact to="/" onClick={() => setMenuOpen(false)} activeClassName="active">
-            <FaHome className="nav-icon" /> Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/about-us" onClick={() => setMenuOpen(false)} activeClassName="active">
-            <FaInfoCircle className="nav-icon" /> About Us
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/properties" onClick={() => setMenuOpen(false)} activeClassName="active">
-            <FaBuilding className="nav-icon" /> Properties
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/blog" onClick={() => setMenuOpen(false)} activeClassName="active">
-            <FaBlog className="nav-icon" /> Blog
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/contact-us" onClick={() => setMenuOpen(false)} activeClassName="active">
-            <FaEnvelope className="nav-icon" /> Contact Us
-          </NavLink>
-        </li>
+        {navLinks.map(({ to, label, icon }) => (
+          <li key={to}>
+            <NavLink
+              to={to}
+              className={({ isActive }) => isActive ? 'active' : ''}
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="nav-icon">{icon}</span>
+              <span className="nav-label">{label}</span>
+            </NavLink>
+          </li>
+        ))}
       </ul>
     </nav>
   );

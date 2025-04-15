@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
 const TestimonialsModule = () => {
+  // Extend the state to include a stars rating field.
   const [testimonials, setTestimonials] = useState([]);
-  const [newTestimonial, setNewTestimonial] = useState({ name: '', role: '', feedback: '' });
+  const [newTestimonial, setNewTestimonial] = useState({ name: '', role: '', feedback: '', stars: 5 });
   const [imageFile, setImageFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
-  const [editingData, setEditingData] = useState({});
+  const [editingData, setEditingData] = useState({ name: '', role: '', feedback: '', stars: 5 });
   const [editingImageFile, setEditingImageFile] = useState(null);
 
   useEffect(() => {
@@ -22,7 +23,8 @@ const TestimonialsModule = () => {
   };
 
   const handleAddChange = (e) => {
-    setNewTestimonial({ ...newTestimonial, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setNewTestimonial({ ...newTestimonial, [name]: value });
   };
 
   const handleImageChange = (e) => setImageFile(e.target.files[0]);
@@ -42,12 +44,13 @@ const TestimonialsModule = () => {
         image_url = data.publicUrl;
       }
 
+      // Insert with stars included
       const { error: insertError } = await supabase.from('testimonials').insert([
         { ...newTestimonial, image_url }
       ]);
       if (insertError) throw insertError;
 
-      setNewTestimonial({ name: '', role: '', feedback: '' });
+      setNewTestimonial({ name: '', role: '', feedback: '', stars: 5 });
       setImageFile(null);
       fetchTestimonials();
     } catch (err) {
@@ -57,11 +60,13 @@ const TestimonialsModule = () => {
 
   const startEdit = (t) => {
     setEditingId(t.id);
-    setEditingData({ name: t.name, role: t.role, feedback: t.feedback });
+    // Prepopulate the stars value when editing
+    setEditingData({ name: t.name, role: t.role, feedback: t.feedback, stars: t.stars || 5 });
   };
 
   const handleEditChange = (e) => {
-    setEditingData({ ...editingData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setEditingData({ ...editingData, [name]: value });
   };
 
   const handleEditSubmit = async (e, id) => {
@@ -103,9 +108,44 @@ const TestimonialsModule = () => {
       <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: '#2c3e50' }}>🌟 Testimonials</h2>
 
       <form onSubmit={handleUpload} style={formStyle}>
-        <input type="text" name="name" placeholder="Name" value={newTestimonial.name} onChange={handleAddChange} required style={inputStyle} />
-        <input type="text" name="role" placeholder="Role/Title" value={newTestimonial.role} onChange={handleAddChange} required style={inputStyle} />
-        <textarea name="feedback" placeholder="Feedback" value={newTestimonial.feedback} onChange={handleAddChange} required style={textareaStyle} />
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={newTestimonial.name}
+          onChange={handleAddChange}
+          required
+          style={inputStyle}
+        />
+        <input
+          type="text"
+          name="role"
+          placeholder="Role/Title"
+          value={newTestimonial.role}
+          onChange={handleAddChange}
+          required
+          style={inputStyle}
+        />
+        <textarea
+          name="feedback"
+          placeholder="Feedback"
+          value={newTestimonial.feedback}
+          onChange={handleAddChange}
+          required
+          style={textareaStyle}
+        />
+        {/* New Input for Stars */}
+        <input
+          type="number"
+          name="stars"
+          placeholder="Stars (1-5)"
+          value={newTestimonial.stars}
+          onChange={handleAddChange}
+          required
+          min="1"
+          max="5"
+          style={inputStyle}
+        />
         <input type="file" onChange={handleImageChange} />
         <button type="submit" style={buttonStyle}>Add Testimonial</button>
       </form>
@@ -115,9 +155,41 @@ const TestimonialsModule = () => {
           <div key={t.id} style={cardStyle}>
             {editingId === t.id ? (
               <form onSubmit={(e) => handleEditSubmit(e, t.id)} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <input type="text" name="name" value={editingData.name} onChange={handleEditChange} required style={inputStyle} />
-                <input type="text" name="role" value={editingData.role} onChange={handleEditChange} required style={inputStyle} />
-                <textarea name="feedback" value={editingData.feedback} onChange={handleEditChange} required style={textareaStyle} />
+                <input
+                  type="text"
+                  name="name"
+                  value={editingData.name}
+                  onChange={handleEditChange}
+                  required
+                  style={inputStyle}
+                />
+                <input
+                  type="text"
+                  name="role"
+                  value={editingData.role}
+                  onChange={handleEditChange}
+                  required
+                  style={inputStyle}
+                />
+                <textarea
+                  name="feedback"
+                  value={editingData.feedback}
+                  onChange={handleEditChange}
+                  required
+                  style={textareaStyle}
+                />
+                {/* Editing field for stars */}
+                <input
+                  type="number"
+                  name="stars"
+                  placeholder="Stars (1-5)"
+                  value={editingData.stars}
+                  onChange={handleEditChange}
+                  required
+                  min="1"
+                  max="5"
+                  style={inputStyle}
+                />
                 <input type="file" onChange={(e) => setEditingImageFile(e.target.files[0])} />
                 <div>
                   <button type="submit" style={buttonStyle}>Save</button>
@@ -134,6 +206,8 @@ const TestimonialsModule = () => {
                   </div>
                 </div>
                 <p style={{ marginTop: '0.75rem' }}>{t.feedback}</p>
+                {/* Display stars numerically in the admin view */}
+                <div style={{ fontSize: '1.2rem', margin: '0.5rem 0' }}>Rating: {'★'.repeat(t.stars || 0)}</div>
                 <div>
                   <button onClick={() => startEdit(t)} style={buttonStyle}>Edit</button>
                   <button onClick={() => deleteTestimonial(t.id)} style={cancelButtonStyle}>Delete</button>

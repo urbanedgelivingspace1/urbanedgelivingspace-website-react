@@ -1,4 +1,3 @@
-/* src/components/NavigationBar.css */
 :root {
   --primary-color: #001f3f;
   --secondary-color: #d4af37;
@@ -11,14 +10,18 @@
 
 body {
   font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 50px;
+  padding: 14px 36px;
   background-color: var(--bg-nav);
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -26,29 +29,29 @@ body {
 }
 
 .navbar.scrolled {
-  background-color: rgba(0, 31, 63, 0.85);
+  background-color: rgba(0, 31, 63, 0.92);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
 
 .navbar-logo a {
   font-family: var(--font-heading);
-  font-size: 2.2rem;
+  font-size: 1.9rem;
   font-weight: 600;
   color: var(--secondary-color);
   text-decoration: none;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  text-shadow: 0.5px 0.5px 3px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-logo a span {
-  color: #ffffff;
-  font-weight: 300;
+  color: var(--text-color);
+  font-weight: 400;
 }
 
 .hamburger {
   display: none;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   cursor: pointer;
   color: var(--text-color);
   transition: all var(--transition-speed);
@@ -56,33 +59,40 @@ body {
 
 .hamburger:hover {
   color: var(--secondary-color);
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .navbar-menu {
   list-style: none;
   display: flex;
-  gap: 40px;
+  align-items: center;
+  gap: 28px;
   margin: 0;
   padding: 0;
 }
 
 .navbar-menu li a {
-  color: var(--text-color);
-  font-size: 1.1rem;
-  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-bottom: 4px;
+  gap: 6px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
   transition: all var(--transition-speed);
 }
 
 .navbar-menu li a:hover,
 .navbar-menu li a.active {
   color: var(--secondary-color);
-  transform: translateY(-2px);
   border-bottom: 2px solid var(--secondary-color);
+  transform: translateY(-1.5px);
+}
+
+.nav-icon {
+  font-size: 0.95rem;
 }
 
 /* Mobile Responsive */
@@ -94,16 +104,17 @@ body {
   .navbar-menu {
     flex-direction: column;
     position: absolute;
-    top: 70px;
+    top: 60px;
     right: 0;
-    background: var(--bg-nav);
-    width: 260px;
-    padding: 25px;
+    width: 240px;
+    background-color: var(--bg-nav);
+    padding: 20px;
     opacity: 0;
     pointer-events: none;
     transform: translateY(-20px);
     transition: all var(--transition-speed);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 6px 0 0 6px;
   }
 
   .navbar-menu.active {
@@ -113,6 +124,10 @@ body {
   }
 
   .navbar-menu li {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+  }
+
+  .navbar-menu li:last-child {
+    margin-bottom: 0;
   }
 }

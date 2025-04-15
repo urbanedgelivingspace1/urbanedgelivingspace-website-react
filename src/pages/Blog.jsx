@@ -28,8 +28,9 @@ const Blog = () => {
         <h1>Our Blog</h1>
         <p>Explore insights, tips, and market trends in luxury real estate.</p>
       </header>
-
-      <section className="blog-posts">
+      
+      {/* Main content wrapped in semantic <main> */}
+      <main className="blog-posts">
         {loading ? (
           <p className="loading-message">Loading blog posts...</p>
         ) : posts.length === 0 ? (
@@ -42,7 +43,12 @@ const Blog = () => {
               aria-labelledby={`post-title-${post.id}`}
             >
               {post.image_url && (
-                <img src={post.image_url} alt={post.title} className="blog-thumbnail" />
+                <img 
+                  src={post.image_url} 
+                  alt={`Thumbnail for ${post.title}`} 
+                  className="blog-thumbnail" 
+                  loading="lazy" 
+                />
               )}
               <h2 id={`post-title-${post.id}`}>{post.title}</h2>
               <p className="date">
@@ -53,13 +59,13 @@ const Blog = () => {
                 })}
               </p>
               <p className="excerpt">{post.content.substring(0, 120)}...</p>
-              <Link to={`/blog/${post.id}`} className="btn btn-primary transition">
+              <Link to={`/blog/${post.id}`} className="btn btn-primary transition" role="button">
                 Read More
               </Link>
             </article>
           ))
         )}
-      </section>
+      </main>
     </div>
   );
 };
