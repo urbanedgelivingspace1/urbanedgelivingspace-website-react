@@ -1,33 +1,25 @@
 import React from 'react';
-import johnDoeImage from '../assets/review2.jpg';
-import janeSmithImage from '../assets/review2.jpg';
-import michaelBrownImage from '../assets/review1.jpg';
-import emilyJohnsonImage from '../assets/review2.jpg';
 
 const teamMembers = [
   {
-    name: 'John Doe',
+    name: 'Mantavya Patel',
     role: 'CEO & Founder',
-    image: johnDoeImage,
-    description: 'John leads our company with a vision to bring excellence and innovation to the real estate industry.',
+    description: 'Mantavya leads Urban Edge Living Space with a strategic vision, driving innovation and excellence in the real estate sector. His leadership inspires growth and ensures the company’s values are reflected in every project.',
   },
   {
-    name: 'Jane Smith',
-    role: 'Lead Designer',
-    image: janeSmithImage,
-    description: 'Jane is responsible for the stunning designs and user-friendly interfaces that define our brand.',
+    name: 'Riya Patel',
+    role: 'Co-Founder & Adviser',
+    description: 'Riya plays a pivotal role in shaping the company\'s creative direction. Her expertise in design and strategic insight ensures a seamless blend of functionality and aesthetic appeal in every initiative.',
   },
   {
-    name: 'Michael Brown',
+    name: 'Narendrasinh M. Vihol',
     role: 'Head of Marketing',
-    image: michaelBrownImage,
-    description: 'Michael brings over 15 years of experience to ensure our marketing strategies stay ahead of trends.',
+    description: 'With over 15 years of experience, Narendrasinh spearheads marketing strategies that keep Urban Edge Living Space ahead of industry trends. His innovative campaigns effectively connect the company with its audience.',
   },
   {
-    name: 'Emily Johnson',
-    role: 'CTO',
-    image: emilyJohnsonImage,
-    description: 'Emily oversees the technical direction of our website, ensuring cutting-edge solutions and stability.',
+    name: 'VPxGrowth',
+    role: 'Website Development & Maintenance',
+    description: 'VPxGrowth is responsible for the development and maintenance of Urban Edge Living Space\'s website. They ensure a robust digital foundation, crafting intuitive interfaces, implementing cutting-edge solutions, and maintaining a seamless and reliable online experience that supports the company\'s growth.',
   },
 ];
 
