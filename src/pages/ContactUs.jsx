@@ -130,9 +130,9 @@ const ContactUs = () => {
           {/* Contact Details */}
           <div className="contact-details">
             <h3>Contact Details</h3>
-            <p>+44 7903 766625</p>
-            <p>+44 7490 136565</p>
-            <p>urbanedgeliving@projection.me</p>
+            <p>+91 7487094556</p>
+            <p>+91 7984619362</p>
+            <p>urbanedgelivingspace@gmail.com</p>
           </div>
         </div>
       </section>
