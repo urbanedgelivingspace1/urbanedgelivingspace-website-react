@@ -1,54 +1,34 @@
-// src/pages/AdminLogin.jsx
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import bcrypt from 'bcryptjs';
-import { Link } from 'react-router-dom';
 
-const AdminLogin = () => {
-  const [formData, setFormData] = useState({ username: '', password: '' });
+const Register = () => {
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
   const [loading, setLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSuccessMsg('');
     setErrorMsg('');
 
+    const { name, phone, email } = formData;
+
     try {
-      const username = formData.username.trim().toLowerCase();
-
-      const { data, error } = await supabase
-        .from('admins')
-        .select('*')
-        .eq('username', username);
-
+      const { error } = await supabase.from('form_submissions').insert([{ name, phone, email }]);
       if (error) {
-        setErrorMsg('Something went wrong while fetching admin');
-        return;
+        throw new Error(error.message);
       }
-
-      if (!data || data.length === 0) {
-        setErrorMsg('Admin not found');
-        return;
-      }
-
-      const admin = data[0];
-      const passwordMatch = await bcrypt.compare(formData.password, admin.password_hash);
-
-      if (!passwordMatch) {
-        setErrorMsg('Incorrect password');
-        return;
-      }
-
-      localStorage.setItem('admin-auth', 'true');
-      window.location.href = '/admin-dashboard';
+      setSuccessMsg('Registered successfully!');
+      setFormData({ name: '', phone: '', email: '' });
     } catch (err) {
-      console.error('Login error:', err);
-      setErrorMsg('Unexpected error. Try again.');
+      console.error('Error during registration:', err.message);
+      setErrorMsg('Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -57,34 +37,41 @@ const AdminLogin = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={{ marginBottom: '1rem' }}>🔐 Admin Login</h2>
-        <form onSubmit={handleLogin}>
+        <h2>📝 Register</h2>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
             onChange={handleChange}
             style={styles.input}
             required
           />
           <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
+            type="tel"
+            name="phone"
+            placeholder="Contact Number"
+            value={formData.phone}
+            onChange={handleChange}
+            style={styles.input}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
             onChange={handleChange}
             style={styles.input}
             required
           />
           <button type="submit" style={styles.button} disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
+        {successMsg && <p style={styles.success}>{successMsg}</p>}
         {errorMsg && <p style={styles.error}>{errorMsg}</p>}
-        <p style={{ marginTop: '1rem' }}>
-          New here? <Link to="/admin-register">Register here</Link>
-        </p>
       </div>
     </div>
   );
@@ -118,12 +105,17 @@ const styles = {
   button: {
     width: '100%',
     padding: '0.75rem',
-    backgroundColor: '#007bff',
+    backgroundColor: '#28a745',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
     fontSize: '1rem',
     cursor: 'pointer',
+  },
+  success: {
+    marginTop: '1rem',
+    color: 'green',
+    fontWeight: '500',
   },
   error: {
     marginTop: '1rem',
@@ -132,4 +124,4 @@ const styles = {
   },
 };
 
-export default AdminLogin;
+export default Register;

@@ -12,6 +12,8 @@ import AdminUpload from './pages/AdminUpload'; // Admin Upload component
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin'; // Admin Login component
 import PropertyDetail from './components/PropertyDetail'; // Property Detail component
+import './index.css'; // Global styles
+import AdminRegister from './pages/AdminRegister';
 import './App.css'; // App-specific styles
 
 // Main application component with semantic layout for accessibility
@@ -33,6 +35,7 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/properties/:id" element={<PropertyDetail />} />
+          <Route path="/admin-register" element={<AdminRegister />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </main>
