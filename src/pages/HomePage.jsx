@@ -183,9 +183,9 @@ const HomePage = () => {
           />
         </div>
         <div className="homepage-welcome-content">
-          <h2>Welcome to RealEstatePro</h2>
+          <h2>Welcome to UrbanEdge Living Space</h2>
           <p className="text-background-overlay">
-            At RealEstatePro, we are committed to providing you with a curated selection of premium properties and unparalleled service. Our expert team is here to guide you every step of the way.
+            At UrbanEdge Living Space, we are committed to providing you with a curated selection of premium properties and unparalleled service. Our expert team is here to guide you every step of the way.
           </p>
           <a href="#/about-us" className="homepage-cta-button">
             Learn More About Us
