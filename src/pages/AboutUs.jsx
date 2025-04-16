@@ -40,7 +40,7 @@ const AboutUs = () => {
           <p className="aboutus-hero-subtitle">
             Experience luxury living and refined property solutions.
           </p>
-          <a href="/listings" className="aboutus-cta-button" role="button">
+          <a href="#/listings" className="aboutus-cta-button" role="button">
             Explore Listings
           </a>
         </div>
@@ -68,7 +68,7 @@ const AboutUs = () => {
               className="aboutus-video-placeholder" 
               aria-label="Introductory video placeholder"
             ></div>
-            <a href="/contact-us" className="aboutus-cta-button" role="button">
+            <a href="#/contact-us" className="aboutus-cta-button" role="button">
               Request Consultation
             </a>
           </div>
@@ -82,7 +82,7 @@ const AboutUs = () => {
               We are a team of property experts driven by a passion for excellence.
               Our core values—integrity, innovation, and luxury—guide every decision.
             </p>
-            <a href="/our-team" className="aboutus-cta-button aboutus-secondary-button" role="button">
+            <a href="#/our-team" className="aboutus-cta-button aboutus-secondary-button" role="button">
               Meet Our Team
             </a>
           </div>

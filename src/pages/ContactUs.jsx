@@ -28,15 +28,13 @@ const ContactUs = () => {
   
     const { data, error } = await supabase
       .from('form_submissions')
-      .insert([
-        {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message
-        }
-      ]);
+      .insert([{
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message
+      }]);
   
     if (error) {
       console.error('Form submission error:', error.message, error.details);

@@ -24,7 +24,8 @@ const PropertyModule = () => {
     google_map_location: '',
     explore_neighbourhood: '',
     about_builder_company: '',
-    about_location: ''
+    about_location: '',
+    image_url: ''
   };
 
   // State for adding new properties.
@@ -139,7 +140,7 @@ const PropertyModule = () => {
     }
   };
 
-  // Set the property for editing.
+  // Start edit - open modal with pre-filled data.
   const startEdit = (property) => {
     setEditingId(property.id);
     // Pre-fill editing data. Convert JSON arrays back to CSV if needed.
@@ -260,7 +261,7 @@ const PropertyModule = () => {
       </section>
 
       {/* ------------------------------------------------------------
-          Existing Properties Section (Editable)
+          Existing Properties Section (View Only)
       ------------------------------------------------------------- */}
       <section className="property-list">
         <h2>🏠 Existing Properties</h2>
@@ -269,81 +270,85 @@ const PropertyModule = () => {
         ) : (
           properties.map((property) => (
             <div key={property.id} className="property-card">
-              {editingId === property.id ? (
-                // Edit Form for the property.
-                <form onSubmit={handleEditSubmit}>
-                  {Object.entries(initialState).map(([key]) =>
-                    key === 'possession' ? (
-                      <div key={key} className="form-group">
-                        <label htmlFor={`edit-${key}`} style={{ textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>
-                          {key.replace(/_/g, ' ')}
-                        </label>
-                        <input
-                          type="date"
-                          id={`edit-${key}`}
-                          name={key}
-                          value={editingData.possession || ''}
-                          onChange={handleEditChange}
-                          required
-                        />
-                      </div>
-                    ) : (
-                      <div key={key} className="form-group">
-                        <input
-                          type="text"
-                          name={key}
-                          value={editingData[key] || ''}
-                          onChange={handleEditChange}
-                          placeholder={key.replace(/_/g, ' ').toUpperCase()}
-                          required={['name', 'location'].includes(key)}
-                        />
-                      </div>
-                    )
-                  )}
-                  <div className="form-group">
-                    <label style={{ textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>IMAGE</label>
-                    <input type="file" accept="image/*" onChange={handleEditImageChange} />
-                  </div>
-                  <div className="property-actions">
-                    <button type="submit" disabled={uploading} className="btn btn-save">
-                      {uploading ? 'Saving...' : 'Save'}
-                    </button>
-                    <button type="button" onClick={cancelEdit} className="btn btn-cancel">
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                // Read-only display with Edit and Delete options.
-                <>
-                  <h3>{property.name}</h3>
-                  <p>{property.location}</p>
-                  <p>
-                    <strong>BHK:</strong> {property.bhk}
-                  </p>
-                  <p>
-                    <strong>Carpet Area:</strong> {property.carpet_area}
-                  </p>
-                  <p>
-                    <strong>Possession:</strong> {property.possession}
-                  </p>
-                  {property.image_url && (
-                    <img src={property.image_url} alt={property.name} className="property-image" />
-                  )}
-                  <div className="property-actions">
-                    <button onClick={() => startEdit(property)} className="btn btn-edit">
-                      Edit
-                    </button>
-                    <button onClick={() => deleteProperty(property.id)} className="btn btn-delete">
-                      Delete
-                    </button>
-                  </div>
-                </>
+              <h3>{property.name}</h3>
+              <p>{property.location}</p>
+              <p>
+                <strong>BHK:</strong> {property.bhk}
+              </p>
+              <p>
+                <strong>Carpet Area:</strong> {property.carpet_area}
+              </p>
+              <p>
+                <strong>Possession:</strong> {property.possession}
+              </p>
+              {property.image_url && (
+                <img src={property.image_url} alt={property.name} className="property-image" />
               )}
+              <div className="property-actions">
+                <button onClick={() => startEdit(property)} className="btn btn-edit">
+                  Edit
+                </button>
+                <button onClick={() => deleteProperty(property.id)} className="btn btn-delete">
+                  Delete
+                </button>
+              </div>
             </div>
           ))
         )}
       </section>
+
+      {/* ------------------------------------------------------------
+          Edit Modal Overlay (Visible When Editing)
+      ------------------------------------------------------------- */}
+      {editingId !== null && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <h2>Edit Property</h2>
+            <form onSubmit={handleEditSubmit}>
+              {Object.entries(initialState).map(([key]) =>
+                key === 'possession' ? (
+                  <div key={key} className="form-group">
+                    <label htmlFor={`edit-${key}`} style={{ textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>
+                      {key.replace(/_/g, ' ')}
+                    </label>
+                    <input
+                      type="date"
+                      id={`edit-${key}`}
+                      name={key}
+                      value={editingData.possession || ''}
+                      onChange={handleEditChange}
+                      required
+                    />
+                  </div>
+                ) : (
+                  <div key={key} className="form-group">
+                    <input
+                      type="text"
+                      name={key}
+                      value={editingData[key] || ''}
+                      onChange={handleEditChange}
+                      placeholder={key.replace(/_/g, ' ').toUpperCase()}
+                      required={['name', 'location'].includes(key)}
+                    />
+                  </div>
+                )
+              )}
+              <div className="form-group">
+                <label style={{ textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>IMAGE</label>
+                <input type="file" accept="image/*" onChange={handleEditImageChange} />
+              </div>
+              <div className="modal-actions">
+                <button type="submit" disabled={uploading} className="btn btn-save">
+                  {uploading ? 'Saving...' : 'Save'}
+                </button>
+                <button type="button" onClick={cancelEdit} className="btn btn-cancel">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,13 +1,13 @@
-// src/pages/AdminLogin.jsx
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import bcrypt from 'bcryptjs';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const navigate = useNavigate(); // Using useNavigate hook for redirect
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +27,7 @@ const AdminLogin = () => {
         .eq('username', username);
 
       if (error) {
-        setErrorMsg('Something went wrong while fetching admin');
+        setErrorMsg('Error fetching admin data');
         return;
       }
 
@@ -44,11 +44,14 @@ const AdminLogin = () => {
         return;
       }
 
+      // Store auth state in localStorage (or sessionStorage if needed)
       localStorage.setItem('admin-auth', 'true');
-      window.location.href = '/admin-dashboard';
+
+      // Redirect to admin dashboard using navigate() from react-router-dom
+      navigate('/admin-dashboard');
     } catch (err) {
       console.error('Login error:', err);
-      setErrorMsg('Unexpected error. Try again.');
+      setErrorMsg('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -57,7 +60,7 @@ const AdminLogin = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={{ marginBottom: '1rem' }}>🔐 Admin Login</h2>
+        <h2>🔐 Login</h2>
         <form onSubmit={handleLogin}>
           <input
             type="text"
@@ -82,8 +85,8 @@ const AdminLogin = () => {
           </button>
         </form>
         {errorMsg && <p style={styles.error}>{errorMsg}</p>}
-        <p style={{ marginTop: '1rem' }}>
-          New here? <Link to="/admin-register">Register here</Link>
+        <p>
+          New here? <Link to="/admin-register">Register</Link>
         </p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -14,6 +14,7 @@ import AdminLogin from './pages/AdminLogin'; // Admin Login component
 import PropertyDetail from './components/PropertyDetail'; // Property Detail component
 import './index.css'; // Global styles
 import AdminRegister from './pages/AdminRegister';
+import OurTeam from './pages/OurTeam'; // Our Team component
 import './App.css'; // App-specific styles
 
 // Main application component with semantic layout for accessibility
@@ -36,6 +37,8 @@ function App() {
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/properties/:id" element={<PropertyDetail />} />
           <Route path="/admin-register" element={<AdminRegister />} />
+          <Route path="/our-team" element={<OurTeam />} />
+          {/* 404 Not Found route */}
           <Route path="*" element={<HomePage />} />
         </Routes>
       </main>

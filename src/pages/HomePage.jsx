@@ -1,3 +1,4 @@
+// src/pages/HomePage.jsx
 import React, { useRef, useEffect, useState, memo } from 'react';
 import PropertyCard from '../components/PropertyCard';
 import Testimonial from '../components/Testimonial';
@@ -90,8 +91,8 @@ const HeroSection = () => {
         <h1>Discover Your Next Home</h1>
         <p>Explore premium properties with unmatched quality and expert service.</p>
         <div className="homepage-cta-buttons">
-          <a href="/properties" className="homepage-cta-button">Explore Properties</a>
-          <a href="/contact" className="homepage-cta-button homepage-secondary">Contact Us</a>
+          <a href="#/properties" className="homepage-cta-button">Explore Properties</a>
+          <a href="#/contact-us" className="homepage-cta-button homepage-secondary">Contact Us</a>
         </div>
       </AnimateOnScroll>
     </section>
@@ -186,7 +187,7 @@ const HomePage = () => {
           <p className="text-background-overlay">
             At RealEstatePro, we are committed to providing you with a curated selection of premium properties and unparalleled service. Our expert team is here to guide you every step of the way.
           </p>
-          <a href="/about-us" className="homepage-cta-button">
+          <a href="#/about-us" className="homepage-cta-button">
             Learn More About Us
           </a>
         </div>
@@ -203,7 +204,7 @@ const HomePage = () => {
           ))}
         </div>
         <div className="homepage-cta-container">
-          <a href="/properties" className="homepage-cta-button homepage-secondary">
+          <a href="#/properties" className="homepage-cta-button homepage-secondary">
             View All Listings
           </a>
         </div>
@@ -252,7 +253,7 @@ const HomePage = () => {
               Enjoy peace of mind with our guaranteed rent program. We ensure timely rental payments and a hassle-free process, so you can invest with confidence.
             </p>
           </div>
-          <a href="/services" className="homepage-cta-button">
+          <a href="#/services" className="homepage-cta-button">
             Learn More
           </a>
         </AnimateOnScroll>
@@ -275,13 +276,8 @@ const HomePage = () => {
         <h2 className="homepage-section-title">Latest News</h2>
         <div className="homepage-news-grid">
           {NEWS_ITEMS.map((news) => (
-            <div key={news.id} className="homepage-news-item card-hover">
-              <img src={news.image} alt={news.title} loading="lazy" />
-              <h3>{news.title}</h3>
-              <p>{news.description}</p>
-              <a href="/blog" className="homepage-cta-button homepage-secondary">
-                Read More
-              </a>
+            <div key={news.id} className="card-hover">
+              <PropertyCard property={news} />
             </div>
           ))}
         </div>

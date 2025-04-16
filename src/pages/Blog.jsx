@@ -59,7 +59,8 @@ const Blog = () => {
                 })}
               </p>
               <p className="excerpt">{post.content.substring(0, 120)}...</p>
-              <Link to={`/blog/${post.id}`} className="btn btn-primary transition" role="button">
+              {/* Updated Link with Hash-based routing */}
+              <Link to={`#/blog/${post.id}`} className="btn btn-primary transition" role="button">
                 Read More
               </Link>
             </article>

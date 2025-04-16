@@ -1,225 +1,603 @@
 /* ------------------------------------------------------------
-   CSS Variables for Consistency
+   LUXE PROPERTIES - PROFESSIONAL REAL ESTATE CSS
+   Structured for optimal readability, performance and usability
+------------------------------------------------------------ */
+
+/* ------------------------------------------------------------
+   1. CSS Variables & Design System
 ------------------------------------------------------------ */
 :root {
-  --primary-color: #007bff;
-  --primary-color-hover: #0056b3;
-  --success-color: #28a745;
-  --success-color-hover: #218838;
-  --danger-color: #dc3545;
-  --danger-color-hover: #c82333;
-  --neutral-color: #6c757d;
-  --neutral-color-hover: #5a6268;
-  --light-bg: #f9f9f9;
-  --border-color: #ddd;
-  --input-border: #ccc;
-  --font-family-base: 'Arial', sans-serif;
-  --transition-speed: 0.3s;
+  /* Color Palette */
+  --color-dark: #1a1a1c;           /* Primary dark tone */
+  --color-dark-hover: #2a2a2c;     /* Lighter on hover */
+  --color-gold: #c4ae70;           /* Luxury gold accent */
+  --color-gold-light: #d6c085;     /* Gold accent hover */
+  --color-success: #28a745;        /* Success actions */
+  --color-success-hover: #218838;
+  --color-danger: #dc3545;         /* Warning/delete actions */
+  --color-danger-hover: #c82333;
+  --color-neutral: #6c757d;        /* Secondary actions */
+  --color-neutral-hover: #5a6268;
+  --color-off-white: #f9f8f6;      /* Background light */
+  --color-white: #ffffff;          /* Pure white */
+  --color-text: #333333;           /* Main text color */
+  --color-text-light: #666666;     /* Secondary text */
+  
+  /* Border Colors */
+  --border-light: #e5e3e0;         /* Subtle border */
+  --border-input: #d1d0cc;         /* Form input borders */
+  --border-radius-sm: 6px;         /* Small elements */
+  --border-radius-md: 8px;         /* Cards, buttons */
+  --border-radius-lg: 12px;        /* Modal, forms */
+  
+  /* Typography */
+  --font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-heading: 'Georgia', serif; /* Elegant headings */
+  --font-size-sm: 0.875rem;        /* 14px */
+  --font-size-base: 1rem;          /* 16px */
+  --font-size-md: 1.125rem;        /* 18px */
+  --font-size-lg: 1.375rem;        /* 22px */
+  --font-size-xl: 1.75rem;         /* 28px */
+  --line-height: 1.6;
+  
+  /* Spacing */
+  --space-xs: 0.5rem;              /* 8px */
+  --space-sm: 1rem;                /* 16px */
+  --space-md: 1.5rem;              /* 24px */
+  --space-lg: 2rem;                /* 32px */
+  --space-xl: 2.5rem;              /* 40px */
+  
+  /* Effects */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 6px 18px rgba(0, 0, 0, 0.12);
+  --transition: 0.25s ease;
 }
 
 /* ------------------------------------------------------------
-   Property Manager Module Styles
+   2. Reset & Base Styles
+------------------------------------------------------------ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-white);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  line-height: var(--line-height);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  margin-top: 0;
+  line-height: 1.2;
+  color: var(--color-dark);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--color-gold-light);
+}
+
+/* ------------------------------------------------------------
+   3. Layout & Container
 ------------------------------------------------------------ */
 .property-module {
-  padding: 2rem;
-  font-family: var(--font-family-base);
-  background-color: #fff;
-  color: #333;
+  padding: var(--space-lg) var(--space-md);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-heading {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-xs);
+  border-bottom: 2px solid var(--color-gold);
+  display: inline-block;
 }
 
 /* ------------------------------------------------------------
-   Form Styling
+   4. Forms - Property Creation/Editing
 ------------------------------------------------------------ */
 .property-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
-  padding: 1.5rem;
-  background-color: var(--light-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  gap: var(--space-md);
+  max-width: 700px;
+  margin: 0 auto var(--space-lg) auto;
+  padding: var(--space-lg);
+  background-color: var(--color-off-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: var(--space-md);
+  color: var(--color-dark);
+  font-size: var(--font-size-xl);
+}
+
+.form-group {
+  margin-bottom: var(--space-sm);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-weight: 500;
+  color: var(--color-dark);
 }
 
 .property-form input,
-.property-form textarea {
+.property-form textarea,
+.property-form select {
   width: 100%;
-  padding: 0.8rem;
-  border: 1px solid var(--input-border);
-  border-radius: 5px;
-  font-size: 1rem;
+  padding: var(--space-sm);
+  border: 1px solid var(--border-input);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  background-color: var(--color-white);
 }
 
-.property-form input[type="date"] {
-  padding: 0.6rem;
+.property-form input:focus,
+.property-form textarea:focus,
+.property-form select:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(196, 174, 112, 0.15);
 }
 
+.property-form input[type="date"],
 .property-form input[type="file"] {
-  padding: 0.8rem;
-  border: 1px solid var(--input-border);
-  border-radius: 5px;
-  font-size: 1rem;
+  padding: 0.75rem;
 }
 
-.property-form button {
-  background-color: var(--primary-color);
-  color: #fff;
-  padding: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color var(--transition-speed) ease;
+.property-form textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
-.property-form button:hover {
-  background-color: var(--primary-color-hover);
+.input-price::before {
+  content: "$";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-light);
 }
 
-.property-form p {
-  color: var(--success-color);
-  margin-top: 0.75rem;
-  text-align: center;
+.input-price input {
+  padding-left: 24px;
 }
 
-/* ------------------------------------------------------------
-   Property List Styling
------------------------------------------------------------- */
-.property-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
-  padding: 0 1rem;
+.form-helper {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  margin-top: var(--space-xs);
 }
 
-.property-list p {
-  grid-column: 1 / -1;
-  text-align: center;
-  font-size: 1.1rem;
-}
-
-.property-card {
-  background-color: var(--light-bg);
-  padding: 1.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
-
-.property-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-}
-
-.property-card h3 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1.3rem;
-  color: #222;
-}
-
-.property-card p {
-  margin: 0.3rem 0;
-  line-height: 1.4;
-  font-size: 0.95rem;
-}
-
-.property-image {
-  width: 100%;
-  border-radius: 8px;
-  margin-top: 1rem;
-  object-fit: cover;
+.form-submit {
+  margin-top: var(--space-sm);
 }
 
 /* ------------------------------------------------------------
-   Button Base Classes
+   5. Buttons & Interactive Elements
 ------------------------------------------------------------ */
 .btn {
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-size: 0.9rem;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: 500;
   border: none;
   cursor: pointer;
-  transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
-  text-transform: uppercase;
-  letter-spacing: 0.03rem;
+  transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 0.03em;
 }
 
 .btn:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(28, 28, 30, 0.3);
+}
+
+.btn-primary {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-dark-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-edit {
-  background-color: var(--primary-color);
-  color: #fff;
-  margin-right: 0.5rem;
+  background-color: var(--color-dark);
+  color: var(--color-white);
 }
 
 .btn-edit:hover {
-  background-color: var(--primary-color-hover);
+  background-color: var(--color-dark-hover);
+  transform: translateY(-2px);
 }
 
 .btn-delete {
-  background-color: var(--danger-color);
-  color: #fff;
+  background-color: var(--color-danger);
+  color: var(--color-white);
 }
 
 .btn-delete:hover {
-  background-color: var(--danger-color-hover);
+  background-color: var(--color-danger-hover);
+  transform: translateY(-2px);
 }
 
 .btn-save {
-  background-color: var(--success-color);
-  color: #fff;
-  margin-right: 0.5rem;
+  background-color: var(--color-success);
+  color: var(--color-white);
 }
 
 .btn-save:hover {
-  background-color: var(--success-color-hover);
+  background-color: var(--color-success-hover);
+  transform: translateY(-2px);
 }
 
 .btn-cancel {
-  background-color: var(--neutral-color);
-  color: #fff;
+  background-color: var(--color-neutral);
+  color: var(--color-white);
 }
 
 .btn-cancel:hover {
-  background-color: var(--neutral-color-hover);
+  background-color: var(--color-neutral-hover);
+  transform: translateY(-2px);
+}
+
+.btn-accent {
+  background-color: var(--color-gold);
+  color: var(--color-white);
+}
+
+.btn-accent:hover {
+  background-color: var(--color-gold-light);
+  transform: translateY(-2px);
 }
 
 /* ------------------------------------------------------------
-   Property Actions Styling
+   6. Property Listings & Cards
 ------------------------------------------------------------ */
-.property-actions {
-  margin-top: 1rem;
+.property-list-header {
   display: flex;
-  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.property-filters {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.property-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.property-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.property-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.property-image-container {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.property-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition);
+}
+
+.property-card:hover .property-image {
+  transform: scale(1.05);
+}
+
+.property-badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  background-color: var(--color-gold);
+  color: var(--color-white);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.property-content {
+  padding: var(--space-md);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.property-title {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-lg);
+  font-family: var(--font-heading);
+}
+
+.property-price {
+  color: var(--color-gold);
+  font-size: var(--font-size-md);
+  font-weight: bold;
+  margin-bottom: var(--space-sm);
+}
+
+.property-details {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+.property-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.property-address {
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+.property-description {
+  margin: 0;
+  margin-bottom: var(--space-sm);
+  line-height: var(--line-height);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  flex-grow: 1;
+}
+
+.property-actions {
+  margin-top: var(--space-sm);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+/* Empty state */
+.property-list-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--space-xl);
+  background-color: var(--color-off-white);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-light);
 }
 
 /* ------------------------------------------------------------
-   Responsive Design
+   7. Modal Styling
 ------------------------------------------------------------ */
-@media (max-width: 768px) {
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 26, 28, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--space-md);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.modal-card {
+  background: var(--color-white);
+  padding: var(--space-lg);
+  width: 100%;
+  max-width: 700px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-light);
+  transition: color var(--transition);
+}
+
+.modal-close:hover {
+  color: var(--color-dark);
+}
+
+.modal-body {
+  margin-bottom: var(--space-md);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-light);
+}
+
+/* ------------------------------------------------------------
+   8. Animations & Transitions
+------------------------------------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.slide-up {
+  animation: slideUp 0.4s ease forwards;
+}
+
+/* ------------------------------------------------------------
+   9. Utilities
+------------------------------------------------------------ */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-gold { color: var(--color-gold); }
+.text-success { color: var(--color-success); }
+.text-danger { color: var(--color-danger); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+
+/* ------------------------------------------------------------
+   10. Responsive Design
+------------------------------------------------------------ */
+@media (max-width: 1024px) {
   .property-list {
     grid-template-columns: repeat(2, 1fr);
   }
+}
 
-  .property-form {
-    width: 90%;
+@media (max-width: 768px) {
+  :root {
+    --space-lg: 1.5rem;
+  }
+  
+  .property-list {
+    gap: var(--space-md);
+  }
+  
+  .property-form,
+  .modal-card {
+    padding: var(--space-md);
+  }
+  
+  .property-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+  
+  .property-filters {
+    width: 100%;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .property-list {
     grid-template-columns: 1fr;
   }
-
-  .property-form {
+  
+  .property-actions {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  
+  .btn {
     width: 100%;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .property-image-container {
+    height: 180px;
+  }
+}
+
+/* ------------------------------------------------------------
+   11. Print Styles
+------------------------------------------------------------ */
+@media print {
+  .property-form,
+  .btn-edit,
+  .btn-delete,
+  .modal-overlay {
+    display: none !important;
+  }
+  
+  .property-list {
+    display: block;
+  }
+  
+  .property-card {
+    page-break-inside: avoid;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    box-shadow: none;
   }
 }

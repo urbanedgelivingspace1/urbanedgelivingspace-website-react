@@ -109,7 +109,49 @@
   margin-top: 4px;
 }
 
-/* Responsive adjustments for larger screens */
+/* Mobile-friendly adjustments */
+@media screen and (max-width: 768px) {
+  .testimonial-list {
+    flex-wrap: wrap; /* Allow testimonials to wrap on smaller screens */
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  /* Adjust the size of testimonial cards on mobile */
+  .testimonial {
+    max-width: 220px;
+    padding: calc(var(--base-spacing) * 0.6);
+    flex: 0 0 100%; /* Allow each card to take up full width on small screens */
+  }
+
+  /* Adjust photo size on mobile */
+  .testimonial-photo {
+    width: 70px;
+    height: 70px;
+    margin-bottom: calc(var(--base-spacing) * 0.8);
+  }
+
+  /* Adjust text size for readability */
+  .testimonial-text {
+    font-size: 0.95rem;
+    margin-bottom: calc(var(--base-spacing) * 0.6);
+  }
+
+  .testimonial-rating {
+    font-size: 1rem;
+    margin-bottom: calc(var(--base-spacing) * 0.5);
+  }
+
+  .testimonial-author {
+    font-size: 0.85rem;
+  }
+
+  .testimonial-role {
+    font-size: 0.7rem;
+  }
+}
+
+/* Larger screens */
 @media screen and (min-width: 768px) {
   .testimonial {
     max-width: 300px;
