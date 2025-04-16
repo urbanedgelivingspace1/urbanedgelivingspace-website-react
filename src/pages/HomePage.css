@@ -35,7 +35,7 @@
 }
 
 /* ==================================================
-   Base Typography & Background
+   Base Typography & Background (Mobile-First)
 ================================================== */
 body {
   margin: 0;
@@ -193,7 +193,7 @@ body,
 ================================================== */
 .homepage-hero {
   position: relative;
-  height: 70vh;
+  height: 60vh; /* Mobile-first: slightly shorter height */
   background: var(--background-gradient),
     url('../assets/property.jpg') center/cover no-repeat;
   background-blend-mode: multiply;
@@ -232,9 +232,9 @@ body,
   transform: translate(0, 0);
 }
 
-/* Main header with rise animation */
+/* Main header with rise animation (Base for Mobile) */
 .homepage-hero h1 {
-  font-size: 3.4rem;
+  font-size: 2rem;
   margin-bottom: 24px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -243,7 +243,7 @@ body,
 }
 
 .homepage-hero p {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   max-width: 640px;
   margin: 0 auto 36px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
@@ -332,15 +332,16 @@ body,
 ================================================== */
 .homepage-welcome-section {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Mobile-first: stack content */
   align-items: center;
   gap: 40px;
   padding: var(--section-spacing) 0;
+  text-align: center;
 }
 
 .homepage-welcome-image,
 .homepage-welcome-content {
-  flex: 1 1 400px;
+  flex: 1 1 100%;
 }
 
 .homepage-welcome-image img {
@@ -427,15 +428,16 @@ body,
 ================================================== */
 .homepage-why-choose {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Stack for mobile */
   align-items: center;
   gap: 40px;
   padding: var(--section-spacing) 0;
+  text-align: center;
 }
 
 .homepage-why-choose-content,
 .homepage-why-choose-image {
-  flex: 1 1 400px;
+  flex: 1 1 100%;
 }
 
 .homepage-why-choose-content h2 {
@@ -479,15 +481,16 @@ body,
 ================================================== */
 .homepage-guaranteed-rent {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Mobile: stack content */
   align-items: center;
   gap: 40px;
   padding: var(--section-spacing) 0;
+  text-align: center;
 }
 
 .homepage-guaranteed-rent-image,
 .homepage-guaranteed-rent-content {
-  flex: 1 1 400px;
+  flex: 1 1 100%;
 }
 
 .homepage-guaranteed-rent-image img {
@@ -601,52 +604,56 @@ body,
 }
 
 /* ==================================================
-   Responsive Design
+   Responsive Design - Enhancements for Larger Screens
 ================================================== */
-@media (max-width: 768px) {
+
+/* For screens 481px and above */
+@media (min-width: 481px) {
+  .homepage-hero {
+    height: 65vh;
+  }
   .homepage-hero h1 {
     font-size: 2.5rem;
   }
   .homepage-hero p {
     font-size: 1.1rem;
   }
-  .homepage-welcome-section,
-  .homepage-why-choose,
-  .homepage-guaranteed-rent {
-    flex-direction: column;
-    text-align: center;
-  }
-  .homepage-welcome-image,
-  .homepage-welcome-content,
-  .homepage-why-choose-content,
-  .homepage-why-choose-image,
-  .homepage-guaranteed-rent-image,
-  .homepage-guaranteed-rent-content {
-    flex: 1 1 100%;
-  }
-  .homepage-hero p {
-    font-size: 1.3rem;
-    line-height: 1.8;
-  }
 }
 
-@media (max-width: 480px) {
+/* For screens 769px and above */
+@media (min-width: 769px) {
+  .homepage-hero {
+    height: 70vh;
+  }
   .homepage-hero h1 {
-    font-size: 2rem;
+    font-size: 3.4rem;
   }
-  .homepage-hero p {
-    font-size: 1.1rem;
+  
+  /* Convert section layouts from stacked to side-by-side */
+  .homepage-welcome-section {
+    flex-direction: row;
+    text-align: left;
   }
-  .homepage-welcome-section,
-  .homepage-why-choose,
+  .homepage-welcome-image,
+  .homepage-welcome-content {
+    flex: 1 1 400px;
+  }
+  
+  .homepage-why-choose {
+    flex-direction: row;
+    text-align: left;
+  }
+  .homepage-why-choose-content,
+  .homepage-why-choose-image {
+    flex: 1 1 400px;
+  }
+  
   .homepage-guaranteed-rent {
-    padding: var(--section-spacing) 0;
+    flex-direction: row;
+    text-align: left;
   }
-  .homepage-welcome-image img,
-  .homepage-why-choose-image img,
-  .homepage-guaranteed-rent-image img {
-    width: 100%;
-    height: auto;
-    border-radius: var(--card-radius);
+  .homepage-guaranteed-rent-image,
+  .homepage-guaranteed-rent-content {
+    flex: 1 1 400px;
   }
 }

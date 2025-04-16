@@ -5,27 +5,23 @@
   The styles here apply additional tweaks and component-level adjustments for the App.
 */
 
-/* Ensure the main content area has consistent padding and supports smooth transitions */
+/* App Main Container: Consistent Padding & Smooth Transitions */
 .app-main {
   padding: var(--base-spacing);
+  transition: all var(--transition-speed) ease-in-out;
 }
 
-/* Legacy styling removed:
-   - .App-logo and associated keyframes have been removed as they are not used.
-   - .App-header styles (including min-height, flex layout, etc.) are omitted so that global styles take precedence.
-*/
-
-/* Retain .App class only if used by some components or for legacy reasons */
+/* App Container for Legacy or Component-specific Use */
 .App {
   text-align: center;
 }
 
-/* Global transition effect for smooth interactions */
+/* Utility Class for Smooth Interactions */
 .transition {
   transition: all var(--transition-speed) ease-in-out;
 }
 
-/* Media query adjustments for App-level content */
+/* Responsive Adjustments: Refining Padding on Smaller Screens */
 @media (max-width: 768px) {
   .app-main {
     padding: 10px;
