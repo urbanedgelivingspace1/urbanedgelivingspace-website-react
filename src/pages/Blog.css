@@ -5,6 +5,8 @@
   background-color: transparent !important;
   box-shadow: none !important;
   padding: var(--base-spacing, 20px) 0 !important;
+  text-align: center;
+  margin-bottom: var(--base-spacing);
 }
 
 /* ===================================
@@ -40,6 +42,7 @@ body {
   color: var(--dark-color);
   line-height: 1.6;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Utility Classes & Transitions */
@@ -58,20 +61,21 @@ body {
 }
 
 /* Blog Header */
-.blog-header {
-  width: 100%;
-  text-align: center;
-  margin-bottom: var(--base-spacing);
-}
 .blog-header h1 {
   font-size: 3rem;
   margin-bottom: var(--base-spacing);
   color: var(--primary-color);
   font-family: var(--primary-font);
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  transition: color var(--transition-speed);
 }
+
 .blog-header p {
   font-size: 1.2rem;
   color: var(--dark-color);
+  margin-bottom: var(--base-spacing);
+  font-weight: 300;
 }
 
 /* ===================================
@@ -82,6 +86,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--base-spacing);
   margin-top: var(--base-spacing);
+  transition: grid-template-columns 0.5s ease-in-out;
 }
 
 /* ===================================
@@ -96,34 +101,37 @@ body {
   flex-direction: column;
   justify-content: space-between;
   transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  overflow: hidden;
 }
 
 .blog-post:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   cursor: pointer;
 }
 
-/* Blog Post Title */
 .blog-post h2 {
   font-size: 1.75rem;
   margin-bottom: 0.5em;
   color: var(--primary-color);
   font-family: var(--primary-font);
+  text-transform: capitalize;
+  letter-spacing: 1px;
 }
 
-/* Date Styling */
 .blog-post .date {
   font-size: 0.9rem;
   color: var(--secondary-color);
   margin-bottom: 1em;
+  font-weight: 400;
 }
 
-/* Blog Post Excerpt */
 .blog-post .excerpt {
   font-size: 1rem;
   margin-bottom: 1em;
   color: var(--dark-color);
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 /* ===================================
@@ -131,7 +139,7 @@ body {
 ==================================== */
 .btn {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 30px;
   background: linear-gradient(145deg, var(--secondary-color), var(--accent-color));
   color: var(--white);
@@ -141,6 +149,7 @@ body {
   text-decoration: none;
   transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .btn:hover {
@@ -149,7 +158,6 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* Primary Button Variation */
 .btn-primary {
   margin-top: auto;
 }
@@ -163,6 +171,11 @@ body {
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 1rem;
+  transition: transform var(--transition-speed);
+}
+
+.blog-thumbnail:hover {
+  transform: scale(1.05);
 }
 
 /* ===================================
@@ -178,5 +191,9 @@ body {
   .blog-post p,
   .blog-post .date {
     font-size: 0.95rem;
+  }
+
+  .blog-posts {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
 }

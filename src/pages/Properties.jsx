@@ -1,4 +1,3 @@
-// src/pages/Properties.jsx
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import PropertyCard from '../components/PropertyCard';
@@ -8,6 +7,7 @@ import propertyImage from '../assets/property.jpg';
 const Properties = () => {
   const [properties, setProperties] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filteredProperties, setFilteredProperties] = useState([]);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -20,17 +20,34 @@ const Properties = () => {
         console.error('Error fetching properties:', error);
       } else {
         setProperties(data);
+        setFilteredProperties(data); // Initialize filtered properties
       }
     };
 
     fetchProperties();
   }, []);
 
-  const filteredProperties = properties.filter((property) =>
-    property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    property.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    property.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    const filterProperties = () => {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+      const filtered = properties.filter((property) => {
+        // Check if each field exists and matches the search term
+        const nameMatch = property.name?.toLowerCase().includes(lowerCaseSearchTerm);
+        const descriptionMatch = property.description?.toLowerCase().includes(lowerCaseSearchTerm);
+        const locationMatch = property.location?.toLowerCase().includes(lowerCaseSearchTerm);
+        const propertyTypeMatch = property.property_type?.toLowerCase().includes(lowerCaseSearchTerm);
+        const priceRangeMatch = property.price_range?.toLowerCase().includes(lowerCaseSearchTerm);
+
+        // Return true if any of the fields match
+        return nameMatch || descriptionMatch || locationMatch || propertyTypeMatch || priceRangeMatch;
+      });
+
+      setFilteredProperties(filtered);
+    };
+
+    filterProperties();
+  }, [searchTerm, properties]);
 
   return (
     <div className="properties-page">
@@ -55,7 +72,7 @@ const Properties = () => {
         <div className="search-wrapper">
           <input
             type="text"
-            placeholder="🔍 Search by name, location, or description..."
+            placeholder="🔍 Search by name, location, description, type, or price range..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-bar"

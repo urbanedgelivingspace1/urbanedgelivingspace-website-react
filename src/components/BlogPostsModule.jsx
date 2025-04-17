@@ -1,4 +1,3 @@
-// src/components/BlogPostsModule.jsx
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
@@ -7,15 +6,22 @@ const BlogPostsModule = () => {
   const [newPost, setNewPost] = useState({ title: '', content: '' });
   const [imageFile, setImageFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
-  const [editingPost, setEditingPost] = useState({});
+  const [editingPost, setEditingPost] = useState({ title: '', content: '' });
   const [editingImageFile, setEditingImageFile] = useState(null);
 
   const fetchPosts = async () => {
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (!error) setPosts(data);
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      setPosts(data);
+    } catch (error) {
+      console.error('Error fetching posts:', error.message);
+      alert('Failed to load posts. Please try again later.');
+    }
   };
 
   useEffect(() => {
@@ -63,7 +69,7 @@ const BlogPostsModule = () => {
 
       setNewPost({ title: '', content: '' });
       setImageFile(null);
-      fetchPosts();
+      fetchPosts(); // Re-fetch posts after adding a new one
     } catch (err) {
       alert('Failed to add blog post: ' + err.message);
     }
@@ -79,8 +85,12 @@ const BlogPostsModule = () => {
     const confirm = window.confirm('Are you sure you want to delete this post?');
     if (!confirm) return;
 
-    await supabase.from('blog_posts').delete().eq('id', id);
-    fetchPosts();
+    try {
+      await supabase.from('blog_posts').delete().eq('id', id);
+      fetchPosts(); // Re-fetch posts after deletion
+    } catch (err) {
+      alert('Failed to delete blog post: ' + err.message);
+    }
   };
 
   const startEdit = (post) => {
@@ -113,18 +123,24 @@ const BlogPostsModule = () => {
         const { error: uploadError } = await supabase.storage
           .from('blog-images')
           .upload(path, editingImageFile);
-        if (!uploadError) {
-          const { data: urlData } = supabase.storage
-            .from('blog-images')
-            .getPublicUrl(path);
-          updatedPost.image_url = urlData.publicUrl;
-        }
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage
+          .from('blog-images')
+          .getPublicUrl(path);
+        updatedPost.image_url = urlData.publicUrl;
       }
 
-      await supabase.from('blog_posts').update(updatedPost).eq('id', id);
+      const { error } = await supabase
+        .from('blog_posts')
+        .update(updatedPost)
+        .eq('id', id);
+
+      if (error) throw error;
+
       setEditingId(null);
       setEditingImageFile(null);
-      fetchPosts();
+      fetchPosts(); // Re-fetch posts after updating one
     } catch (err) {
       alert('Failed to update blog post: ' + err.message);
     }

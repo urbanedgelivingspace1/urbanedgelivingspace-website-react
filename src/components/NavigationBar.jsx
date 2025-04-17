@@ -33,7 +33,6 @@ const NavigationBar = () => {
     { to: '/properties', label: 'Properties', icon: <FaBuilding /> },
     { to: '/blog', label: 'Blog', icon: <FaBlog /> },
     { to: '/contact-us', label: 'Contact Us', icon: <FaEnvelope /> },
-    { to: '/admin-login', label: 'Login / Register', icon: <FaUser /> },
   ];
 
   return (

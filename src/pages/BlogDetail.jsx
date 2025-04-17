@@ -7,16 +7,22 @@ const BlogDetail = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('id', id)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('id', id)
+          .single();
 
-      if (!error) setPost(data);
+        if (error) throw error;
+        setPost(data);
+      } catch (err) {
+        setError(err.message);
+      }
       setLoading(false);
     };
 
@@ -24,6 +30,7 @@ const BlogDetail = () => {
   }, [id]);
 
   if (loading) return <div className="blog-detail-page"><p>Loading...</p></div>;
+  if (error) return <div className="blog-detail-page"><p>{`Error: ${error}`}</p></div>;
   if (!post) return <div className="blog-detail-page"><p>Post not found.</p></div>;
 
   return (
@@ -32,20 +39,32 @@ const BlogDetail = () => {
 
       <article className="blog-detail-article">
         {post.image_url && (
-          <img src={post.image_url} alt={post.title} className="detail-hero-image" />
+          <img
+            src={post.image_url}
+            alt={post.title}
+            className="detail-hero-image"
+          />
         )}
+
         <h1 className="detail-title">{post.title}</h1>
-        <p className="detail-date">
-          {new Date(post.created_at).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </p>
+
+        <div className="detail-meta">
+          <span className="detail-date">
+            {new Date(post.created_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </span>
+        </div>
+
         <div className="detail-content">
-          {post.content.split('\n').map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
+          {post.content
+            .split('\n')
+            .filter(para => para.trim() !== '')
+            .map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
         </div>
       </article>
     </div>

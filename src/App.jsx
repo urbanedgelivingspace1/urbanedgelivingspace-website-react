@@ -14,6 +14,7 @@ import AdminLogin from './pages/AdminLogin'; // Admin Login component
 import PropertyDetail from './components/PropertyDetail'; // Property Detail component
 import './index.css'; // Global styles
 import AdminRegister from './pages/AdminRegister';
+import BlogDetail from './pages/BlogDetail'; // Blog Detail component
 import OurTeam from './pages/OurTeam'; // Our Team component
 import './App.css'; // App-specific styles
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/properties/:id" element={<PropertyDetail />} />
           <Route path="/admin-register" element={<AdminRegister />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/our-team" element={<OurTeam />} />
           {/* 404 Not Found route */}
           <Route path="*" element={<HomePage />} />

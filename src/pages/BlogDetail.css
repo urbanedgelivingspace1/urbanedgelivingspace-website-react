@@ -1,19 +1,15 @@
-/* ===================================
-   Blog Detail Page Styles
-==================================== */
 .blog-detail-page {
   max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
-  font-family: var(--font-family, 'Segoe UI', sans-serif);
-  color: var(--dark-color, #333);
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .back-link {
   display: inline-block;
   margin-bottom: 1rem;
-  color: var(--link-color, #007bff);
   text-decoration: none;
+  color: #0077cc;
   font-weight: 500;
 }
 
@@ -22,44 +18,35 @@
 }
 
 .blog-detail-article {
-  background-color: var(--white, #fff);
+  background-color: #fff;
+  border-radius: 12px;
   padding: 2rem;
-  border-radius: var(--card-radius, 10px);
-  box-shadow: var(--box-shadow, 0px 4px 20px rgba(0, 0, 0, 0.05));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .detail-hero-image {
   width: 100%;
-  height: auto;
+  max-height: 400px;
+  object-fit: cover;
   border-radius: 8px;
   margin-bottom: 1.5rem;
 }
 
 .detail-title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   margin-bottom: 0.5rem;
-  color: var(--primary-color);
-  font-family: var(--primary-font, 'Merriweather', serif);
+  line-height: 1.3;
 }
 
-.detail-date {
+.detail-meta {
   color: #777;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   margin-bottom: 1.5rem;
 }
 
 .detail-content p {
   line-height: 1.8;
-  margin-bottom: 1.2rem;
-  font-size: 1.1rem;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .detail-title {
-    font-size: 2rem;
-  }
-  .detail-content p {
-    font-size: 1rem;
-  }
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  color: #333;
 }
