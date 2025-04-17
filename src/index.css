@@ -25,6 +25,7 @@
   /* Shadows & Effects */
   --shadow-light: rgba(0, 0, 0, 0.1);
   --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-premium: rgba(0, 0, 0, 0.08);
   --gradient-divider: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
   
   /* Typography */
@@ -38,6 +39,8 @@
   
   /* Animation */
   --transition-speed: 0.3s;
+  --transition-speed-slow: 0.5s;
+  --transition-speed-luxury: 0.8s;
   --animation-delay: 0.2s;
   --perspective: 1000px;
 }
@@ -63,7 +66,7 @@ body {
 
 /* Global Container for the Entire App with Smooth Transitions */
 .app-container {
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Utility: Subtle Text Shadow for Busy Backgrounds */
@@ -85,11 +88,32 @@ video {
 a {
   text-decoration: none;
   color: var(--primary-color);
-  transition: color var(--transition-speed) ease;
+  transition: color var(--transition-speed) cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
 }
 
 a:hover {
-  color: var(--white);
+  color: var(--accent-color);
+}
+
+/* Premium animated link underline effect */
+a.animated-link {
+  position: relative;
+}
+
+a.animated-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent-color);
+  transition: width var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+a.animated-link:hover::after {
+  width: 100%;
 }
 
 /* ==================================================
@@ -109,10 +133,23 @@ header {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  background-color: var(--background-color);
-  box-shadow: 0 2px 5px var(--shadow-medium);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px var(--shadow-premium);
   padding: var(--base-spacing) 0;
   z-index: 1000;
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+              background-color 0.4s ease;
+}
+
+/* Subtle header slide-up animation on scroll */
+header.scrolled {
+  transform: translateY(-100%);
+}
+
+header.visible {
+  transform: translateY(0);
 }
 
 header .header-inner {
@@ -131,10 +168,32 @@ header h1 {
   color: var(--primary-color);
   text-align: center;
   margin-bottom: var(--base-spacing);
+  transition: transform var(--transition-speed) ease;
+}
+
+header h1:hover {
+  transform: translateY(-2px);
 }
 
 header h1 span {
   color: var(--accent-color);
+  position: relative;
+  display: inline-block;
+}
+
+header h1 span::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+  transition: width var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+header h1:hover span::after {
+  width: 100%;
 }
 
 /* Navigation: Stacked on mobile */
@@ -149,13 +208,34 @@ header nav a {
   color: var(--charcoal);
   padding: var(--base-spacing);
   border-radius: 30px;
-  transition: background-color var(--transition-speed) ease;
+  transition: all var(--transition-speed) cubic-bezier(0.22, 1, 0.36, 1);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+header nav a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent-color);
+  border-radius: 30px;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition-speed) cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
 }
 
 header nav a:hover {
-  background-color: var(--accent-color);
   color: var(--white);
+}
+
+header nav a:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* ==================================================
@@ -166,6 +246,18 @@ footer {
   color: var(--white);
   padding: var(--section-spacing) 0;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
 }
 
 footer .footer-content {
@@ -175,10 +267,17 @@ footer .footer-content {
   flex-direction: column;
   gap: var(--base-spacing);
   padding: 0 var(--base-spacing);
+  position: relative;
+  z-index: 2;
 }
 
 footer .footer-content div {
   flex: 1 1 200px;
+  transition: transform var(--transition-speed) ease;
+}
+
+footer .footer-content div:hover {
+  transform: translateY(-5px);
 }
 
 footer p {
@@ -189,14 +288,31 @@ footer p {
 footer a {
   color: var(--white);
   font-weight: bold;
+  position: relative;
+  transition: color var(--transition-speed) ease;
+}
+
+footer a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent-color);
+  transition: width var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 footer a:hover {
-  text-decoration: underline;
+  color: var(--accent-color);
+}
+
+footer a:hover::after {
+  width: 100%;
 }
 
 /* ==================================================
-   Button Base Styles with Ripple Effect
+   Button Base Styles with Luxury Effects
 ================================================== */
 .btn {
   position: relative;
@@ -210,47 +326,95 @@ footer a:hover {
   color: var(--white);
   border-radius: 30px;
   font-size: 1rem;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              box-shadow 0.4s ease;
+  z-index: 1;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+  z-index: -1;
+  border-radius: inherit;
 }
 
 .btn:hover {
-  background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(184, 134, 11, 0.3), 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 5px 15px rgba(184, 134, 11, 0.2);
 }
 
 .btn:active::after {
   content: "";
   position: absolute;
-  background: var(--white);
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  border-radius: inherit;
-  opacity: 0.3;
-  animation: ripple 0.6s ease-out;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  width: 150px;
+  height: 150px;
+  top: calc(var(--y, 0) * 1px - 75px);
+  left: calc(var(--x, 0) * 1px - 75px);
+  border-radius: 50%;
+  opacity: 0.6;
+  transform: scale(0);
+  animation: luxuryRipple 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes ripple {
+@keyframes luxuryRipple {
   from {
-    transform: scale(1);
-    opacity: 0.5;
+    transform: scale(0);
+    opacity: 0.6;
   }
   to {
-    transform: scale(2);
+    transform: scale(3);
     opacity: 0;
   }
 }
 
 /* ==================================================
-   Animation Utilities
+   Enhanced Animation Utilities
 ================================================== */
 .transition {
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes slideInLeft {
+/* Premium Real Estate Reveal Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
   from {
     opacity: 0;
     transform: translateX(-50px);
@@ -261,7 +425,7 @@ footer a:hover {
   }
 }
 
-@keyframes slideInRight {
+@keyframes fadeInRight {
   from {
     opacity: 0;
     transform: translateX(50px);
@@ -272,32 +436,205 @@ footer a:hover {
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.animate-slide-in-left {
-  animation: slideInLeft var(--transition-speed) ease-out forwards;
+@keyframes slideFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.animate-slide-in-right {
-  animation: slideInRight var(--transition-speed) ease-out forwards;
+@keyframes subtleFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-.animate-fade-in {
-  animation: fadeIn var(--transition-speed) ease-out forwards;
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Luxury Property Highlight Animation */
+@keyframes luxuryGlow {
+  0% {
+    box-shadow: 0 5px 15px rgba(184, 134, 11, 0.1);
+  }
+  50% {
+    box-shadow: 0 5px 25px rgba(184, 134, 11, 0.3);
+  }
+  100% {
+    box-shadow: 0 5px 15px rgba(184, 134, 11, 0.1);
+  }
+}
+
+/* Elegant Text Reveal */
+@keyframes elegantReveal {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* Premium feature highlight pulse */
+@keyframes premiumPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(218, 186, 82, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(218, 186, 82, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(218, 186, 82, 0);
+  }
+}
+
+/* Luxury property image zoom */
+@keyframes subtleZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+/* Animation Classes */
+.animate-fade-up {
+  animation: fadeInUp var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-down {
+  animation: fadeInDown var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-left {
+  animation: fadeInLeft var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-right {
+  animation: fadeInRight var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-zoom-in {
+  animation: zoomIn var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-from-bottom {
+  animation: slideFromBottom var(--transition-speed-luxury) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-float {
+  animation: subtleFloat 6s ease-in-out infinite;
+}
+
+.animate-luxury-glow {
+  animation: luxuryGlow 3s ease-in-out infinite;
+}
+
+.animate-elegant-reveal {
+  animation: elegantReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-premium-pulse {
+  animation: premiumPulse 2s infinite;
+}
+
+/* Staggered animations for lists of items */
+.stagger-animation > * {
+  opacity: 0;
+}
+
+.stagger-animation > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stagger-animation > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stagger-animation > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stagger-animation > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.stagger-animation > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.stagger-animation > *:nth-child(n+6) {
+  animation-delay: 0.6s;
+}
+
+/* Scroll-triggered animations */
+.reveal-on-scroll {
+  opacity: 0;
+  transition: opacity var(--transition-speed-slow) ease,
+              transform var(--transition-speed-luxury) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-on-scroll.from-bottom {
+  transform: translateY(50px);
+}
+
+.reveal-on-scroll.from-left {
+  transform: translateX(-50px);
+}
+
+.reveal-on-scroll.from-right {
+  transform: translateX(50px);
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translate(0);
 }
 
 /* ==================================================
-   Form & Card Components
+   Form & Card Components with Enhanced Animations
 ================================================== */
 form {
   background-color: var(--white);
   border-radius: 15px;
-  box-shadow: 0 4px 10px var(--shadow-light);
+  box-shadow: 0 10px 30px var(--shadow-light);
   padding: var(--base-spacing);
   margin: var(--base-spacing) 0;
+  transition: transform var(--transition-speed) ease, 
+              box-shadow var(--transition-speed) ease;
+}
+
+form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px var(--shadow-medium);
 }
 
 form input,
@@ -308,53 +645,90 @@ form textarea {
   border-radius: 5px;
   margin-bottom: var(--base-spacing);
   font-size: 1rem;
+  transition: border-color var(--transition-speed) ease,
+              box-shadow var(--transition-speed) ease,
+              transform var(--transition-speed) ease;
 }
 
 form input:focus,
 form textarea:focus {
-  border-color: var(--primary-color);
+  border-color: var(--accent-color);
   outline: none;
-  box-shadow: 0 0 5px var(--shadow-light);
+  box-shadow: 0 0 10px rgba(218, 186, 82, 0.2);
+  transform: translateY(-2px);
 }
 
 form button {
   background: linear-gradient(45deg, var(--btn-bg-start), var(--btn-bg-end));
   color: var(--white);
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   border-radius: 30px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all var(--transition-speed) cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 form button:hover {
   background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 20px rgba(184, 134, 11, 0.3);
 }
 
 /* ==================================================
-   Card Styles
+   Card Styles with Luxury Animations
 ================================================== */
 .card {
   background-color: var(--white);
   border-radius: 15px;
-  box-shadow: 0 4px 10px var(--shadow-light);
+  box-shadow: 0 10px 30px var(--shadow-light);
   padding: var(--base-spacing);
   margin: var(--base-spacing) 0;
-  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  transition: transform var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1), 
+              box-shadow var(--transition-speed-slow) cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-speed-luxury) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px var(--shadow-medium);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px var(--shadow-medium);
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.card .image-container {
+  overflow: hidden;
+  border-radius: 15px 15px 0 0;
+  position: relative;
 }
 
 .card img {
   border-radius: 15px 15px 0 0;
   width: 100%;
   height: auto;
+  transition: transform var(--transition-speed-luxury) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover img {
+  transform: scale(1.05);
 }
 
 .card h2 {
@@ -362,6 +736,23 @@ form button:hover {
   font-size: 1.5rem;
   color: var(--primary-color);
   margin-bottom: var(--base-spacing);
+  position: relative;
+  display: inline-block;
+}
+
+.card h2::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-color), transparent);
+  transition: width var(--transition-speed-luxury) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover h2::after {
+  width: 100%;
 }
 
 .card p {
@@ -379,16 +770,37 @@ form button:hover {
 .card a.btn {
   background: linear-gradient(45deg, var(--btn-bg-start), var(--btn-bg-end));
   color: var(--white);
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 30px;
   font-size: 1rem;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all var(--transition-speed) cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .card a.btn:hover {
   background: linear-gradient(45deg, var(--btn-hover-bg-start), var(--btn-hover-bg-end));
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 20px rgba(184, 134, 11, 0.3);
+}
+
+/* Luxury property card highlight */
+.featured-property {
+  position: relative;
+}
+
+.featured-property::after {
+  content: 'Featured';
+  position: absolute;
+  top: 20px;
+  right: -35px;
+  background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+  color: var(--white);
+  padding: 5px 40px;
+  font-size: 0.8rem;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
 /* ==================================================
@@ -418,12 +830,25 @@ form button:hover {
 }
 
 /* ==================================================
-   Section Dividers
+   Section Dividers with Animation
 ================================================== */
 .section-divider {
   height: 1px;
-  background-color: var(--neutral-light);
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
   margin: var(--section-spacing) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-divider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: shimmer 3s infinite;
 }
 
 /* ==================================================

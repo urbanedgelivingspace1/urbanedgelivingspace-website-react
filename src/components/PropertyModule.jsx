@@ -1,5 +1,8 @@
+// src/components/PropertyModule.jsx
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import { FaMapMarkerAlt, FaBed, FaRuler } from 'react-icons/fa';
+import './PropertyModule.css';
 
 const PropertyModule = () => {
   const initialState = {
@@ -7,7 +10,7 @@ const PropertyModule = () => {
     location: '',
     bhk: '',
     carpet_area: '',
-    possession: '', // Expected as YYYY-MM-DD
+    possession: '',
     no_of_units: '',
     rera_no: '',
     developed_by: '',
@@ -28,21 +31,15 @@ const PropertyModule = () => {
     image_url: ''
   };
 
-  // State for adding new properties.
   const [propertyData, setPropertyData] = useState(initialState);
   const [imageFile, setImageFile] = useState(null);
-
-  // State for listing properties.
   const [properties, setProperties] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
-
-  // State for editing a property.
   const [editingId, setEditingId] = useState(null);
   const [editingData, setEditingData] = useState(initialState);
   const [editingImageFile, setEditingImageFile] = useState(null);
 
-  // Fetch properties from Supabase.
   const fetchProperties = async () => {
     const { data, error } = await supabase
       .from('properties')
@@ -64,12 +61,10 @@ const PropertyModule = () => {
     }
   }, []);
 
-  // Handle changes for new property form.
   const handleChange = (e) => {
     setPropertyData({ ...propertyData, [e.target.name]: e.target.value });
   };
 
-  // Handle changes for editing property form.
   const handleEditChange = (e) => {
     setEditingData({ ...editingData, [e.target.name]: e.target.value });
   };
@@ -82,7 +77,6 @@ const PropertyModule = () => {
     setEditingImageFile(e.target.files[0]);
   };
 
-  // Submit new property.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
@@ -129,7 +123,6 @@ const PropertyModule = () => {
     }
   };
 
-  // Delete property.
   const deleteProperty = async (id) => {
     if (!window.confirm('Are you sure you want to delete this property?')) return;
     const { error } = await supabase.from('properties').delete().eq('id', id);
@@ -140,10 +133,8 @@ const PropertyModule = () => {
     }
   };
 
-  // Start edit - open modal with pre-filled data.
   const startEdit = (property) => {
     setEditingId(property.id);
-    // Pre-fill editing data. Convert JSON arrays back to CSV if needed.
     setEditingData({
       ...property,
       amenities: Array.isArray(property.amenities)
@@ -155,14 +146,12 @@ const PropertyModule = () => {
     });
   };
 
-  // Cancel editing.
   const cancelEdit = () => {
     setEditingId(null);
     setEditingData(initialState);
     setEditingImageFile(null);
   };
 
-  // Submit edit.
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
@@ -213,42 +202,35 @@ const PropertyModule = () => {
 
   return (
     <div className="property-module">
-      {/* ------------------------------------------------------------
-          Property Form Section (Add New)
-      ------------------------------------------------------------- */}
+      {/* Add Property Form */}
       <section className="property-form">
         <h2>➕ Add New Property</h2>
         <form onSubmit={handleSubmit}>
-          {Object.entries(initialState).map(([key]) =>
-            key === 'possession' ? (
-              <div key={key} className="form-group">
-                <label htmlFor="possession" style={{ textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>
-                  {key.replace(/_/g, ' ')}
-                </label>
-                <input
-                  type="date"
-                  id="possession"
-                  name="possession"
-                  value={propertyData.possession}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            ) : (
-              <div key={key} className="form-group">
-                <input
-                  type="text"
-                  name={key}
-                  value={propertyData[key]}
-                  onChange={handleChange}
-                  placeholder={key.replace(/_/g, ' ').toUpperCase()}
-                  required={['name', 'location'].includes(key)}
-                />
-              </div>
-            )
-          )}
+          {Object.entries(initialState).map(([key]) => (
+            <div key={key} className="form-group">
+              <label
+                htmlFor={key}
+                style={{
+                  textTransform: 'uppercase',
+                  marginBottom: '0.5rem',
+                  display: 'block'
+                }}
+              >
+                {key.replace(/_/g, ' ')}
+              </label>
+              <input
+                type={key === 'possession' ? 'date' : 'text'}
+                id={key}
+                name={key}
+                value={propertyData[key]}
+                onChange={handleChange}
+                required={['name', 'location'].includes(key)}
+              />
+            </div>
+          ))}
 
           <div className="form-group">
+            <label>Image</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
 
@@ -260,9 +242,7 @@ const PropertyModule = () => {
         </form>
       </section>
 
-      {/* ------------------------------------------------------------
-          Existing Properties Section (View Only)
-      ------------------------------------------------------------- */}
+      {/* Property List */}
       <section className="property-list">
         <h2>🏠 Existing Properties</h2>
         {properties.length === 0 ? (
@@ -270,20 +250,25 @@ const PropertyModule = () => {
         ) : (
           properties.map((property) => (
             <div key={property.id} className="property-card">
-              <h3>{property.name}</h3>
-              <p>{property.location}</p>
-              <p>
-                <strong>BHK:</strong> {property.bhk}
-              </p>
-              <p>
-                <strong>Carpet Area:</strong> {property.carpet_area}
-              </p>
-              <p>
-                <strong>Possession:</strong> {property.possession}
-              </p>
               {property.image_url && (
-                <img src={property.image_url} alt={property.name} className="property-image" />
+                <img
+                  src={property.image_url}
+                  alt={property.name}
+                  className="property-image"
+                />
               )}
+              <div className="property-details">
+                <h3>{property.name}</h3>
+                <p className="property-location">
+                  <FaMapMarkerAlt className="icon" /> {property.location}
+                </p>
+                <p className="property-bhk">
+                  <FaBed className="icon" /> {property.bhk} BHK
+                </p>
+                <p className="property-sq">
+                  <FaRuler className="icon" /> {property.carpet_area} Sq Ft
+                </p>
+              </div>
               <div className="property-actions">
                 <button onClick={() => startEdit(property)} className="btn btn-edit">
                   Edit
@@ -297,46 +282,40 @@ const PropertyModule = () => {
         )}
       </section>
 
-      {/* ------------------------------------------------------------
-          Edit Modal Overlay (Visible When Editing)
-      ------------------------------------------------------------- */}
+      {/* Edit Modal */}
       {editingId !== null && (
         <div className="modal-overlay">
           <div className="modal-card">
             <h2>Edit Property</h2>
             <form onSubmit={handleEditSubmit}>
-              {Object.entries(initialState).map(([key]) =>
-                key === 'possession' ? (
-                  <div key={key} className="form-group">
-                    <label htmlFor={`edit-${key}`} style={{ textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>
-                      {key.replace(/_/g, ' ')}
-                    </label>
-                    <input
-                      type="date"
-                      id={`edit-${key}`}
-                      name={key}
-                      value={editingData.possession || ''}
-                      onChange={handleEditChange}
-                      required
-                    />
-                  </div>
-                ) : (
-                  <div key={key} className="form-group">
-                    <input
-                      type="text"
-                      name={key}
-                      value={editingData[key] || ''}
-                      onChange={handleEditChange}
-                      placeholder={key.replace(/_/g, ' ').toUpperCase()}
-                      required={['name', 'location'].includes(key)}
-                    />
-                  </div>
-                )
-              )}
+              {Object.entries(initialState).map(([key]) => (
+                <div key={key} className="form-group">
+                  <label
+                    htmlFor={`edit-${key}`}
+                    style={{
+                      textTransform: 'uppercase',
+                      marginBottom: '0.5rem',
+                      display: 'block'
+                    }}
+                  >
+                    {key.replace(/_/g, ' ')}
+                  </label>
+                  <input
+                    type={key === 'possession' ? 'date' : 'text'}
+                    id={`edit-${key}`}
+                    name={key}
+                    value={editingData[key] || ''}
+                    onChange={handleEditChange}
+                    required={['name', 'location'].includes(key)}
+                  />
+                </div>
+              ))}
+
               <div className="form-group">
-                <label style={{ textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>IMAGE</label>
+                <label>Image</label>
                 <input type="file" accept="image/*" onChange={handleEditImageChange} />
               </div>
+
               <div className="modal-actions">
                 <button type="submit" disabled={uploading} className="btn btn-save">
                   {uploading ? 'Saving...' : 'Save'}

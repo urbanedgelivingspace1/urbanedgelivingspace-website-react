@@ -85,7 +85,6 @@ body {
   gap: 16px;
   margin: 0;
   padding: 20px;
-  background-color: var(--bg-nav);
   position: absolute;
   top: 60px; /* Adjust based on navbar height */
   right: 0;

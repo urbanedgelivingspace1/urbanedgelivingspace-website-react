@@ -36,16 +36,16 @@
   padding: var(--base-spacing) 0;
 }
 
-/* Base styling for a refined, professional testimonial card */
+/* Refined and slightly smaller testimonial card for a professional appearance */
 .testimonial {
   background-color: var(--white);
   border-radius: 12px;
-  padding: calc(var(--base-spacing) * 0.8);
+  padding: calc(var(--base-spacing) * 0.7); /* Slightly reduced padding */
   margin: 0;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  max-width: 250px;
+  max-width: 220px; /* Reduced overall width */
   flex: 0 0 auto;
 }
 
@@ -72,26 +72,26 @@
   transform: scale(1.05);
 }
 
-/* Testimonial text styling: italic quotes with accent border */
+/* Testimonial text styling for enhanced readability */
 .testimonial-text {
-  font-size: 1rem;
+  font-size: 0.98rem; /* Adjusted for improved readability */
   font-style: italic;
   color: #424242;
-  margin: calc(var(--base-spacing) * 0.6) 0;
-  line-height: 1.6;
+  margin: calc(var(--base-spacing) * 0.5) 0;
+  line-height: 1.75; /* Increased line-height for better legibility */
   padding: 0 15px;
   position: relative;
   padding-left: 25px;
-  border-left: 3px solid var(--secondary-color);
+  border-left: 2px solid var(--secondary-color); /* Softer decorative accent */
 }
 
-/* Rating styling with luxurious gold color */
+/* Rating styling with a refined appearance */
 .testimonial-rating {
   display: flex;
   justify-content: center;
-  margin-bottom: calc(var(--base-spacing) * 0.6);
+  margin-bottom: calc(var(--base-spacing) * 0.5);
   color: var(--secondary-color);
-  font-size: 1.2rem;
+  font-size: 1.1rem; /* Adjusted slightly from before */
 }
 
 /* Author attribution styling */
@@ -119,9 +119,9 @@
 
   /* Adjust the size of testimonial cards on mobile */
   .testimonial {
-    max-width: 220px;
+    max-width: 200px; /* Further reduced for mobile */
     padding: calc(var(--base-spacing) * 0.6);
-    flex: 0 0 100%; /* Allow each card to take up full width on small screens */
+    flex: 0 0 100%; /* Each card takes full width on small screens */
   }
 
   /* Adjust photo size on mobile */
@@ -154,8 +154,8 @@
 /* Larger screens */
 @media screen and (min-width: 768px) {
   .testimonial {
-    max-width: 300px;
-    padding: calc(var(--base-spacing) * 0.9);
+    max-width: 250px; /* Maintaining professional look on larger screens */
+    padding: calc(var(--base-spacing) * 0.8);
   }
   
   .testimonial-photo {

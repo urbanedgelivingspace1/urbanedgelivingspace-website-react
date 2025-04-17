@@ -4,8 +4,9 @@ import './Testimonial.css';
 
 const Testimonial = () => {
   const [testimonials, setTestimonials] = useState([]);
+  const [currentIndex] = useState(0);
 
-  // Helper function to display stars (filled/empty stars can be customized)
+  // Helper function to display stars with filled/empty characters
   const renderStars = (num) => {
     const maxStars = 5;
     const filledStars = '★'.repeat(num);
@@ -30,36 +31,40 @@ const Testimonial = () => {
     fetchTestimonials();
   }, []);
 
+
+  // Render the current testimonial (if any) in its own box
   return (
     <div className="testimonial-container">
       <h2>Client Testimonials</h2>
-      <div className="testimonial-list">
-        {testimonials.length > 0 ? (
-          testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="testimonial transition">
-              {testimonial.image_url && (
-                <img
-                  src={testimonial.image_url}
-                  alt={testimonial.name}
-                  className="testimonial-photo"
-                />
-              )}
-              <div className="testimonial-rating">
-                {renderStars(testimonial.stars || 0)}
-              </div>
-              <blockquote className="testimonial-text">
-                "{testimonial.feedback}"
-              </blockquote>
-              <h4 className="testimonial-author">{testimonial.name}</h4>
-              {testimonial.role && (
-                <p className="testimonial-role">{testimonial.role}</p>
-              )}
-            </div>
-          ))
-        ) : (
-          <p>No testimonials available.</p>
-        )}
-      </div>
+      {testimonials.length > 0 ? (
+        <div className="testimonial-box transition">
+          {testimonials[currentIndex].image_url && (
+            <img
+              src={testimonials[currentIndex].image_url}
+              alt={testimonials[currentIndex].name}
+              className="testimonial-photo"
+            />
+          )}
+          <div className="testimonial-rating">
+            {renderStars(testimonials[currentIndex].stars || 0)}
+          </div>
+          <blockquote className="testimonial-text">
+            "{testimonials[currentIndex].feedback}"
+          </blockquote>
+          <h4 className="testimonial-author">
+            {testimonials[currentIndex].name}
+          </h4>
+          {testimonials[currentIndex].role && (
+            <p className="testimonial-role">
+              {testimonials[currentIndex].role}
+            </p>
+          )}
+        </div>
+      ) : (
+        <p>No testimonials available.</p>
+      )}
+      {/* Show navigation controls only if there's more than one testimonial */}
+
     </div>
   );
 };
