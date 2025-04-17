@@ -7,6 +7,7 @@
   --transition-speed: 0.3s;
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
+  --background-color: #f8f8f8; /* Added background color variable */
 }
 
 /* Global Reset for Mobile-First */
@@ -18,7 +19,7 @@ body {
   font-family: var(--font-body);
   margin: 0;
   padding: 0;
-  background-color: #f8f8f8;
+  background-color: var(--background-color); /* Applied background color */
 }
 
 /* Navbar Container Styles */
@@ -95,6 +96,7 @@ body {
   transition: all var(--transition-speed);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   border-radius: 6px 0 0 6px;
+  background-color: var(--bg-nav); /* Ensure solid background on mobile */
 }
 
 /* Active state for Mobile Menu */
@@ -152,6 +154,7 @@ body {
     transform: translateY(0);
     box-shadow: none;
     border-radius: 0;
+    background-color: transparent; /* Remove background color on desktop */
   }
   
   .navbar-menu li {
