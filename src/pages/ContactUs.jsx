@@ -141,7 +141,7 @@ const ContactUs = () => {
             <p><strong>Email:</strong> urbanedgelivingspace@gmail.com</p>
 
             <h4>Office Address</h4>
-            <p>123 UrbanEdge Plaza, 7th Floor<br/>City Name, State 123456</p>
+            <p>UrbanEdge living space office<br/>Shiholi Moti, Gandhinagar 382355</p>
 
             <h4>Business Hours</h4>
             <p>Mon - Fri: 9:00 AM - 6:00 PM<br/>Sat: 10:00 AM - 4:00 PM<br/>Sun: Closed</p>
