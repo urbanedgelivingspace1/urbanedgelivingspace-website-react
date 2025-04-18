@@ -66,6 +66,18 @@
   margin: 0 0 0.5rem;
   font-size: clamp(1.8rem, 5vw, 2.5rem);
   font-weight: 700;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  color: var(--secondary-color); /* Highlight the property name */
+  background: rgba(255, 255, 255, 0.2); /* Add a semi-transparent background */
+  border-radius: var(--radius-sm); /* Slightly rounded corners */
+  padding: 0.5rem 1rem; /* Add padding for better readability */
+  border-bottom: 3px solid var(--secondary-color); /* Add an underline for emphasis */
+}
+
+.pd-hero-content h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 

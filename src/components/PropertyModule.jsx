@@ -28,6 +28,7 @@ const PropertyModule = () => {
     explore_neighbourhood: '',
     about_builder_company: '',
     about_location: '',
+    google_drive_url: '',
     image_url: ''
   };
 
@@ -62,7 +63,6 @@ const PropertyModule = () => {
       fetchProperties();
     }
 
-    // Load draft from localStorage if exists
     const savedDraft = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedDraft) {
       try {
@@ -128,7 +128,7 @@ const PropertyModule = () => {
 
       setPropertyData(initialState);
       setImageFile(null);
-      localStorage.removeItem(LOCAL_STORAGE_KEY); // 🧽 Clear draft
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
       setSuccessMsg('✅ Property uploaded successfully!');
       fetchProperties();
     } catch (err) {
@@ -221,28 +221,24 @@ const PropertyModule = () => {
       <section className="property-form">
         <h2>➕ Add New Property</h2>
         <form onSubmit={handleSubmit}>
-          {Object.entries(initialState).map(([key]) => (
-            <div key={key} className="form-group">
-              <label
-                htmlFor={key}
-                style={{
-                  textTransform: 'uppercase',
-                  marginBottom: '0.5rem',
-                  display: 'block'
-                }}
-              >
-                {key.replace(/_/g, ' ')}
-              </label>
-              <input
-                type={key === 'possession' ? 'date' : 'text'}
-                id={key}
-                name={key}
-                value={propertyData[key]}
-                onChange={handleChange}
-                required={['name', 'location'].includes(key)}
-              />
-            </div>
-          ))}
+          {Object.entries(initialState).map(([key]) => {
+            if (key === 'image_url') return null;
+            return (
+              <div key={key} className="form-group">
+                <label htmlFor={key}>
+                  {key.replace(/_/g, ' ').toUpperCase()}
+                </label>
+                <input
+                  type={key === 'possession' ? 'date' : 'text'}
+                  id={key}
+                  name={key}
+                  value={propertyData[key]}
+                  onChange={handleChange}
+                  required={['name', 'location'].includes(key)}
+                />
+              </div>
+            );
+          })}
 
           <div className="form-group">
             <label>Image</label>
@@ -283,6 +279,18 @@ const PropertyModule = () => {
                 <p className="property-sq">
                   <FaRuler className="icon" /> {property.carpet_area} Sq Ft
                 </p>
+                {property.google_drive_url && (
+                  <p>
+                    <a
+                      href={property.google_drive_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'blue', textDecoration: 'underline' }}
+                    >
+                      📥 Download Brochure
+                    </a>
+                  </p>
+                )}
               </div>
               <div className="property-actions">
                 <button onClick={() => startEdit(property)} className="btn btn-edit">
@@ -303,28 +311,24 @@ const PropertyModule = () => {
           <div className="modal-card">
             <h2>Edit Property</h2>
             <form onSubmit={handleEditSubmit}>
-              {Object.entries(initialState).map(([key]) => (
-                <div key={key} className="form-group">
-                  <label
-                    htmlFor={`edit-${key}`}
-                    style={{
-                      textTransform: 'uppercase',
-                      marginBottom: '0.5rem',
-                      display: 'block'
-                    }}
-                  >
-                    {key.replace(/_/g, ' ')}
-                  </label>
-                  <input
-                    type={key === 'possession' ? 'date' : 'text'}
-                    id={`edit-${key}`}
-                    name={key}
-                    value={editingData[key] || ''}
-                    onChange={handleEditChange}
-                    required={['name', 'location'].includes(key)}
-                  />
-                </div>
-              ))}
+              {Object.entries(initialState).map(([key]) => {
+                if (key === 'image_url') return null;
+                return (
+                  <div key={key} className="form-group">
+                    <label htmlFor={`edit-${key}`}>
+                      {key.replace(/_/g, ' ').toUpperCase()}
+                    </label>
+                    <input
+                      type={key === 'possession' ? 'date' : 'text'}
+                      id={`edit-${key}`}
+                      name={key}
+                      value={editingData[key] || ''}
+                      onChange={handleEditChange}
+                      required={['name', 'location'].includes(key)}
+                    />
+                  </div>
+                );
+              })}
 
               <div className="form-group">
                 <label>Image</label>

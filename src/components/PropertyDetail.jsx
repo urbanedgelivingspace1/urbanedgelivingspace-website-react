@@ -221,14 +221,61 @@ const AmenityItem = ({ name }) => {
   );
 };
 
-const QuickFacts = ({ property }) => (
-  <div className="pd-quick-facts">
-    <InfoCard icon={<FaBuilding />} label="Project Type" value={property.property_type} />
-    <InfoCard icon={<FaRulerCombined />} label="Total Area" value={property.project_area} />
-    <InfoCard icon={<MdLocalParking />} label="Parking" value={property.parking} />
-    <InfoCard icon={<FaBolt />} label="Power Backup" value={property.power_backup || 'Yes'} />
-  </div>
-);
+const QuickFacts = ({ property }) => {
+  const getDownloadLink = (driveUrl) => {
+    const match = driveUrl?.match(/\/d\/(.*?)\//);
+    if (!match) return null;
+    return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+  };
+
+  const handleDownload = () => {
+    const downloadUrl = getDownloadLink(property.google_drive_url);
+    if (downloadUrl) {
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.setAttribute("download", "Brochure.pdf"); // Optional filename
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  return (
+    <div className="pd-quick-facts">
+      <InfoCard icon={<FaBuilding />} label="Project Type" value={property.property_type || "Coming Soon"} />
+      <InfoCard icon={<FaRulerCombined />} label="Total Area" value={property.project_area || "Coming Soon"} />
+      <InfoCard icon={<MdLocalParking />} label="Parking" value={property.parking || "Coming Soon"} />
+
+      <div className="pd-info-card">
+        <div className="pd-info-card-icon"><FaDownload /></div>
+        <div className="pd-info-card-content">
+          <div className="pd-info-card-label">Download Brochure</div>
+          <div className="pd-info-card-value">
+            {property.google_drive_url ? (
+              <button
+                onClick={handleDownload}
+                className="pd-download-link"
+                style={{
+                  color: '#007BFF',
+                  textDecoration: 'underline',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  fontSize: 'inherit',
+                }}
+              >
+                Click to Download
+              </button>
+            ) : (
+              <span style={{ fontStyle: 'italic', color: '#888' }}>Coming Soon</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const InfoCard = ({ icon, label, value }) => (
   <div className="pd-info-card">

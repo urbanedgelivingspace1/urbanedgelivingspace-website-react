@@ -17,6 +17,7 @@ import AdminRegister from './pages/AdminRegister';
 import BlogDetail from './pages/BlogDetail'; // Blog Detail component
 import OurTeam from './pages/OurTeam'; // Our Team component
 import './App.css'; // App-specific styles
+import ScrollToTop from './components/ScrollToTop'; // ScrollToTop component
 
 // Main application component with semantic layout for accessibility
 function App() {
@@ -27,6 +28,7 @@ function App() {
 
       {/* Main content wrapped in a semantic <main> tag with added transition effects */}
       <main className="app-main transition">
+      <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about-us" element={<AboutUs />} />

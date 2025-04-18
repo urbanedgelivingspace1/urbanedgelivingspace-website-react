@@ -91,8 +91,8 @@ const Properties = () => {
                   description: property.description,
                   location: property.location,
                   image: property.image_url || propertyImage,
-                  property_type: property.property_type,
-                  price_range: property.price_range,
+                  carpet_area: property.carpet_area,
+                  bhk: property.bhk
                 }}
               />
             ))}
