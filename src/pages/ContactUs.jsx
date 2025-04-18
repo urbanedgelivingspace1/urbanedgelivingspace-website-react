@@ -1,4 +1,3 @@
-// src/pages/ContactUs.jsx
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import './ContactUs.css';
@@ -25,7 +24,7 @@ const ContactUs = () => {
     setSubmitting(true);
     setErrorMessage('');
     setSuccessMessage('');
-  
+
     const { data, error } = await supabase
       .from('form_submissions')
       .insert([{
@@ -35,104 +34,132 @@ const ContactUs = () => {
         subject: formData.subject,
         message: formData.message
       }]);
-  
+
     if (error) {
       console.error('Form submission error:', error.message, error.details);
       setErrorMessage(`Error: ${error.message}`);
     } else {
       console.log('Form submitted:', data);
-      setSuccessMessage('Thank you for contacting us!');
+      setSuccessMessage('Thank you for contacting us! We will get back to you shortly.');
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
     }
-  
+
     setSubmitting(false);
-  };  
+  };
 
   return (
     <div className="contact-us-page">
       {/* Hero Section */}
       <section className="contact-hero">
         <div className="hero-overlay"></div>
-        <div className="hero-content container">
-          <h1>Contact Us</h1>
-          <p>We’re here to help you with any questions, bookings, or special requests.</p>
+        <div className="hero-content container fade-in">
+          <h1>Contact UrbanEdge Living</h1>
+          <p>Ready to find your dream property? Our expert team is here to guide you every step of the way.</p>
         </div>
       </section>
 
       {/* Contact Form & Info */}
       <section className="contact-form-section container">
-        <h2>Get in Touch with UrbanEdge Living</h2>
-        <p>Our team is available to assist you with any inquiries. Please feel free to contact us using the form below.</p>
-        
+        <h2>Get in Touch</h2>
+        <p>Have questions about listings, property viewings, or partnerships? Send us a message below.</p>
+
         <div className="form-container">
-          <form className="contact-form" onSubmit={handleSubmit}>
+          {/* Contact Form */}
+          <form className="contact-form" onSubmit={handleSubmit} aria-label="Contact form">
             <div className="form-group">
               <label htmlFor="name">Name</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="name"
-                name="name" 
-                value={formData.name} 
-                onChange={handleChange} 
-                required 
+                name="name"
+                placeholder="Your full name"
+                value={formData.name}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 id="email"
-                name="email" 
-                value={formData.email} 
-                onChange={handleChange} 
-                required 
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="phone">Phone</label>
-              <input 
-                type="tel" 
+              <input
+                type="tel"
                 id="phone"
-                name="phone" 
-                value={formData.phone} 
-                onChange={handleChange} 
-                required 
+                name="phone"
+                placeholder="+91 1234567890"
+                value={formData.phone}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="subject">Subject</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="subject"
-                name="subject" 
-                value={formData.subject} 
-                onChange={handleChange} 
-                required 
+                name="subject"
+                placeholder="Brief subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group full-width">
               <label htmlFor="message">Message</label>
-              <textarea 
+              <textarea
                 id="message"
-                name="message" 
-                value={formData.message} 
-                onChange={handleChange} 
+                name="message"
+                placeholder="How can we help you?"
+                value={formData.message}
+                onChange={handleChange}
                 required
               />
             </div>
             <button type="submit" className="send-button" disabled={submitting}>
               {submitting ? 'Sending...' : 'Send Message'}
             </button>
-            {successMessage && <p className="success-message">{successMessage}</p>}
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+            {successMessage && <p className="success-message" role="alert">{successMessage}</p>}
+            {errorMessage && <p className="error-message" role="alert">{errorMessage}</p>}
           </form>
 
           {/* Contact Details */}
-          <div className="contact-details">
-            <h3>Contact Details</h3>
-            <p>+91 7487094556</p>
-            <p>+91 7984619362</p>
-            <p>urbanedgelivingspace@gmail.com</p>
+          <div className="contact-details" aria-labelledby="contact-info-heading">
+            <h3 id="contact-info-heading">Contact Information</h3>
+            <p><strong>Phone:</strong> +91 7487094556</p>
+            <p><strong>Phone:</strong> +91 7984619362</p>
+            <p><strong>Email:</strong> urbanedgelivingspace@gmail.com</p>
+
+            <h4>Office Address</h4>
+            <p>123 UrbanEdge Plaza, 7th Floor<br/>City Name, State 123456</p>
+
+            <h4>Business Hours</h4>
+            <p>Mon - Fri: 9:00 AM - 6:00 PM<br/>Sat: 10:00 AM - 4:00 PM<br/>Sun: Closed</p>
+
+            {/* Google Maps Embed */}
+            <div className="map-container">
+              <iframe
+                title="UrbanEdge Living Office"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3666.0349841636835!2d72.73002327532032!3d23.241813979020765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395dd51d5ba695b1%3A0x99bd44906e708c19!2sRadhe%20residency!5e0!3m2!1sen!2sin!4v1744967575679!5m2!1sen!2sin"
+                width="100%"
+                height="200"
+                frameBorder="0"
+                style={{ border: 0, borderRadius: '8px' }}
+                allowFullScreen=""
+                aria-hidden="false"
+                tabIndex="0"
+              ></iframe>
+            </div>
           </div>
         </div>
       </section>

@@ -1,0 +1,117 @@
+/* ------------------------------------------- */
+
+/* src/components/OurTeam.css */
+
+.our-team {
+    padding: 4rem 1.5rem;
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .our-team__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .our-team__header .our-team__title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .our-team__subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2.5rem;
+  }
+  
+  .our-team__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+  
+  .team-card {
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .team-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+  }
+  
+  .team-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 4px solid #007bff;
+  }
+  
+  .team-card__content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  
+  .team-card__name {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+  
+  .team-card__role {
+    font-size: 1.1rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+  }
+  
+  .team-card__description {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-top: auto;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .our-team__header .our-team__title {
+      font-size: 2rem;
+    }
+    .our-team__subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .team-card__content {
+      padding: 1rem;
+    }
+    .team-card__name {
+      font-size: 1.25rem;
+    }
+    .team-card__role {
+      font-size: 1rem;
+    }
+    .team-card__description {
+      font-size: 0.9rem;
+    }
+  }
+  

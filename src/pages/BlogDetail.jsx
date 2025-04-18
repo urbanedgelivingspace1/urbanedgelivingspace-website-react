@@ -35,7 +35,7 @@ const BlogDetail = () => {
 
   return (
     <div className="blog-detail-page transition">
-      <Link to="/blog" className="back-link">← Back to Blog</Link>
+      <Link to="/blog" className="back-link"> Back to Blog</Link>
 
       <article className="blog-detail-article">
         {post.image_url && (

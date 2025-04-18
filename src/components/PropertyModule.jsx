@@ -31,6 +31,8 @@ const PropertyModule = () => {
     image_url: ''
   };
 
+  const LOCAL_STORAGE_KEY = 'draft_property_form';
+
   const [propertyData, setPropertyData] = useState(initialState);
   const [imageFile, setImageFile] = useState(null);
   const [properties, setProperties] = useState([]);
@@ -59,10 +61,22 @@ const PropertyModule = () => {
     } else {
       fetchProperties();
     }
+
+    // Load draft from localStorage if exists
+    const savedDraft = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedDraft) {
+      try {
+        setPropertyData(JSON.parse(savedDraft));
+      } catch (err) {
+        console.warn('Failed to parse saved draft:', err);
+      }
+    }
   }, []);
 
   const handleChange = (e) => {
-    setPropertyData({ ...propertyData, [e.target.name]: e.target.value });
+    const updatedData = { ...propertyData, [e.target.name]: e.target.value };
+    setPropertyData(updatedData);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedData));
   };
 
   const handleEditChange = (e) => {
@@ -114,6 +128,7 @@ const PropertyModule = () => {
 
       setPropertyData(initialState);
       setImageFile(null);
+      localStorage.removeItem(LOCAL_STORAGE_KEY); // 🧽 Clear draft
       setSuccessMsg('✅ Property uploaded successfully!');
       fetchProperties();
     } catch (err) {

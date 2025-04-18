@@ -1,14 +1,36 @@
 /* ================================
-   Base & Typography
+   Universal Box Sizing
+================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ================================
+   Root Variables
 ================================ */
 .pd-page {
-  max-width: 1140px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  font-family: 'Arial', 'Helvetica Neue', sans-serif;
-  color: #333;
-  line-height: 1.5;
-  background: #f8f8f8;
+  --primary-color: #1a4d8d;
+  --secondary-color: #d4a418;
+  --text-color: #333;
+  --background-light: #f9fafb;
+  --border-color: #e0e0e0;
+  --success-color: #28a745;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.2s ease;
+}
+
+/* ================================
+   Base Styles
+================================ */
+.pd-loading {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.2rem;
+  color: #666;
 }
 
 /* ================================
@@ -16,186 +38,198 @@
 ================================ */
 .pd-hero {
   position: relative;
-  height: 50vh;
-  min-height: 300px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2.5rem;
-}
-
-.pd-hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
-  z-index: 1;
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow-md);
 }
 
 .pd-hero-img {
   width: 100%;
-  height: 100%;
+  height: 60vh;
+  min-height: 400px;
   object-fit: cover;
+  background: #f0f0f0;
 }
 
-.pd-hero-text {
+.pd-hero-content {
   position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  z-index: 2;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 1rem 1.5rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 90%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
 }
 
-.pd-hero-text h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #333;
+.pd-hero-content h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.pd-hero-text p {
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  color: #555;
-}
-
-/* ================================
-   Section Wrapper
-================================ */
-.pd-content {
+.pd-hero-meta {
   display: flex;
-  flex-direction: column;
   gap: 2rem;
-}
-
-.pd-content section {
-  padding: 1.5rem;
-  border-radius: 6px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-left: 3px solid #1a76d2;
-}
-
-.pd-content section:nth-of-type(even) {
-  background: #f9f9f9;
-}
-
-/* ================================
-   Section Headings
-================================ */
-.pd-content h2 {
-  font-size: 1.5rem;
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #1a76d2;
-}
-
-.pd-content h4 {
+  align-items: center;
   font-size: 1.1rem;
-  margin: 1.25rem 0 0.75rem;
-  color: #444;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 0.5rem;
 }
 
-.pd-content h4:first-of-type {
-  margin-top: 0;
-}
-
-/* ================================
-   About Description
-================================ */
-.pd-description p {
+.pd-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0;
 }
 
-.pd-desc-text {
-  height: auto;
-  max-height: 180px;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  font-size: 1rem;
-  color: #444;
+.pd-price {
+  background: var(--secondary-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  margin: 0;
 }
 
-.pd-desc-text.expanded {
-  max-height: 2000px;
+/* ================================
+   Main Grid Layout
+================================ */
+.pd-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ================================
+   Section Styles
+================================ */
+.pd-section {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2rem;
+}
+
+.pd-section--card {
+  padding: 1.5rem;
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+}
+
+.pd-section-title {
+  font-size: clamp(1.3rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.pd-section-content {
+  padding: 1rem 0;
+}
+
+/* ================================
+   Description Section
+================================ */
+.pd-description-text {
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  line-height: 1.7;
+  color: #444;
 }
 
 .pd-toggle-btn {
-  display: inline-block;
-  margin-top: 0.75rem;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: white;
   border: none;
-  color: #1a76d2;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  padding: 0;
+  transition: var(--transition);
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .pd-toggle-btn:hover {
-  text-decoration: underline;
+  background: #0f3a6b;
 }
 
 /* ================================
    Quick Info Grid
 ================================ */
-.pd-quick-info {
+/* ================================
+   Refined Quick Info Grid
+================================ */
+.pd-quick-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
 }
 
-.pd-quick-info div {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+.pd-info-item {
+  padding: 1.25rem;
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: var(--transition);
 }
 
-.pd-quick-info strong {
+.pd-info-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.pd-info-item strong {
   display: block;
-  font-weight: 700;
-  margin-bottom: 0.3rem;
-  color: #333;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+}
+
+.pd-info-item span {
+  font-size: 0.95rem;
+  color: var(--text-color);
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 /* ================================
-   Configurations Table
+   Table Styles
 ================================ */
-.pd-config table {
+.pd-table-container {
+  overflow-x: auto;
+}
+
+.pd-config-table {
   width: 100%;
   border-collapse: collapse;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 0.5rem;
+  background: white;
 }
 
-.pd-config th,
-.pd-config td {
-  padding: 0.75rem 1rem;
+.pd-config-table th,
+.pd-config-table td {
+  padding: 1rem;
   text-align: left;
-  border: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.pd-config th {
-  background: #f2f2f2;
-  color: #333;
+.pd-config-table th {
+  background: var(--primary-color);
+  color: white;
   font-weight: 600;
 }
 
-.pd-config tr {
-  background: #fff;
-}
-
-.pd-config tr:nth-child(even) {
-  background: #f8f8f8;
+.pd-config-table tr:hover {
+  background: #f8f9fa;
 }
 
 /* ================================
@@ -203,224 +237,159 @@
 ================================ */
 .pd-amenities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
 
 .pd-amenity-item {
   display: flex;
   align-items: center;
-  background: #f9f9f9;
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-}
-
-.pd-icon {
-  color: #1a76d2;
-  margin-right: 0.5rem;
-}
-
-.pd-label {
-  font-size: 0.95rem;
-  color: #444;
-}
-
-/* ================================
-   Builder Info Section
-================================ */
-.pd-builder-info p {
-  background: #f9f9f9;
+  gap: 1rem;
   padding: 1rem;
-  border-radius: 4px;
-  margin: 0;
-  line-height: 1.6;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  min-width: 0;
+}
+
+.pd-amenity-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pd-amenity-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
 }
 
 /* ================================
-   Location Info Section
+   Quick Facts Cards
 ================================ */
-.pd-location-info {
+.pd-quick-facts {
+  display: grid;
+  gap: 1rem;
+}
+
+.pd-info-card {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.pd-location-about,
-.pd-neighbourhood {
-  background: #f9f9f9;
+  gap: 1rem;
   padding: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  min-width: 0;
 }
 
-.pd-location-about h4,
-.pd-neighbourhood h4,
-.pd-map-embed h4 {
-  margin-top: 0;
-  color: #333;
-  font-size: 1.1rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 0.5rem;
+.pd-info-card-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
 }
 
-.pd-location-about p,
-.pd-neighbourhood p {
-  margin: 0;
-  line-height: 1.6;
+.pd-info-card-label {
+  font-size: 0.9rem;
+  color: #666;
 }
 
-.pd-map-embed iframe {
+.pd-info-card-value {
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* ================================
+   Map Container
+================================ */
+.pd-map-container {
+  position: relative;
+  padding-top: 56.25%;
+}
+
+.pd-map-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 400px;
+  height: 100%;
   border: none;
-  border-radius: 4px;
-  margin-top: 0.75rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-md);
 }
 
 /* ================================
    Brochure Download
 ================================ */
-.pd-brochure {
-  text-align: center;
-  padding: 1.5rem;
-}
-
-.pd-download-brochure {
-  display: inline-block;
-  background: #1a76d2;
-  color: #fff;
-  text-decoration: none;
+.pd-brochure-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  background: var(--primary-color);
+  color: white;
+  text-decoration: none;
   font-weight: 600;
-  border-radius: 4px;
-  transition: background 0.2s ease;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
-.pd-download-brochure:hover {
-  background: #1565c0;
+.pd-brochure-download:hover {
+  background: #0f3a6b;
 }
 
 /* ================================
    Responsive Adjustments
 ================================ */
-@media (max-width: 900px) {
-  .pd-quick-info {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
-  
-  .pd-amenities-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+@media (max-width: 1024px) {
+  .pd-main-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .pd-hero {
+  .pd-hero-img {
     height: 40vh;
   }
-  
-  .pd-hero-text {
-    bottom: 1rem;
-    left: 1rem;
-    padding: 0.75rem 1rem;
+
+  .pd-main-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .pd-hero-text h1 {
-    font-size: 1.5rem;
+
+  .pd-quick-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
-  
-  .pd-content section {
-    padding: 1.25rem;
-  }
-  
-  .pd-content h2 {
-    font-size: 1.3rem;
-  }
-  
-  .pd-quick-info {
-    grid-template-columns: 1fr 1fr;
-  }
-  
+
   .pd-amenities-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  .pd-config th,
-  .pd-config td {
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .pd-map-embed iframe {
-    height: 350px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 }
 
-@media (max-width: 576px) {
-  .pd-page {
-    padding: 1rem 0.75rem;
+@media (max-width: 480px) {
+  .pd-hero-img {
+    height: 35vh;
   }
-  
-  .pd-hero-text h1 {
+  .pd-hero-content h1 {
+    font-size: 2rem;
+  }
+  .pd-section-title {
     font-size: 1.3rem;
   }
-  
-  .pd-hero-text p {
+  .pd-description-text {
     font-size: 0.9rem;
+    line-height: 1.6;
   }
-  
-  .pd-content section {
-    padding: 1rem;
-  }
-  
-  .pd-quick-info {
-    grid-template-columns: 1fr;
-  }
-  
-  .pd-amenities-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .pd-download-brochure {
-    width: 100%;
-    padding: 0.75rem 1rem;
-  }
-  
-  .pd-map-embed iframe {
-    height: 300px;
-  }
-}
-
-/* ================================
-   Print Styles
-================================ */
-@media print {
-  .pd-page {
-    background: #fff;
-    max-width: 100%;
-    padding: 0;
-  }
-  
-  .pd-content section {
-    page-break-inside: avoid;
-    box-shadow: none;
-    border-left: 1px solid #ddd;
-  }
-  
-  .pd-download-brochure {
-    display: none;
-  }
-  
   .pd-toggle-btn {
-    display: none;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
   }
-  
-  .pd-desc-text {
-    max-height: none;
+  .pd-main-grid {
+    gap: 1rem;
   }
-  
-  .pd-map-embed iframe {
-    height: 300px;
+  .pd-quick-grid,
+  .pd-amenities-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  .pd-info-item,
+  .pd-amenity-item,
+  .pd-info-card {
+    padding: 0.8rem;
   }
 }

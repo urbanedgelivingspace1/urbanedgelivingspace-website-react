@@ -1,13 +1,12 @@
-// src/components/PropertyCard.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaMapMarkerAlt, FaHome, FaDollarSign } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaBed, FaRulerCombined, FaBuilding } from 'react-icons/fa';
 import './PropertyCard.css';
 
 const PropertyCard = ({ property }) => {
-  // support both shapes: { title, image, ... } or { name, image_url, ... }
   const title = property.title || property.name;
   const image = property.image || property.image_url;
+
   return (
     <Link to={`/properties/${property.id}`} className="property-card-link">
       <div className="property-card">
@@ -17,35 +16,44 @@ const PropertyCard = ({ property }) => {
             alt={title}
             className="property-image"
           />
+          <div className="property-type">
+            <FaBuilding className="type-icon" />
+            <span>{property.type || 'Residential'}</span>
+          </div>
         </div>
+        
         <div className="property-details">
           <h3 className="property-title">{title}</h3>
 
           {property.location && (
-            <p className="property-location">
-              <FaMapMarkerAlt className="icon" /> {property.location}
-            </p>
+            <div className="property-location">
+              <FaMapMarkerAlt className="icon" />
+              <span>{property.location}</span>
+            </div>
           )}
 
-          {property.property_type && (
-            <p className="property-type">
-              <FaHome className="icon" /> {property.property_type}
-            </p>
-          )}
+          <div className="property-meta">
+            {property.bhk && (
+              <div className="meta-item">
+                <FaBed className="meta-icon" />
+                <span>{property.bhk} BHK</span>
+              </div>
+            )}
+            {property.carpet_area && (
+              <div className="meta-item">
+                <FaRulerCombined className="meta-icon" />
+                <span>{property.carpet_area} sq.ft</span>
+              </div>
+            )}
+          </div>
 
-          {property.price_range && (
-            <p className="property-price">
-              <FaDollarSign className="icon" /> {property.price_range}
-            </p>
-          )}
-
-          {/* if you want a short teaser: */}
-          {property.description && (
-            <p className="property-description">
-              {property.description.length > 70
-                ? property.description.slice(0, 67) + '…'
-                : property.description}
-            </p>
+          {property.price && (
+            <div className="property-price">
+              <span className="price">${property.price.toLocaleString()}</span>
+              {property.price_per_sqft && (
+                <span className="price-per"> (${property.price_per_sqft}/sq.ft)</span>
+              )}
+            </div>
           )}
         </div>
       </div>

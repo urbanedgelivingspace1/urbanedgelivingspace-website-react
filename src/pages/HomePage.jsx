@@ -14,23 +14,19 @@ const useInView = (threshold = 0.1) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const currentElem = ref.current;
-    if (!currentElem) return;
-
+    const current = ref.current;
+    if (!current) return;
     const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
       },
       { threshold }
     );
-
-    observer.observe(currentElem);
-    return () => observer.unobserve(currentElem);
+    observer.observe(current);
+    return () => observer.unobserve(current);
   }, [threshold]);
 
   return { ref, isVisible };
@@ -42,9 +38,7 @@ const AnimateOnScroll = ({ children, className = '', direction = 'none' }) => {
   return (
     <div
       ref={ref}
-      className={`scroll-animate ${directionClass} ${className} ${
-        isVisible ? 'in-view' : ''
-      }`}
+      className={`scroll-animate ${directionClass} ${className} ${isVisible ? 'in-view' : ''}`}
     >
       {children}
     </div>
@@ -53,7 +47,7 @@ const AnimateOnScroll = ({ children, className = '', direction = 'none' }) => {
 
 const BackgroundOverlay = memo(() => (
   <svg className="background-overlay" viewBox="0 0 1440 320" aria-hidden="true">
-    <path fill="rgba(0,31,63,0.2)" d="M0,256L1440,32L1440,320L0,320Z"></path>
+    <path fill="rgba(0,31,63,0.2)" d="M0,256L1440,32L1440,320L0,320Z" />
   </svg>
 ));
 
@@ -62,9 +56,7 @@ const HeroSection = () => {
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
       const hero = document.querySelector('.homepage-hero');
-      if (hero) {
-        hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
-      }
+      if (hero) hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -86,16 +78,8 @@ const HeroSection = () => {
 };
 
 const TESTIMONIALS = [
-  {
-    text: 'RealEstatePro made my property buying experience seamless and stress-free!',
-    author: 'John Doe',
-    photo: testimonialMen,
-  },
-  {
-    text: 'Their attention to detail and exceptional service truly stand out.',
-    author: 'Jane Smith',
-    photo: testimonialFemale,
-  },
+  { text: 'RealEstatePro made my property buying experience seamless and stress-free!', author: 'John Doe', photo: testimonialMen },
+  { text: 'Their attention to detail and exceptional service truly stand out.', author: 'Jane Smith', photo: testimonialFemale },
 ];
 
 const WHY_CHOOSE_POINTS = [
@@ -105,79 +89,67 @@ const WHY_CHOOSE_POINTS = [
   'Transparent transactions',
 ];
 
-const NEWS_ITEMS = [
-  {
-    id: 1,
-    title: 'Market Trends 2025',
-    description: 'An in-depth analysis of the current real estate market trends.',
-    image: propertyImage,
-  },
-  {
-    id: 2,
-    title: 'Tips for Home Buyers',
-    description: 'Essential tips and advice for buying your first home.',
-    image: propertyImage,
-  },
-  {
-    id: 3,
-    title: 'Luxury Homes on the Rise',
-    description: 'Discover the latest trends in luxury real estate.',
-    image: propertyImage,
-  },
-];
-
 const HomePage = () => {
   const [featuredProps, setFeaturedProps] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingProps, setLoadingProps] = useState(true);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loadingBlogs, setLoadingBlogs] = useState(true);
 
+  // Fetch featured properties
   useEffect(() => {
     const fetchFeatured = async () => {
       const { data, error } = await supabase
         .from('properties')
         .select('*')
         .order('id', { ascending: false })
-        .limit(3);  // ← only fetch 3
-
-      if (error) {
-        console.error('Error fetching featured properties:', error);
-      } else {
-        setFeaturedProps(data);
-      }
-      setLoading(false);
+        .limit(3);
+      if (error) console.error('Error fetching featured properties:', error);
+      else setFeaturedProps(data);
+      setLoadingProps(false);
     };
     fetchFeatured();
+  }, []);
+
+  // Fetch latest 3 blog posts
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('id, title, content, image_url, created_at')
+        .order('created_at', { ascending: false })
+        .limit(3);
+      if (error) console.error('Error fetching blog posts:', error);
+      else setBlogPosts(data);
+      setLoadingBlogs(false);
+    };
+    fetchBlogs();
   }, []);
 
   return (
     <div className="homepage-container">
       <HeroSection />
 
+      {/* Welcome Section */}
       <AnimateOnScroll className="homepage-welcome-section homepage-box">
         <div className="homepage-welcome-image">
-          <img
-            src={propertyImage}
-            alt="Welcome to RealEstatePro"
-            className="card-hover"
-            loading="lazy"
-          />
+          <img src={propertyImage} alt="Welcome" className="card-hover" loading="lazy" />
         </div>
         <div className="homepage-welcome-content">
           <h2>Welcome to UrbanEdge Living Space</h2>
           <p className="text-background-overlay">
             At UrbanEdge Living Space, we are committed to providing you with a curated selection of premium properties and unparalleled service. Our expert team is here to guide you every step of the way.
           </p>
-          <a href="#/about-us" className="homepage-cta-button">
-            Learn More About Us
-          </a>
+          <a href="#/about-us" className="homepage-cta-button">Learn More About Us</a>
         </div>
       </AnimateOnScroll>
 
+      {/* Featured Properties */}
       <AnimateOnScroll className="homepage-featured-properties homepage-box">
         <h2 className="homepage-section-title">Featured Properties</h2>
         <div className="homepage-property-list">
-          {loading ? (
+          {loadingProps ? (
             <p>Loading properties...</p>
-          ) : featuredProps.length > 0 ? (
+          ) : featuredProps.length ? (
             featuredProps.map(prop => (
               <div key={prop.id} className="card-hover">
                 <PropertyCard
@@ -187,8 +159,8 @@ const HomePage = () => {
                     description: prop.description,
                     location: prop.location,
                     image: prop.image_url || propertyImage,
-                    property_type: prop.property_type,
-                    price_range: prop.price_range,
+                    carpet_area: prop.carpet_area,
+                    bhk: prop.bhk,
                   }}
                 />
               </div>
@@ -198,54 +170,26 @@ const HomePage = () => {
           )}
         </div>
         <div className="homepage-cta-container">
-          <a href="#/properties" className="homepage-cta-button homepage-secondary">
-            View All Listings
-          </a>
+          <a href="#/properties" className="homepage-cta-button homepage-secondary">View All Listings</a>
         </div>
       </AnimateOnScroll>
+
+      {/* Why Choose */}
       <div className="homepage-why-choose homepage-box">
         <AnimateOnScroll direction="right" className="homepage-why-choose-content">
           <div className="text-border connected-right">
             <h2>Why Choose Us?</h2>
             <ul className="homepage-why-choose-list">
-              {WHY_CHOOSE_POINTS.map((point, i) => (
-                <li key={i}>{point}</li>
-              ))}
+              {WHY_CHOOSE_POINTS.map((point, i) => <li key={i}>{point}</li>)}
             </ul>
           </div>
         </AnimateOnScroll>
         <AnimateOnScroll direction="left" className="homepage-why-choose-image">
-          <img
-            src={propertyImage}
-            alt="Why Choose RealEstatePro"
-            className="card-hover"
-            loading="lazy"
-          />
+          <img src={propertyImage} alt="Why Choose Us" className="card-hover" loading="lazy" />
         </AnimateOnScroll>
       </div>
 
-      <div className="homepage-guaranteed-rent homepage-box">
-        <AnimateOnScroll direction="left" className="homepage-guaranteed-rent-image">
-          <img
-            src={propertyImage}
-            alt="Guaranteed Rent Program"
-            className="card-hover"
-            loading="lazy"
-          />
-        </AnimateOnScroll>
-        <AnimateOnScroll direction="right" className="homepage-guaranteed-rent-content">
-          <div className="text-border connected-left">
-            <h2>Support under 24 hours</h2>
-            <p>
-              Enjoy peace of mind with our support under 24 hours. We ensure timely support calls and a hassle-free process, so you can invest with confidence.
-            </p>
-          </div>
-          <a href="#/contact-us" className="homepage-cta-button">
-            Learn More
-          </a>
-        </AnimateOnScroll>
-      </div>
-
+      {/* Testimonials */}
       <AnimateOnScroll className="homepage-testimonials homepage-box">
         <h2 className="homepage-section-title">What Our Clients Say</h2>
         <div className="homepage-testimonial-list">
@@ -257,19 +201,28 @@ const HomePage = () => {
         </div>
       </AnimateOnScroll>
 
+      {/* Latest Blog Posts */}
       <AnimateOnScroll className="homepage-latest-news homepage-box">
-        <h2 className="homepage-section-title">Latest News</h2>
+        <h2 className="homepage-section-title">Latest Blog Posts</h2>
         <div className="homepage-news-grid">
-          {NEWS_ITEMS.map((news) => (
-            <div key={news.id} className="news-card card-hover">
-              <img src={news.image} alt={news.title} className="news-image" loading="lazy" />
-              <div className="news-content">
-                <h3 className="news-title">{news.title}</h3>
-                <p className="news-description">{news.description}</p>
-                <a href="#/blog" className="news-readmore">Read More →</a>
+          {loadingBlogs ? (
+            <p>Loading blog posts...</p>
+          ) : blogPosts.length ? (
+            blogPosts.map(post => (
+              <div key={post.id} className="news-card card-hover">
+                {post.image_url && (
+                  <img src={post.image_url} alt={post.title} className="news-image" loading="lazy" />
+                )}
+                <div className="news-content">
+                  <h3 className="news-title">{post.title}</h3>
+                  <p className="news-description">{post.content.slice(0, 100)}...</p>
+                  <a href="#/blog" className="news-readmore">Read More →</a>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No blog posts available.</p>
+          )}
         </div>
       </AnimateOnScroll>
     </div>

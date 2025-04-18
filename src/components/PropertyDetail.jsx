@@ -3,7 +3,20 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import './PropertyDetail.css';
 import defaultImage from '../assets/property.jpg';
-import { MdCheckCircle } from 'react-icons/md';
+
+import {
+  MdCheckCircle,
+  MdPool,
+  MdWifi,
+  MdLocalParking,
+  MdSecurity,
+  MdFitnessCenter,
+  MdElevator,
+  MdExpandMore,
+  MdExpandLess,
+} from 'react-icons/md';
+import { FaUtensils, FaTree, FaCogs, FaBolt, FaDownload, FaBuilding, FaRulerCombined } from 'react-icons/fa';
+import { GiPathDistance, GiHomeGarage } from 'react-icons/gi';
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -17,197 +30,307 @@ const PropertyDetail = () => {
         .select('*')
         .eq('id', id)
         .single();
-      if (error) console.error('Error fetching property:', error);
-      else setProperty(data);
+
+      if (error) {
+        console.error('Error fetching property:', error);
+        return;
+      }
+      setProperty(data);
     };
+
     fetchProperty();
   }, [id]);
 
-  if (!property) return <p>Loading...</p>;
+  if (!property) return <div className="pd-loading">Loading Property Details...</div>;
 
-  // Parse configurations
-  let configurations = [];
-  try {
-    const raw = JSON.parse(property.floor_space_pricing || '[]');
-    if (Array.isArray(raw) && raw.every(item => typeof item === 'object')) {
-      configurations = raw;
-    }
-  } catch {
-    configurations = [];
-  }
-
-  // Parse amenities
-  let amenities = [];
-  try {
-    let raw = property.amenities;
-
-    // Handle stringified array or nested stringified arrays
-    if (typeof raw === 'string') {
-      while (typeof raw === 'string') {
-        raw = JSON.parse(raw);
-      }
-    }
-
-    if (Array.isArray(raw)) {
-      amenities = raw;
-    } else if (typeof raw === 'string') {
-      amenities = raw.split(',').map(a => a.trim());
-    }
-  } catch {
-    amenities = (property.amenities || '').split(',').map(a => a.trim());
-  }
-
-  // Description toggle logic
-  const fullDesc = property.about_property || 'No description available.';
-  const limit = 300;
-  const isLong = fullDesc.length > limit;
-  const truncated = isLong ? fullDesc.slice(0, limit).trim() + '…' : fullDesc;
+  // Data processing remains similar but moved to separate functions for clarity
+  const { configurations, amenities } = processPropertyData(property);
+  const { truncated, isLong, fullDesc } = processDescription(property);
 
   return (
     <div className="pd-page">
       {/* Hero Section */}
-      <div className="pd-hero">
-        <img
-          src={property.image_url || defaultImage}
-          alt={property.name}
+      <section className="pd-hero" aria-label="Property overview">
+        <img 
+          src={property.image_url || defaultImage} 
+          alt={property.name} 
           className="pd-hero-img"
+          loading="lazy"
         />
-        <div className="pd-hero-text">
+        <div className="pd-hero-content">
           <h1>{property.name}</h1>
-          <p>{property.location || 'Location not specified'}</p>
+          <div className="pd-hero-meta">
+            <p className="pd-location">
+              <MdCheckCircle aria-hidden="true" />
+              {property.location || 'Location not specified'}
+            </p>
+            <p className="pd-price">
+              {property.price && `$${property.price.toLocaleString()}`}
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Main Content */}
-      <div className="pd-content">
+      {/* Main Content Grid */}
+      <main className="pd-main-grid">
+        {/* Primary Content Column */}
+        <div className="pd-primary-content">
+          <Section title="About the Property" initialOpen={true}>
+            <DescriptionText
+              fullDesc={fullDesc}
+              truncated={truncated}
+              isLong={isLong}
+              showFullDesc={showFullDesc}
+              toggle={() => setShowFullDesc(!showFullDesc)}
+            />
+          </Section>
 
-        {/* About the Project */}
-        <section className="pd-description">
-          <h2>About the Project</h2>
-          <p className={`pd-desc-text ${showFullDesc ? 'expanded' : ''}`}>
-            {showFullDesc ? fullDesc : truncated}
-          </p>
-          {isLong && (
-            <button className="pd-toggle-btn" onClick={() => setShowFullDesc(!showFullDesc)}>
-              {showFullDesc ? 'Show Less' : 'Show More'}
-            </button>
+          <Section title="Key Features">
+            <QuickInfoGrid property={property} />
+          </Section>
+
+          {configurations.length > 0 && (
+            <Section title="Floor Plans & Pricing">
+              <ConfigurationsTable configurations={configurations} />
+            </Section>
           )}
-        </section>
 
-        {/* Quick Info */}
-        <section className="pd-quick-info">
-          <div><strong>BHK:</strong> {property.bhk || '—'}</div>
-          <div><strong>Carpet Area:</strong> {property.carpet_area || '—'}</div>
-          <div><strong>Possession Date:</strong> {property.possession || '—'}</div>
-          <div><strong>Units:</strong> {property.no_of_units || '—'}</div>
-          <div><strong>RERA No.:</strong> {property.rera_no || '—'}</div>
-          <div><strong>Developed By:</strong> {property.developed_by || '—'}</div>
-          <div><strong>Property Type:</strong> {property.property_type || '—'}</div>
-          <div><strong>Project Area:</strong> {property.project_area || '—'}</div>
-          <div><strong>Ownership:</strong> {property.ownership || '—'}</div>
-          <div><strong>Towers & Floors:</strong> {property.towers_floor || '—'}</div>
-          <div><strong>View:</strong> {property.property_view || '—'}</div>
-          <div><strong>Parking:</strong> {property.parking || '—'}</div>
-        </section>
+          {amenities.length > 0 && (
+            <Section title="Amenities & Facilities">
+              <AmenitiesGrid amenities={amenities} />
+            </Section>
+          )}
 
-        {/* Configurations */}
-        {configurations.length > 0 && (
-          <section className="pd-config">
-            <h2>Configurations</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Area</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {configurations.map((cfg, idx) => (
-                  <tr key={idx}>
-                    <td>{cfg.type || '—'}</td>
-                    <td>{cfg.area || '—'}</td>
-                    <td>{cfg.price || '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        )}
+          {property.about_builder_company && (
+            <Section title="About the Builder">
+              <p>{property.about_builder_company}</p>
+            </Section>
+          )}
+        </div>
 
-        {/* Amenities */}
-        {amenities.length > 0 && (
-          <section className="pd-amenities">
-            <h2>Amenities</h2>
-            <div className="pd-amenities-grid">
-              {amenities.map((item, i) => (
-                <div className="pd-amenity-item" key={i}>
-                  <MdCheckCircle className="pd-icon" />
-                  <span className="pd-label">{item}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Secondary Content Column */}
+        <div className="pd-secondary-content">
+          <Section title="At a Glance" variant="card">
+            <QuickFacts property={property} />
+          </Section>
 
-        {/* Builder Info */}
-        {property.about_builder_company && (
-          <section className="pd-builder-info">
-            <h2>About the Builder</h2>
-            <p>{property.about_builder_company}</p>
-          </section>
-        )}
+          {property.google_map_location && (
+            <Section title="Location" variant="card">
+              <LocationMap location={property.google_map_location} />
+            </Section>
+          )}
 
-        {/* Location Section */}
-        {(property.about_location || property.explore_neighbourhood || property.google_map_location) && (
-          <section className="pd-location-info">
-            <h2>Location Details</h2>
-
-            {property.about_location && (
-              <div className="pd-location-about">
-                <h4>About Location</h4>
-                <p>{property.about_location}</p>
-              </div>
-            )}
-
-            {property.explore_neighbourhood && (
-              <div className="pd-neighbourhood">
-                <h4>Explore Neighbourhood</h4>
-                <p>{property.explore_neighbourhood}</p>
-              </div>
-            )}
-
-            {property.google_map_location && (
-              <div className="pd-map-embed">
-                <h4>Map</h4>
-                <iframe
-                  src={property.google_map_location}
-                  title="Google Map Location"
-                  loading="lazy"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
-              </div>
-            )}
-          </section>
-        )}
-
-        {/* Brochure */}
-        {property.brochure_url && (
-          <section className="pd-brochure">
-            <a
-              href={property.brochure_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pd-download-brochure"
-            >
-              📥 Download Brochure
-            </a>
-          </section>
-        )}
-      </div>
+          {property.brochure_url && (
+            <Section variant="card">
+              <BrochureDownload url={property.brochure_url} />
+            </Section>
+          )}
+        </div>
+      </main>
     </div>
   );
+};
+
+// Sub-components for better maintainability
+const Section = ({ title, children, variant, initialOpen }) => (
+  <section className={`pd-section ${variant ? `pd-section--${variant}` : ''}`}>
+    {title && <h2 className="pd-section-title">{title}</h2>}
+    <div className="pd-section-content">{children}</div>
+  </section>
+);
+
+const DescriptionText = ({ fullDesc, truncated, isLong, showFullDesc, toggle }) => (
+  <>
+    <div className="pd-description-text" aria-expanded={isLong ? showFullDesc : undefined}>
+      {showFullDesc ? fullDesc : truncated}
+    </div>
+    {isLong && (
+      <button 
+        className="pd-toggle-btn"
+        onClick={toggle}
+        aria-label={`${showFullDesc ? 'Collapse' : 'Expand'} description`}
+      >
+        {showFullDesc ? <><MdExpandLess /> Show Less</> : <><MdExpandMore /> Show More</>}
+      </button>
+    )}
+  </>
+);
+
+const QuickInfoGrid = ({ property }) => (
+  <div className="pd-quick-grid">
+    <InfoItem label="Property Type" value={property.property_type} />
+    <InfoItem label="BHK Configuration" value={property.bhk} />
+    <InfoItem label="Carpet Area" value={property.carpet_area} />
+    <InfoItem label="Possession Date" value={property.possession} />
+    <InfoItem label="Total Units" value={property.no_of_units} />
+    <InfoItem label="RERA Number" value={property.rera_no} />
+    <InfoItem label="Developer" value={property.developed_by} />
+    <InfoItem label="Project Area" value={property.project_area} />
+    <InfoItem label="Ownership Type" value={property.ownership} />
+    <InfoItem label="Towers & Floors" value={property.towers_floor} />
+    <InfoItem label="View" value={property.property_view} />
+    <InfoItem label="Parking" value={property.parking} />
+  </div>
+);
+
+const InfoItem = ({ label, value }) => (
+  <div className="pd-info-item">
+    <strong>{label}</strong>
+    <span>{value || '—'}</span>
+  </div>
+);
+
+const ConfigurationsTable = ({ configurations }) => (
+  <div className="pd-table-container">
+    <table className="pd-config-table">
+      <thead>
+        <tr>
+          <th>Unit Type</th>
+          <th>Area (sq.ft)</th>
+          <th>Price Range</th>
+        </tr>
+      </thead>
+      <tbody>
+        {configurations.map((cfg, idx) => (
+          <tr key={idx}>
+            <td>{cfg.type || '—'}</td>
+            <td>{cfg.area || '—'}</td>
+            <td>{cfg.price ? `$${cfg.price.toLocaleString()}` : '—'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+const AmenitiesGrid = ({ amenities }) => (
+  <div className="pd-amenities-grid">
+    {amenities.map((item, i) => (
+      <AmenityItem key={i} name={item} />
+    ))}
+  </div>
+);
+
+const AmenityItem = ({ name }) => {
+  const icon = getAmenityIcon(name);
+  return (
+    <div className="pd-amenity-item">
+      <span className="pd-amenity-icon" aria-hidden="true">{icon}</span>
+      <span className="pd-amenity-label">{name}</span>
+    </div>
+  );
+};
+
+const QuickFacts = ({ property }) => (
+  <div className="pd-quick-facts">
+    <InfoCard icon={<FaBuilding />} label="Project Type" value={property.property_type} />
+    <InfoCard icon={<FaRulerCombined />} label="Total Area" value={property.project_area} />
+    <InfoCard icon={<MdLocalParking />} label="Parking" value={property.parking} />
+    <InfoCard icon={<FaBolt />} label="Power Backup" value={property.power_backup || 'Yes'} />
+  </div>
+);
+
+const InfoCard = ({ icon, label, value }) => (
+  <div className="pd-info-card">
+    <div className="pd-info-card-icon">{icon}</div>
+    <div className="pd-info-card-content">
+      <div className="pd-info-card-label">{label}</div>
+      <div className="pd-info-card-value">{value || '—'}</div>
+    </div>
+  </div>
+);
+
+const LocationMap = ({ location }) => (
+  <div className="pd-map-container">
+    <iframe 
+      src={location}
+      title="Property Location"
+      loading="lazy"
+      allowFullScreen
+      referrerPolicy="no-referrer-when-downgrade"
+    />
+  </div>
+);
+
+const BrochureDownload = ({ url }) => (
+  <a href={url} className="pd-brochure-download" download>
+    <FaDownload />
+    Download Full Brochure
+  </a>
+);
+
+// Helper functions
+const processPropertyData = (property) => {
+  // Configurations processing
+  let configurations = [];
+  try {
+    const rawCfg = JSON.parse(property.floor_space_pricing || '[]');
+    configurations = Array.isArray(rawCfg) ? rawCfg : [];
+  } catch {
+    configurations = [];
+  }
+
+  // Amenities processing
+  let amenities = [];
+  try {
+    let raw = property.amenities;
+  
+    // If raw is a string, try parsing it as JSON
+    if (typeof raw === 'string') {
+      try {
+        raw = JSON.parse(raw);
+      } catch {
+        // If parsing fails, split the string by commas
+        raw = raw.split(',').map((item) => item.trim());
+      }
+    }
+  
+    // If raw is an array, clean up each item
+    if (Array.isArray(raw)) {
+      amenities = raw.map((item) => {
+        let s = String(item).trim();
+        // Remove surrounding quotes
+        if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
+          s = s.slice(1, -1);
+        }
+        // Remove unwanted brackets or escape characters
+        s = s.replace(/[\[\]\\]/g, ''); // Remove unwanted brackets or escape characters
+        return s.trim();
+            });
+          }
+
+          // Final cleanup: remove any remaining double quotes
+          amenities = amenities.map((item) => item.replace(/"/g, '').trim());
+        } catch {
+          amenities = [];
+        }
+
+  return { configurations, amenities };
+};
+
+const processDescription = (property) => {
+  const fullDesc = property.about_property || 'No description available.';
+  const limit = 300;
+  const isLong = fullDesc.length > limit;
+  const truncated = isLong ? `${fullDesc.slice(0, limit).trim()}…` : fullDesc;
+  return { fullDesc, truncated, isLong };
+};
+
+const getAmenityIcon = (name) => {
+  const key = name.toLowerCase();
+  if (key.includes('pool')) return <MdPool />;
+  if (key.includes('wifi')) return <MdWifi />;
+  if (key.includes('parking')) return <MdLocalParking />;
+  if (key.includes('security')) return <MdSecurity />;
+  if (key.includes('gym')) return <MdFitnessCenter />;
+  if (key.includes('elevator')) return <MdElevator />;
+  if (key.includes('garden')) return <FaTree />;
+  if (key.includes('generator')) return <FaBolt />;
+  if (key.includes('cctv')) return <FaCogs />;
+  if (key.includes('garage')) return <GiHomeGarage />;
+  if (key.includes('dining')) return <FaUtensils />;
+  if (key.includes('path')) return <GiPathDistance />;
+  return <MdCheckCircle />;
 };
 
 export default PropertyDetail;

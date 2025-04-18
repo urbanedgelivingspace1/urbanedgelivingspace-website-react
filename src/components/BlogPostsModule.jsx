@@ -38,43 +38,62 @@ const BlogPostsModule = () => {
 
   const addPost = async (e) => {
     e.preventDefault();
-
+  
     const isLoggedIn = localStorage.getItem('admin-auth') === 'true';
     if (!isLoggedIn) {
       alert('Please log in to add a blog post.');
       return;
     }
-
+  
     let image_url = '';
     try {
       if (imageFile) {
         const ext = imageFile.name.split('.').pop();
         const path = `blog/${Date.now()}.${ext}`;
+        
+        // Log file details to check if file is being picked up correctly
+        console.log('Uploading file:', imageFile);
         const { error: uploadError } = await supabase.storage
           .from('blog-images')
           .upload(path, imageFile);
-        if (uploadError) throw uploadError;
-
-        const { data: urlData } = supabase.storage
+        
+        if (uploadError) {
+          console.error('Error uploading image:', uploadError);
+          throw uploadError;
+        }
+        
+        // Log the path where the image was uploaded
+        console.log('File uploaded to path:', path);
+  
+        const { data: urlData, error: urlError } = supabase.storage
           .from('blog-images')
           .getPublicUrl(path);
+  
+        if (urlError) {
+          console.error('Error retrieving image URL:', urlError);
+          throw urlError;
+        }
+  
+        // Log the URL returned from Supabase
+        console.log('Image URL:', urlData.publicUrl);
         image_url = urlData.publicUrl;
       }
-
+  
       const { error } = await supabase
         .from('blog_posts')
         .insert([{ ...newPost, image_url }]);
-
+  
       if (error) throw error;
-
+  
       setNewPost({ title: '', content: '' });
       setImageFile(null);
       fetchPosts(); // Re-fetch posts after adding a new one
     } catch (err) {
+      console.error('Failed to add blog post:', err.message);
       alert('Failed to add blog post: ' + err.message);
     }
   };
-
+  
   const deletePost = async (id) => {
     const isLoggedIn = localStorage.getItem('admin-auth') === 'true';
     if (!isLoggedIn) {
