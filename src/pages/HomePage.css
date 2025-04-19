@@ -38,9 +38,9 @@
 /* ==================================================
    Accessibility Improvements
 ================================================== */
-:focus {
-  outline: 3px solid var(--accent-color);
-  outline-offset: 2px;
+/* Only show focus outlines for keyboard users */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Improve tap target sizes for mobile */
@@ -434,7 +434,7 @@ body,
 ================================================== */
 .card-hover {
   width: 100%;
-  min-height: 420px;
+  min-height: 200px;
   background-color: var(--white);
   border-radius: var(--card-radius);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);

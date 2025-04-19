@@ -103,23 +103,50 @@ body {
 }
 
 /* CTA Button Styling */
+.aboutus-cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
 .aboutus-cta-button {
-  display: inline-block;
-  padding: 14px 32px;
-  border-radius: 40px;
-  background: linear-gradient(145deg, var(--secondary-color), var(--accent-color));
-  color: var(--white);
+  padding: 16px 28px;
+  border-radius: 4px; /* Less rounded for professional look */
+  background: var(--secondary-color); /* Solid color for better accessibility */
+  color: var(--dark-color); /* Better contrast */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  font-size: 1rem;
   text-decoration: none;
+  transition: background var(--transition-speed), transform var(--transition-speed),
+              box-shadow var(--transition-speed);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  text-align: center;
 }
 
 .aboutus-cta-button:hover {
-  background: linear-gradient(145deg, var(--accent-color), var(--secondary-color));
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background: #d4b963; /* Lighter shade for hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.aboutus-cta-button:active {
+  transform: translateY(1px);
+}
+
+.aboutus-cta-button.aboutus-secondary {
+  background: transparent;
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.aboutus-cta-button.aboutus-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0c057; /* Brighter for better visibility */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* ===================================
