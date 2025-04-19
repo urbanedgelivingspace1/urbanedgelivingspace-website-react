@@ -100,7 +100,7 @@ body,
 ================================================== */
 .text-background-overlay {
   background-color: rgba(255, 255, 255, 0.85); /* More opaque for readability */
-  -webkit-backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); /* Safari support */
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.5);
   padding: 16px;
@@ -125,9 +125,9 @@ body,
 }
 
 /* ==================================================
-   Refined Animations - Sophisticated & Professional
+   Refined Animations - Smoother & Less Motion
 ================================================== */
-/* Accessibility: Respect user preferences for reduced motion */
+/* Reduce motion option for accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -137,44 +137,35 @@ body,
   }
 }
 
-/* Elegant slide-in from left with easing */
+/* Slide in from left with softer transition */
 @keyframes slideInLeft {
   0% {
     opacity: 0;
-    transform: translateX(-20px);
-  }
-  60% {
-    opacity: 0.9;
+    transform: translateX(-30px);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translate(0, 0);
   }
 }
 
-/* Elegant slide-in from right with easing */
+/* Slide in from right with softer transition */
 @keyframes slideInRight {
   0% {
     opacity: 0;
-    transform: translateX(20px);
-  }
-  60% {
-    opacity: 0.9;
+    transform: translateX(30px);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translate(0, 0);
   }
 }
 
-/* Refined rise animation with subtle easing for hero elements */
+/* Simpler rise animation */
 @keyframes riseIn {
   0% {
     opacity: 0;
-    transform: translateY(15px);
-  }
-  70% {
-    opacity: 0.95;
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
@@ -182,15 +173,11 @@ body,
   }
 }
 
-/* Subtle fade-in with minimal scale change for property listings */
+/* Fade effect for scroll reveal */
 @keyframes fadeInScale {
   0% {
     opacity: 0;
-    transform: scale(0.99);
-  }
-  70% {
-    opacity: 0.95;
-    transform: scale(0.995);
+    transform: scale(0.98);
   }
   100% {
     opacity: 1;
@@ -199,41 +186,32 @@ body,
 }
 
 /* ==================================================
-   Scroll Animations & Slide Effects - Professional Implementation
+   Scroll Animations & Slide Effects - Modified for performance
 ================================================== */
-/* Base: elements start invisible but ready for animation */
+/* Base: elements start hidden */
 .scroll-animate {
   opacity: 0;
-  will-change: opacity, transform;
 }
 
-/* When element enters viewport */
+/* When element is in view */
 .scroll-animate.in-view {
   opacity: 1;
-  transition: opacity 0.5s ease;
 }
 
-/* Slide animations with premium timing */
+/* Slide animations when in view */
 .slide-left.in-view {
-  animation: slideInLeft 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: slideInLeft 0.8s ease-out forwards;
 }
 
 .slide-right.in-view {
-  animation: slideInRight 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: slideInRight 0.8s ease-out forwards;
 }
 
-/* Fade-in with minimal scale for property cards and testimonials */
+/* Fade-in with scale variation */
 .fade-in.in-view,
 .fade-in-scale.in-view {
-  animation: fadeInScale 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: fadeInScale 0.7s ease forwards;
 }
-
-/* Sequential animations for grouped elements */
-.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
-.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
 
 /* ==================================================
    Hero Section with Enhanced Background & Parallax
@@ -456,7 +434,7 @@ body,
 ================================================== */
 .card-hover {
   width: 100%;
-  min-height: 200px;
+  min-height: 420px;
   background-color: var(--white);
   border-radius: var(--card-radius);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
