@@ -287,17 +287,28 @@ const InfoCard = ({ icon, label, value }) => (
   </div>
 );
 
-const LocationMap = ({ location }) => (
-  <div className="pd-map-container">
-    <iframe 
-      src={location}
-      title="Property Location"
-      loading="lazy"
-      allowFullScreen
-      referrerPolicy="no-referrer-when-downgrade"
-    />
-  </div>
-);
+const LocationMap = ({ location }) => {
+  // Extract the src if the location is an iframe string
+  const extractSrc = (input) => {
+    const match = input.match(/src=["']([^"']+)["']/);
+    return match ? match[1] : input;
+  };
+
+  const mapSrc = extractSrc(location);
+
+  return (
+    <div className="pd-map-container">
+      <iframe
+        src={mapSrc}
+        title="Property Location"
+        loading="lazy"
+        allowFullScreen
+        referrerPolicy="no-referrer-when-downgrade"
+        style={{ width: '100%', height: '450px', border: 0 }}
+      />
+    </div>
+  );
+};
 
 const BrochureDownload = ({ url }) => (
   <a href={url} className="pd-brochure-download" download>
@@ -341,6 +352,7 @@ const processPropertyData = (property) => {
           s = s.slice(1, -1);
         }
         // Remove unwanted brackets or escape characters
+        // eslint-disable-next-line no-useless-escape
         s = s.replace(/[\[\]\\]/g, ''); // Remove unwanted brackets or escape characters
         return s.trim();
             });
@@ -377,6 +389,20 @@ const getAmenityIcon = (name) => {
   if (key.includes('garage')) return <GiHomeGarage />;
   if (key.includes('dining')) return <FaUtensils />;
   if (key.includes('path')) return <GiPathDistance />;
+  if (key.includes('clubhouse')) return <MdFitnessCenter />;
+  if (key.includes('water')) return <MdCheckCircle />; // Placeholder for water supply
+  if (key.includes('power')) return <MdCheckCircle />; // Placeholder for power backup
+  if (key.includes('fire')) return <MdCheckCircle />; // Placeholder for fire safety
+  if (key.includes('internet')) return <MdCheckCircle />; // Placeholder for internet
+  if (key.includes('playground')) return <MdCheckCircle />; // Placeholder for playground
+  if (key.includes('sports')) return <MdCheckCircle />; // Placeholder for sports facilities
+  if (key.includes('balcony')) return <MdCheckCircle />; // Placeholder for balcony
+  if (key.includes('terrace')) return <MdCheckCircle />; // Placeholder for terrace
+  if (key.includes('garden')) return <MdCheckCircle />; // Placeholder for garden
+  if (key.includes('lobby')) return <MdCheckCircle />; // Placeholder for lobby
+  if (key.includes('courtyard')) return <MdCheckCircle />; // Placeholder for courtyard
+  if (key.includes('landscaping')) return <MdCheckCircle />; // Placeholder for landscaping
+
   return <MdCheckCircle />;
 };
 

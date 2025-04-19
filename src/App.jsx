@@ -37,7 +37,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/admin-secret-upload" element={<AdminUpload />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/mppateL123" element={<AdminLogin />} />
           <Route path="/properties/:id" element={<PropertyDetail />} />
           <Route path="/admin-register" element={<AdminRegister />} />
           <Route path="/blog/:id" element={<BlogDetail />} />

@@ -8,6 +8,8 @@ import './HomePage.css';
 import propertyImage from '../assets/property.jpg';
 import testimonialMen from '../assets/review1.jpg';
 import testimonialFemale from '../assets/reviewfemale.jpg';
+import urbanEdgeLogo from '../assets/UrbanEdge_Living_Space_Logo_HD.jpg';
+import whyChooseUs from '../assets/whyChooseUs.jpg';
 
 const useInView = (threshold = 0.1) => {
   const ref = useRef(null);
@@ -83,10 +85,14 @@ const TESTIMONIALS = [
 ];
 
 const WHY_CHOOSE_POINTS = [
-  'Personalized property recommendations',
-  'Expert local market knowledge',
-  'Unparalleled customer service',
-  'Transparent transactions',
+  'A Proven Track Record of Excellence',
+  'Tailored and Personalized Services',
+  'Clear and Transparent Communication',
+  'Expert Negotiation Skills',
+  'Comprehensive End-to-End Support',
+  'A Trusted Network of Professionals',
+  'Innovative and Effective Marketing Strategies',
+  'A Results-Oriented Approach to Success',
 ];
 
 const HomePage = () => {
@@ -129,10 +135,15 @@ const HomePage = () => {
     <div className="homepage-container">
       <HeroSection />
 
-      {/* Welcome Section */}
+      {/* Welcome Section with Logo */}
       <AnimateOnScroll className="homepage-welcome-section homepage-box">
-        <div className="homepage-welcome-image">
-          <img src={propertyImage} alt="Welcome" className="card-hover" loading="lazy" />
+        <div className="homepage-welcome-image logo-container">
+          <img
+            src={urbanEdgeLogo}
+            alt="UrbanEdge Living Space Logo"
+            className="homepage-logo"
+            loading="lazy"
+          />
         </div>
         <div className="homepage-welcome-content">
           <h2>Welcome to UrbanEdge Living Space</h2>
@@ -185,7 +196,7 @@ const HomePage = () => {
           </div>
         </AnimateOnScroll>
         <AnimateOnScroll direction="left" className="homepage-why-choose-image">
-          <img src={propertyImage} alt="Why Choose Us" className="card-hover" loading="lazy" />
+          <img src={whyChooseUs} alt="Why Choose Us" className="card-hover" loading="lazy" />
         </AnimateOnScroll>
       </div>
 
