@@ -279,18 +279,6 @@ const PropertyModule = () => {
                 <p className="property-sq">
                   <FaRuler className="icon" /> {property.carpet_area} Sq Ft
                 </p>
-                {property.google_drive_url && (
-                  <p>
-                    <a
-                      href={property.google_drive_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: 'blue', textDecoration: 'underline' }}
-                    >
-                      📥 Download Brochure
-                    </a>
-                  </p>
-                )}
               </div>
               <div className="property-actions">
                 <button onClick={() => startEdit(property)} className="btn btn-edit">
