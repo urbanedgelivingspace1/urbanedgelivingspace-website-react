@@ -221,25 +221,24 @@ const PropertyModule = () => {
       <section className="property-form">
         <h2>➕ Add New Property</h2>
         <form onSubmit={handleSubmit}>
-          {Object.entries(initialState).map(([key]) => {
-            if (key === 'image_url') return null;
-            return (
-              <div key={key} className="form-group">
-                <label htmlFor={key}>
-                  {key.replace(/_/g, ' ').toUpperCase()}
-                </label>
-                <input
-                  type={key === 'possession' ? 'date' : 'text'}
-                  id={key}
-                  name={key}
-                  value={propertyData[key]}
-                  onChange={handleChange}
-                  required={['name', 'location'].includes(key)}
-                />
-              </div>
-            );
-          })}
-
+        {Object.entries(initialState).map(([key]) => {
+          if (key === 'image_url') return null; // Skip the image_url field for text inputs
+          return (
+            <div key={key} className="form-group">
+              <label htmlFor={key}>
+                {key.replace(/_/g, ' ').toUpperCase()}
+              </label>
+              <input
+                type={key === 'possession' ? 'date' : 'text'}
+                id={key}
+                name={key}
+                value={propertyData[key] || ''} // Ensure the value is always a string
+                onChange={handleChange}
+                required={['name', 'location'].includes(key)}
+              />
+            </div>
+          );
+        })}
           <div className="form-group">
             <label>Image</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -299,25 +298,24 @@ const PropertyModule = () => {
           <div className="modal-card">
             <h2>Edit Property</h2>
             <form onSubmit={handleEditSubmit}>
-              {Object.entries(initialState).map(([key]) => {
-                if (key === 'image_url') return null;
-                return (
-                  <div key={key} className="form-group">
-                    <label htmlFor={`edit-${key}`}>
-                      {key.replace(/_/g, ' ').toUpperCase()}
-                    </label>
-                    <input
-                      type={key === 'possession' ? 'date' : 'text'}
-                      id={`edit-${key}`}
-                      name={key}
-                      value={editingData[key] || ''}
-                      onChange={handleEditChange}
-                      required={['name', 'location'].includes(key)}
-                    />
-                  </div>
-                );
-              })}
-
+            {Object.entries(initialState).map(([key]) => {
+            if (key === 'image_url') return null; // Skip the image_url field for text inputs
+            return (
+              <div key={key} className="form-group">
+                <label htmlFor={`edit-${key}`}>
+                  {key.replace(/_/g, ' ').toUpperCase()}
+                </label>
+                <input
+                  type={key === 'possession' ? 'date' : 'text'}
+                  id={`edit-${key}`}
+                  name={key}
+                  value={editingData[key] || ''} // Ensure the value is always a string
+                  onChange={handleEditChange}
+                  required={['name', 'location'].includes(key)}
+                />
+              </div>
+            );
+          })}
               <div className="form-group">
                 <label>Image</label>
                 <input type="file" accept="image/*" onChange={handleEditImageChange} />
