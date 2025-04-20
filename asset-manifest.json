@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.28a327ca.css",
-    "main.js": "/static/js/main.84814218.js",
+    "main.css": "/static/css/main.69fc0937.css",
+    "main.js": "/static/js/main.38b071ba.js",
     "static/js/952.9a2e65b5.chunk.js": "/static/js/952.9a2e65b5.chunk.js",
     "static/media/property.jpg": "/static/media/property.37e2fb7fa6af32a4ae1d.jpg",
     "static/media/whyChooseUs.jpg": "/static/media/whyChooseUs.c84b8af937bc16e85751.jpg",
@@ -10,12 +10,12 @@
     "static/media/review1.jpg": "/static/media/review1.1ed855c1dadb18231811.jpg",
     "static/media/reviewfemale.jpg": "/static/media/reviewfemale.11d0053cfaaced6a81f6.jpg",
     "index.html": "/index.html",
-    "main.28a327ca.css.map": "/static/css/main.28a327ca.css.map",
-    "main.84814218.js.map": "/static/js/main.84814218.js.map",
+    "main.69fc0937.css.map": "/static/css/main.69fc0937.css.map",
+    "main.38b071ba.js.map": "/static/js/main.38b071ba.js.map",
     "952.9a2e65b5.chunk.js.map": "/static/js/952.9a2e65b5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.28a327ca.css",
-    "static/js/main.84814218.js"
+    "static/css/main.69fc0937.css",
+    "static/js/main.38b071ba.js"
   ]
 }
