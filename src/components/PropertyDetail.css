@@ -9,20 +9,21 @@
    Root Variables
 ================================ */
 .pd-page {
-  --primary-color: #2c5282;
-  --secondary-color: #f6ad55;
-  --text-color: #2d3748;
-  --text-light: #718096;
-  --background-light: #f7fafc;
+  --primary-color: #1a365d;         /* Darker blue for professionalism */
+  --secondary-color: #eab308;       /* Refined gold for luxury appeal */
+  --text-color: #1e293b;            /* Darker text for better readability */
+  --text-light: #64748b;            /* Softer gray for secondary text */
+  --background-light: #f8fafc;      /* Slightly lighter background */
   --border-color: #e2e8f0;
-  --success-color: #38a169;
+  --success-color: #047857;         /* Deeper green for success indicators */
+  --accent-color: #f0f9ff;          /* Light blue accent for highlights */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.05);
-  --transition: all 0.25s ease;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.04), 0 6px 8px rgba(0, 0, 0, 0.03);
+  --transition: all 0.3s ease;
   --font-heading: 'Montserrat', sans-serif;
   --font-body: 'Open Sans', sans-serif;
   --spacing-xs: 0.5rem;
@@ -41,6 +42,7 @@
   font-size: 1.1rem;
   color: var(--text-light);
   font-family: var(--font-body);
+  letter-spacing: 0.01em;
 }
 
 /* ================================
@@ -52,19 +54,20 @@
   overflow: hidden;
   margin-bottom: var(--spacing-xl);
   box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .pd-hero-img {
   width: 100%;
-  height: 65vh;
-  min-height: 450px;
+  height: 70vh;
+  min-height: 480px;
   object-fit: cover;
   background: linear-gradient(to right, #f0f0f0, #f8f8f8);
-  transition: transform 0.8s ease;
+  transition: transform 1s ease;
 }
 
 .pd-hero:hover .pd-hero-img {
-  transform: scale(1.02);
+  transform: scale(1.01);
 }
 
 .pd-hero-content {
@@ -72,11 +75,11 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: calc(var(--spacing-lg) + 0.5rem);
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  padding: calc(var(--spacing-lg) + 1rem);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   color: white;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 }
 
 .pd-hero-content h1 {
@@ -86,7 +89,8 @@
   font-family: var(--font-heading);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   letter-spacing: -0.02em;
-  max-width: 80%;
+  max-width: 85%;
+  line-height: 1.2;
 }
 
 .pd-hero-meta {
@@ -95,6 +99,7 @@
   align-items: center;
   font-size: 1.05rem;
   font-family: var(--font-body);
+  flex-wrap: wrap;
 }
 
 .pd-location {
@@ -102,7 +107,8 @@
   align-items: center;
   gap: var(--spacing-xs);
   margin: 0;
-  opacity: 0.9;
+  opacity: 0.95;
+  font-weight: 500;
 }
 
 .pd-price {
@@ -114,6 +120,7 @@
   letter-spacing: 0.01em;
   color: #000;
   opacity: 0.95;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 /* ================================
@@ -121,7 +128,7 @@
 ================================ */
 .pd-main-grid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
   gap: var(--spacing-lg);
   align-items: start;
   max-width: 1400px;
@@ -138,15 +145,20 @@
   margin-bottom: var(--spacing-lg);
   overflow: hidden;
   border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.pd-section:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .pd-section--card {
-  padding: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
   background: var(--background-light);
 }
 
 .pd-section-title {
-  font-size: clamp(1.3rem, 2.5vw, 1.4rem);
+  font-size: clamp(1.3rem, 2.5vw, 1.5rem);
   font-weight: 600;
   font-family: var(--font-heading);
   margin: 0 0 var(--spacing-md);
@@ -154,10 +166,21 @@
   border-bottom: 2px solid var(--border-color);
   color: var(--primary-color);
   letter-spacing: -0.01em;
+  position: relative;
+}
+
+.pd-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background-color: var(--secondary-color);
 }
 
 .pd-section-content {
-  padding: var(--spacing-xs) 0;
+  padding: var(--spacing-md) 0;
   font-family: var(--font-body);
 }
 
@@ -165,8 +188,8 @@
    Description Section
 ================================ */
 .pd-description-text {
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.8;
   color: var(--text-color);
   margin-bottom: var(--spacing-md);
 }
@@ -176,7 +199,7 @@
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
-  padding: 0.6rem 1.25rem;
+  padding: 0.7rem 1.5rem;
   background: var(--primary-color);
   color: white;
   border: none;
@@ -186,11 +209,13 @@
   font-size: 0.95rem;
   font-weight: 500;
   box-shadow: var(--shadow-sm);
+  letter-spacing: 0.02em;
 }
 
 .pd-toggle-btn:hover {
-  background: #1e3a5f;
-  transform: translateY(-1px);
+  background: #0f2948;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 /* ================================
@@ -198,7 +223,7 @@
 ================================ */
 .pd-quick-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
 }
@@ -212,6 +237,8 @@
   display: flex;
   flex-direction: column;
   transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
 .pd-info-item:hover {
@@ -232,7 +259,7 @@
 .pd-info-item span {
   font-size: 0.95rem;
   color: var(--text-color);
-  line-height: 1.4;
+  line-height: 1.5;
   word-break: break-word;
   font-family: var(--font-body);
 }
@@ -245,6 +272,7 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
+  margin: var(--spacing-md) 0;
 }
 
 .pd-config-table {
@@ -255,7 +283,7 @@
 
 .pd-config-table th,
 .pd-config-table td {
-  padding: 0.9rem 1.25rem;
+  padding: 1rem 1.25rem;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.95rem;
@@ -274,8 +302,12 @@
   border-bottom: none;
 }
 
+.pd-config-table tr:nth-child(even) {
+  background-color: var(--accent-color);
+}
+
 .pd-config-table tr:hover {
-  background: #f8fafc;
+  background: #f1f5f9;
 }
 
 /* ================================
@@ -283,7 +315,7 @@
 ================================ */
 .pd-amenities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--spacing-sm);
 }
 
@@ -291,7 +323,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -303,6 +335,7 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
   border-color: #cbd5e0;
+  background-color: var(--accent-color);
 }
 
 .pd-amenity-icon {
@@ -322,7 +355,7 @@
 .pd-info-card {
   display: flex;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
   background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -333,6 +366,7 @@
 .pd-info-card:hover {
   box-shadow: var(--shadow-sm);
   border-color: #cbd5e0;
+  background-color: var(--accent-color);
 }
 
 .pd-info-card-icon {
@@ -346,6 +380,7 @@
   color: var(--text-light);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  margin-bottom: 0.15rem;
 }
 
 .pd-info-card-value {
@@ -353,6 +388,7 @@
   margin-top: 0.25rem;
   font-family: var(--font-heading);
   color: var(--text-color);
+  font-size: 1.05rem;
 }
 
 /* ================================
@@ -365,6 +401,7 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
+  margin: var(--spacing-md) 0;
 }
 
 .pd-map-container iframe {
@@ -383,7 +420,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: 0.7rem 1.25rem;
+  padding: 0.8rem 1.5rem;
   background: var(--primary-color);
   color: white;
   text-decoration: none;
@@ -392,11 +429,12 @@
   transition: var(--transition);
   font-size: 0.95rem;
   box-shadow: var(--shadow-sm);
+  letter-spacing: 0.02em;
 }
 
 .pd-brochure-download:hover {
-  background: #1e3a5f;
-  transform: translateY(-1px);
+  background: #0f2948;
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
@@ -412,12 +450,16 @@
   .pd-section {
     margin-bottom: var(--spacing-md);
   }
+  
+  .pd-section--card {
+    padding: var(--spacing-md);
+  }
 }
 
 @media (max-width: 768px) {
   .pd-hero-img {
-    height: 50vh;
-    min-height: 350px;
+    height: 55vh;
+    min-height: 380px;
   }
   
   .pd-hero-content h1 {
@@ -427,19 +469,24 @@
 
   .pd-quick-grid,
   .pd-amenities-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-sm);
   }
   
   .pd-section-title {
     font-size: 1.25rem;
   }
+  
+  .pd-description-text {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 }
 
 @media (max-width: 480px) {
   .pd-hero-img {
-    height: 40vh;
-    min-height: 280px;
+    height: 45vh;
+    min-height: 300px;
   }
   
   .pd-hero-content {
@@ -468,7 +515,7 @@
   .pd-toggle-btn,
   .pd-brochure-download {
     font-size: 0.9rem;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     width: 100%;
     justify-content: center;
   }
@@ -481,7 +528,7 @@
   .pd-info-item,
   .pd-amenity-item,
   .pd-info-card {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
   }
   
   .pd-config-table th,
