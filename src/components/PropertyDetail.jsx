@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import './PropertyDetail.css';
 import defaultImage from '../assets/property.jpg';
+import PropertyContactForm from './PropertyContactForm';
 
 import {
   MdCheckCircle,
@@ -65,7 +66,7 @@ const PropertyDetail = () => {
               {property.location || 'Location not specified'}
             </p>
             <p className="pd-price">
-              {property.price && `$${property.price.toLocaleString()}`}
+              {property.price && `₹${property.price.toLocaleString()}`}
             </p>
           </div>
         </div>
@@ -102,8 +103,14 @@ const PropertyDetail = () => {
           )}
 
           {property.about_builder_company && (
-            <Section title="About the Builder">
+            <Section title="About the Developer">
               <p>{property.about_builder_company}</p>
+            </Section>
+          )}
+
+          {property.about_location && (
+            <Section title="About the Location">
+              <p>{property.about_location}</p>
             </Section>
           )}
         </div>
@@ -119,6 +126,11 @@ const PropertyDetail = () => {
               <LocationMap location={property.google_map_location} />
             </Section>
           )}
+
+          {/* Property Contact Form: Inquiries */}
+          <Section title="Inquire About This Property" variant="card">
+          <PropertyContactForm property={property} />
+          </Section>
 
           {property.brochure_url && (
             <Section variant="card">
@@ -160,16 +172,16 @@ const QuickInfoGrid = ({ property }) => (
   <div className="pd-quick-grid">
     <InfoItem label="Property Type" value={property.property_type} />
     <InfoItem label="BHK Configuration" value={property.bhk} />
-    <InfoItem label="Carpet Area" value={property.carpet_area} />
+    <InfoItem label="Area" value={property.carpet_area ? `${property.carpet_area} sq. yards` : null} />
     <InfoItem label="Possession Date" value={property.possession} />
     <InfoItem label="Total Units" value={property.no_of_units} />
     <InfoItem label="RERA Number" value={property.rera_no} />
     <InfoItem label="Developer" value={property.developed_by} />
     <InfoItem label="Project Area" value={property.project_area} />
-    <InfoItem label="Ownership Type" value={property.ownership} />
-    <InfoItem label="Towers & Floors" value={property.towers_floor} />
+    <InfoItem label="Towers" value={property.towers} />
+    <InfoItem label="Floors" value={property.towers_floor} />
     <InfoItem label="View" value={property.property_view} />
-    <InfoItem label="Parking" value={property.parking} />
+    <InfoItem label="Alloted Parking" value={property.parking} />
   </div>
 );
 
@@ -233,7 +245,7 @@ const QuickFacts = ({ property }) => {
     if (downloadUrl) {
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.setAttribute("download", "Brochure.pdf"); // Optional filename
+      link.setAttribute("download", "Brochure.pdf");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -244,8 +256,8 @@ const QuickFacts = ({ property }) => {
     <div className="pd-quick-facts">
       <InfoCard icon={<FaBuilding />} label="Project Type" value={property.property_type || "Coming Soon"} />
       <InfoCard icon={<FaRulerCombined />} label="Total Area" value={property.project_area || "Coming Soon"} />
-      <InfoCard icon={<MdLocalParking />} label="Parking" value={property.parking || "Coming Soon"} />
-
+      <InfoCard icon={<MdLocalParking />} label="Price" value={property.price ? `₹${property.price.toLocaleString()}` : "Coming Soon"} />
+      
       <div className="pd-info-card">
         <div className="pd-info-card-icon"><FaDownload /></div>
         <div className="pd-info-card-content">

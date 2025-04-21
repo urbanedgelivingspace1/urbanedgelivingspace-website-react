@@ -9,18 +9,27 @@
    Root Variables
 ================================ */
 .pd-page {
-  --primary-color: #1a4d8d;
-  --secondary-color: #d4a418;
-  --text-color: #333;
-  --background-light: #f9fafb;
-  --border-color: #e0e0e0;
-  --success-color: #28a745;
+  --primary-color: #2c5282;
+  --secondary-color: #f6ad55;
+  --text-color: #2d3748;
+  --text-light: #718096;
+  --background-light: #f7fafc;
+  --border-color: #e2e8f0;
+  --success-color: #38a169;
   --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --transition: all 0.2s ease;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --transition: all 0.25s ease;
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
 }
 
 /* ================================
@@ -28,9 +37,10 @@
 ================================ */
 .pd-loading {
   text-align: center;
-  padding: 4rem;
-  font-size: 1.2rem;
-  color: #666;
+  padding: var(--spacing-xl);
+  font-size: 1.1rem;
+  color: var(--text-light);
+  font-family: var(--font-body);
 }
 
 /* ================================
@@ -40,16 +50,21 @@
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  margin-bottom: 3rem;
-  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .pd-hero-img {
   width: 100%;
-  height: 60vh;
-  min-height: 400px;
+  height: 65vh;
+  min-height: 450px;
   object-fit: cover;
-  background: #f0f0f0;
+  background: linear-gradient(to right, #f0f0f0, #f8f8f8);
+  transition: transform 0.8s ease;
+}
+
+.pd-hero:hover .pd-hero-img {
+  transform: scale(1.02);
 }
 
 .pd-hero-content {
@@ -57,50 +72,48 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 2rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: calc(var(--spacing-lg) + 0.5rem);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
   color: white;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
 }
 
 .pd-hero-content h1 {
-  margin: 0 0 0.5rem;
-  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  margin: 0 0 var(--spacing-xs);
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
   font-weight: 700;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-  color: var(--secondary-color); /* Highlight the property name */
-  background: rgba(255, 255, 255, 0.2); /* Add a semi-transparent background */
-  border-radius: var(--radius-sm); /* Slightly rounded corners */
-  padding: 0.5rem 1rem; /* Add padding for better readability */
-  border-bottom: 3px solid var(--secondary-color); /* Add an underline for emphasis */
-}
-
-.pd-hero-content h1 {
-  margin: 0 0 0.5rem;
-  font-size: clamp(1.8rem, 5vw, 2.5rem);
-  font-weight: 700;
+  font-family: var(--font-heading);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.02em;
+  max-width: 80%;
 }
 
 .pd-hero-meta {
   display: flex;
-  gap: 2rem;
+  gap: var(--spacing-md);
   align-items: center;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  font-family: var(--font-body);
 }
 
 .pd-location {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
   margin: 0;
+  opacity: 0.9;
 }
 
 .pd-price {
   background: var(--secondary-color);
-  padding: 0.5rem 1rem;
+  padding: calc(var(--spacing-xs) + 0.1rem) var(--spacing-sm);
   border-radius: var(--radius-sm);
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
+  letter-spacing: 0.01em;
+  color: #000;
+  opacity: 0.95;
 }
 
 /* ================================
@@ -109,8 +122,10 @@
 .pd-main-grid {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
-  gap: 2rem;
+  gap: var(--spacing-lg);
   align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* ================================
@@ -118,85 +133,91 @@
 ================================ */
 .pd-section {
   background: white;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  margin-bottom: 2rem;
-}
-
-.pd-section--card {
-  padding: 1.5rem;
-  background: var(--background-light);
+  margin-bottom: var(--spacing-lg);
+  overflow: hidden;
   border: 1px solid var(--border-color);
 }
 
+.pd-section--card {
+  padding: var(--spacing-md);
+  background: var(--background-light);
+}
+
 .pd-section-title {
-  font-size: clamp(1.3rem, 2.5vw, 1.5rem);
+  font-size: clamp(1.3rem, 2.5vw, 1.4rem);
   font-weight: 600;
-  margin: 0 0 1.5rem;
-  padding-bottom: 0.75rem;
+  font-family: var(--font-heading);
+  margin: 0 0 var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
   border-bottom: 2px solid var(--border-color);
+  color: var(--primary-color);
+  letter-spacing: -0.01em;
 }
 
 .pd-section-content {
-  padding: 1rem 0;
+  padding: var(--spacing-xs) 0;
+  font-family: var(--font-body);
 }
 
 /* ================================
    Description Section
 ================================ */
 .pd-description-text {
-  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  font-size: 1rem;
   line-height: 1.7;
-  color: #444;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-md);
 }
 
 .pd-toggle-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.25rem;
   background: var(--primary-color);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: var(--transition);
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
 }
 
 .pd-toggle-btn:hover {
-  background: #0f3a6b;
+  background: #1e3a5f;
+  transform: translateY(-1px);
 }
 
 /* ================================
    Quick Info Grid
 ================================ */
-/* ================================
-   Refined Quick Info Grid
-================================ */
 .pd-quick-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 2rem;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .pd-info-item {
-  padding: 1.25rem;
-  background: var(--background-light);
+  padding: var(--spacing-md);
+  background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   transition: var(--transition);
 }
 
 .pd-info-item:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+  border-color: #cbd5e0;
 }
 
 .pd-info-item strong {
@@ -205,6 +226,7 @@
   color: var(--primary-color);
   font-size: 1.05rem;
   margin-bottom: 0.4rem;
+  font-family: var(--font-heading);
 }
 
 .pd-info-item span {
@@ -212,6 +234,7 @@
   color: var(--text-color);
   line-height: 1.4;
   word-break: break-word;
+  font-family: var(--font-body);
 }
 
 /* ================================
@@ -219,6 +242,9 @@
 ================================ */
 .pd-table-container {
   overflow-x: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
 }
 
 .pd-config-table {
@@ -229,19 +255,27 @@
 
 .pd-config-table th,
 .pd-config-table td {
-  padding: 1rem;
+  padding: 0.9rem 1.25rem;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
 }
 
 .pd-config-table th {
   background: var(--primary-color);
   color: white;
   font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+
+.pd-config-table tr:last-child td {
+  border-bottom: none;
 }
 
 .pd-config-table tr:hover {
-  background: #f8f9fa;
+  background: #f8fafc;
 }
 
 /* ================================
@@ -250,14 +284,14 @@
 .pd-amenities-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .pd-amenity-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
   background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -268,11 +302,13 @@
 .pd-amenity-item:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
+  border-color: #cbd5e0;
 }
 
 .pd-amenity-icon {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--primary-color);
+  flex-shrink: 0;
 }
 
 /* ================================
@@ -280,32 +316,43 @@
 ================================ */
 .pd-quick-facts {
   display: grid;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
 .pd-info-card {
   display: flex;
-  gap: 1rem;
-  padding: 1rem;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
   background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   min-width: 0;
+  transition: var(--transition);
+}
+
+.pd-info-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: #cbd5e0;
 }
 
 .pd-info-card-icon {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--primary-color);
+  flex-shrink: 0;
 }
 
 .pd-info-card-label {
-  font-size: 0.9rem;
-  color: #666;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .pd-info-card-value {
   font-weight: 600;
   margin-top: 0.25rem;
+  font-family: var(--font-heading);
+  color: var(--text-color);
 }
 
 /* ================================
@@ -314,6 +361,10 @@
 .pd-map-container {
   position: relative;
   padding-top: 56.25%;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
 }
 
 .pd-map-container iframe {
@@ -323,7 +374,6 @@
   width: 100%;
   height: 100%;
   border: none;
-  border-radius: var(--radius-md);
 }
 
 /* ================================
@@ -332,19 +382,22 @@
 .pd-brochure-download {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  gap: var(--spacing-xs);
+  padding: 0.7rem 1.25rem;
   background: var(--primary-color);
   color: white;
   text-decoration: none;
   font-weight: 600;
   border-radius: var(--radius-sm);
   transition: var(--transition);
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .pd-brochure-download:hover {
-  background: #0f3a6b;
+  background: #1e3a5f;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 /* ================================
@@ -353,55 +406,87 @@
 @media (max-width: 1024px) {
   .pd-main-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .pd-section {
+    margin-bottom: var(--spacing-md);
   }
 }
 
 @media (max-width: 768px) {
   .pd-hero-img {
-    height: 40vh;
+    height: 50vh;
+    min-height: 350px;
+  }
+  
+  .pd-hero-content h1 {
+    max-width: 100%;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
   }
 
-  .pd-main-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .pd-quick-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-
+  .pd-quick-grid,
   .pd-amenities-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-sm);
+  }
+  
+  .pd-section-title {
+    font-size: 1.25rem;
   }
 }
 
 @media (max-width: 480px) {
   .pd-hero-img {
-    height: 35vh;
+    height: 40vh;
+    min-height: 280px;
   }
+  
+  .pd-hero-content {
+    padding: var(--spacing-md);
+  }
+  
   .pd-hero-content h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
+  
+  .pd-hero-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
   .pd-section-title {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
+  
   .pd-description-text {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     line-height: 1.6;
   }
-  .pd-toggle-btn {
+  
+  .pd-toggle-btn,
+  .pd-brochure-download {
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
+    width: 100%;
+    justify-content: center;
   }
-  .pd-main-grid {
-    gap: 1rem;
-  }
+  
   .pd-quick-grid,
   .pd-amenities-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: 1fr;
   }
+  
   .pd-info-item,
   .pd-amenity-item,
   .pd-info-card {
-    padding: 0.8rem;
+    padding: var(--spacing-sm);
+  }
+  
+  .pd-config-table th,
+  .pd-config-table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
   }
 }

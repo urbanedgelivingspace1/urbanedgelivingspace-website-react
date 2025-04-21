@@ -1,0 +1,115 @@
+.property-contact-form {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem;
+    max-width: 100%;
+    width: 100%;
+    margin: 1rem auto;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+  }
+  
+  .property-contact-form h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #222;
+  }
+  
+  .property-contact-form p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    color: #555;
+  }
+  
+  .property-contact-form .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .property-contact-form .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .property-contact-form .form-group.full-width {
+    width: 100%;
+  }
+  
+  .property-contact-form label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 0.3rem;
+  }
+  
+  .property-contact-form input,
+  .property-contact-form textarea {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fafafa;
+    outline: none;
+    transition: border 0.2s ease;
+  }
+  
+  .property-contact-form input:focus,
+  .property-contact-form textarea:focus {
+    border-color: #4e91fc;
+    background: #fff;
+  }
+  
+  .property-contact-form textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .property-contact-form button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    background: #4e91fc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.3s ease;
+  }
+  
+  .property-contact-form button:hover {
+    background: #2e6eea;
+  }
+  
+  .property-contact-form .success-message {
+    margin-top: 0.8rem;
+    color: #2e7d32;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .property-contact-form .error-message {
+    margin-top: 0.8rem;
+    color: #d32f2f;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    .property-contact-form {
+      padding: 1rem;
+    }
+  
+    .property-contact-form h2 {
+      font-size: 1.1rem;
+    }
+  
+    .property-contact-form p {
+      font-size: 0.85rem;
+    }
+  }
+  

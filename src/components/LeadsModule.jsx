@@ -42,12 +42,20 @@ const LeadsModule = () => {
       ) : (
         <div style={styles.list}>
           {leads.map((lead) => (
-            <div key={lead.id} style={styles.card}>
+            <div
+              key={lead.id}
+              style={lead.property_name ? styles.specialCard : styles.card}
+            >
               <h4>{lead.name}</h4>
               <p><strong>Email:</strong> {lead.email}</p>
               <p><strong>Phone:</strong> {lead.phone}</p>
               <p><strong>Subject:</strong> {lead.subject}</p>
               <p><strong>Message:</strong> {lead.message}</p>
+              {lead.property_name && (
+                <div style={styles.propertyInfo}>
+                  <strong>Interested Property:</strong> {lead.property_name}
+                </div>
+              )}
               <p style={styles.time}>
                 <strong>Submitted at:</strong> {new Date(lead.created_at).toLocaleString()}
               </p>
@@ -80,9 +88,20 @@ const styles = {
     backgroundColor: '#fafafa',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   },
-  cardHover: {
-    transform: 'scale(1.05)',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  specialCard: {
+    padding: '1.5rem',
+    border: '1px solid #007bff',
+    borderRadius: '8px',
+    backgroundColor: '#e9f7fd',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    borderLeft: '5px solid #007bff', // special border for leads with a property name
+  },
+  propertyInfo: {
+    marginTop: '1rem',
+    padding: '0.5rem',
+    backgroundColor: '#f0f9ff',
+    border: '1px solid #bce0fd',
+    borderRadius: '5px',
   },
   time: {
     fontSize: '0.85rem',
