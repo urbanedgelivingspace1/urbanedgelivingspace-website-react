@@ -42,7 +42,7 @@ const PropertyCard = ({ property }) => {
             {property.carpet_area && (
               <div className="meta-item">
                 <FaRulerCombined className="meta-icon" />
-                <span>{property.carpet_area} sq.ft</span>
+                <span>{property.carpet_area} sq.yard</span>
               </div>
             )}
           </div>
