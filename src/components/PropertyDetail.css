@@ -9,28 +9,28 @@
    Root Variables
 ================================ */
 .pd-page {
-  --primary-color: #1a365d;         /* Darker blue for professionalism */
-  --secondary-color: #eab308;       /* Refined gold for luxury appeal */
-  --text-color: #1e293b;            /* Darker text for better readability */
-  --text-light: #64748b;            /* Softer gray for secondary text */
-  --background-light: #f8fafc;      /* Slightly lighter background */
+  --primary-color: #0d2b4d;         /* Deeper blue for professionalism */
+  --secondary-color: #daa520;       /* Gold for premium feel */
+  --text-color: #1a202c;            /* Dark text for readability */
+  --text-light: #4a5568;            /* Gray for contrast */
+  --background-light: #f7fafc;      /* Light background */
   --border-color: #e2e8f0;
-  --success-color: #047857;         /* Deeper green for success indicators */
-  --accent-color: #f0f9ff;          /* Light blue accent for highlights */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.03);
-  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.04), 0 6px 8px rgba(0, 0, 0, 0.03);
-  --transition: all 0.3s ease;
+  --success-color: #046c4e;         /* Green for success indicators */
+  --accent-color: #ebf8ff;          /* Light blue accent */
+  --radius-sm: 3px;                 /* Reduced radius */
+  --radius-md: 4px;                 /* Reduced radius */
+  --radius-lg: 6px;                 /* Reduced radius */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.08);
+  --transition: all 0.2s ease;
   --font-heading: 'Montserrat', sans-serif;
   --font-body: 'Open Sans', sans-serif;
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
+  --spacing-xs: 0.3rem;             /* Reduced spacing */
+  --spacing-sm: 0.6rem;             /* Reduced spacing */
+  --spacing-md: 1rem;               /* Reduced spacing */
+  --spacing-lg: 1.3rem;             /* Reduced spacing */
+  --spacing-xl: 1.8rem;             /* Reduced spacing */
 }
 
 /* ================================
@@ -38,11 +38,12 @@
 ================================ */
 .pd-loading {
   text-align: center;
-  padding: var(--spacing-xl);
-  font-size: 1.1rem;
+  padding: var(--spacing-lg);       /* Reduced padding */
+  font-size: 0.9rem;                /* Smaller font */
   color: var(--text-light);
   font-family: var(--font-body);
   letter-spacing: 0.01em;
+  font-weight: 400;
 }
 
 /* ================================
@@ -52,22 +53,23 @@
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  margin-bottom: var(--spacing-xl);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: var(--spacing-lg);  /* Reduced margin */
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .pd-hero-img {
   width: 100%;
-  height: 70vh;
-  min-height: 480px;
+  height: 50vh;                      /* Reduced height */
+  min-height: 380px;                 /* Reduced min-height */
   object-fit: cover;
-  background: linear-gradient(to right, #f0f0f0, #f8f8f8);
+  background: linear-gradient(to right, #e6e6e6, #f2f2f2);
   transition: transform 1s ease;
+  filter: brightness(0.92);
 }
 
 .pd-hero:hover .pd-hero-img {
-  transform: scale(1.01);
+  transform: scale(1.01);            /* Reduced scale effect */
 }
 
 .pd-hero-content {
@@ -75,20 +77,20 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: calc(var(--spacing-lg) + 1rem);
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: var(--spacing-lg);        /* Reduced padding */
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85) 60%);
   color: white;
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
 }
 
 .pd-hero-content h1 {
-  margin: 0 0 var(--spacing-xs);
-  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  margin: 0 0 var(--spacing-xs);     /* Reduced margin */
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem); /* Smaller font */
   font-weight: 700;
   font-family: var(--font-heading);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  letter-spacing: -0.02em;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  letter-spacing: -0.01em;
   max-width: 85%;
   line-height: 1.2;
 }
@@ -97,9 +99,11 @@
   display: flex;
   gap: var(--spacing-md);
   align-items: center;
-  font-size: 1.05rem;
+  font-size: 0.9rem;                 /* Smaller font */
   font-family: var(--font-body);
   flex-wrap: wrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  margin-top: var(--spacing-xs);     /* Reduced margin */
 }
 
 .pd-location {
@@ -107,20 +111,19 @@
   align-items: center;
   gap: var(--spacing-xs);
   margin: 0;
-  opacity: 0.95;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .pd-price {
   background: var(--secondary-color);
-  padding: calc(var(--spacing-xs) + 0.1rem) var(--spacing-sm);
+  padding: calc(var(--spacing-xs) * 0.8) var(--spacing-sm); /* Reduced padding */
   border-radius: var(--radius-sm);
   font-weight: 700;
   margin: 0;
   letter-spacing: 0.01em;
   color: #000;
   opacity: 0.95;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* ================================
@@ -128,10 +131,10 @@
 ================================ */
 .pd-main-grid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
-  gap: var(--spacing-lg);
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); /* Reduced min-width */
+  gap: var(--spacing-lg);            /* Reduced gap */
   align-items: start;
-  max-width: 1400px;
+  max-width: 1200px;                 /* Reduced max-width */
   margin: 0 auto;
 }
 
@@ -142,7 +145,7 @@
   background: white;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);  /* Reduced margin */
   overflow: hidden;
   border: 1px solid var(--border-color);
   transition: var(--transition);
@@ -153,17 +156,17 @@
 }
 
 .pd-section--card {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg); /* Reduced padding */
   background: var(--background-light);
 }
 
 .pd-section-title {
-  font-size: clamp(1.3rem, 2.5vw, 1.5rem);
+  font-size: clamp(1.1rem, 2vw, 1.3rem); /* Smaller font */
   font-weight: 600;
   font-family: var(--font-heading);
-  margin: 0 0 var(--spacing-md);
-  padding-bottom: var(--spacing-xs);
-  border-bottom: 2px solid var(--border-color);
+  margin: 0 0 var(--spacing-sm);         /* Reduced margin */
+  padding-bottom: var(--spacing-xs);     /* Reduced padding */
+  border-bottom: 1px solid var(--border-color); /* Thinner border */
   color: var(--primary-color);
   letter-spacing: -0.01em;
   position: relative;
@@ -172,15 +175,15 @@
 .pd-section-title::after {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: -1px;
   left: 0;
-  width: 60px;
-  height: 2px;
+  width: 60px;                        /* Reduced width */
+  height: 1px;                        /* Thinner line */
   background-color: var(--secondary-color);
 }
 
 .pd-section-content {
-  padding: var(--spacing-md) 0;
+  padding: var(--spacing-md) 0;       /* Reduced padding */
   font-family: var(--font-body);
 }
 
@@ -188,33 +191,34 @@
    Description Section
 ================================ */
 .pd-description-text {
-  font-size: 1.05rem;
-  line-height: 1.8;
+  font-size: 0.95rem;                 /* Smaller font */
+  line-height: 1.6;                   /* Reduced line height */
   color: var(--text-color);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-md);   /* Reduced margin */
+  font-weight: 400;
 }
 
 .pd-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding: 0.7rem 1.5rem;
+  gap: 0.4rem;                        /* Reduced gap */
+  margin-top: var(--spacing-xs);      /* Reduced margin */
+  padding: 0.5rem 1.2rem;             /* Reduced padding */
   background: var(--primary-color);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: var(--transition);
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 0.85rem;                 /* Smaller font */
+  font-weight: 600;
   box-shadow: var(--shadow-sm);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 .pd-toggle-btn:hover {
-  background: #0f2948;
-  transform: translateY(-2px);
+  background: #0a1f38;
+  transform: translateY(-1px);        /* Reduced transform */
   box-shadow: var(--shadow-md);
 }
 
@@ -223,13 +227,13 @@
 ================================ */
 .pd-quick-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Reduced min-width */
+  gap: var(--spacing-sm);             /* Reduced gap */
+  margin-bottom: var(--spacing-md);   /* Reduced margin */
 }
 
 .pd-info-item {
-  padding: var(--spacing-md);
+  padding: var(--spacing-md);         /* Reduced padding */
   background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -243,7 +247,7 @@
 
 .pd-info-item:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-2px);        /* Reduced transform */
   border-color: #cbd5e0;
 }
 
@@ -251,15 +255,15 @@
   display: block;
   font-weight: 600;
   color: var(--primary-color);
-  font-size: 1.05rem;
-  margin-bottom: 0.4rem;
+  font-size: 0.95rem;                /* Smaller font */
+  margin-bottom: 0.4rem;             /* Reduced margin */
   font-family: var(--font-heading);
 }
 
 .pd-info-item span {
-  font-size: 0.95rem;
+  font-size: 0.85rem;                /* Smaller font */
   color: var(--text-color);
-  line-height: 1.5;
+  line-height: 1.5;                  /* Reduced line height */
   word-break: break-word;
   font-family: var(--font-body);
 }
@@ -272,7 +276,7 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
-  margin: var(--spacing-md) 0;
+  margin: var(--spacing-md) 0;       /* Reduced margin */
 }
 
 .pd-config-table {
@@ -283,10 +287,10 @@
 
 .pd-config-table th,
 .pd-config-table td {
-  padding: 1rem 1.25rem;
+  padding: 0.7rem 1rem;              /* Reduced padding */
   text-align: left;
   border-bottom: 1px solid var(--border-color);
-  font-size: 0.95rem;
+  font-size: 0.85rem;                /* Smaller font */
 }
 
 .pd-config-table th {
@@ -294,7 +298,7 @@
   color: white;
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.75rem;                /* Smaller font */
   letter-spacing: 0.03em;
 }
 
@@ -307,7 +311,7 @@
 }
 
 .pd-config-table tr:hover {
-  background: #f1f5f9;
+  background: #edf2f7;
 }
 
 /* ================================
@@ -315,15 +319,15 @@
 ================================ */
 .pd-amenities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--spacing-sm);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Reduced min-width */
+  gap: var(--spacing-sm);            /* Reduced gap */
 }
 
 .pd-amenity-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
+  gap: var(--spacing-xs);           /* Reduced gap */
+  padding: var(--spacing-sm) var(--spacing-md); /* Reduced padding */
   background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -332,14 +336,14 @@
 }
 
 .pd-amenity-item:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);       /* Reduced transform */
   box-shadow: var(--shadow-sm);
   border-color: #cbd5e0;
   background-color: var(--accent-color);
 }
 
 .pd-amenity-icon {
-  font-size: 1.25rem;
+  font-size: 1.1rem;                /* Smaller font */
   color: var(--primary-color);
   flex-shrink: 0;
 }
@@ -349,13 +353,13 @@
 ================================ */
 .pd-quick-facts {
   display: grid;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-sm);           /* Reduced gap */
 }
 
 .pd-info-card {
   display: flex;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
+  gap: var(--spacing-sm);           /* Reduced gap */
+  padding: var(--spacing-md);       /* Reduced padding */
   background: white;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -367,28 +371,30 @@
   box-shadow: var(--shadow-sm);
   border-color: #cbd5e0;
   background-color: var(--accent-color);
+  transform: translateY(-1px);      /* Reduced transform */
 }
 
 .pd-info-card-icon {
-  font-size: 1.25rem;
+  font-size: 1.1rem;               /* Smaller font */
   color: var(--primary-color);
   flex-shrink: 0;
 }
 
 .pd-info-card-label {
-  font-size: 0.85rem;
+  font-size: 0.7rem;               /* Smaller font */
   color: var(--text-light);
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.1rem;           /* Reduced margin */
+  font-weight: 600;
 }
 
 .pd-info-card-value {
   font-weight: 600;
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;              /* Reduced margin */
   font-family: var(--font-heading);
   color: var(--text-color);
-  font-size: 1.05rem;
+  font-size: 0.9rem;               /* Smaller font */
 }
 
 /* ================================
@@ -401,7 +407,7 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
-  margin: var(--spacing-md) 0;
+  margin: var(--spacing-md) 0;     /* Reduced margin */
 }
 
 .pd-map-container iframe {
@@ -419,22 +425,22 @@
 .pd-brochure-download {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: 0.8rem 1.5rem;
+  gap: var(--spacing-xs);         /* Reduced gap */
+  padding: 0.6rem 1.3rem;         /* Reduced padding */
   background: var(--primary-color);
   color: white;
   text-decoration: none;
   font-weight: 600;
   border-radius: var(--radius-sm);
   transition: var(--transition);
-  font-size: 0.95rem;
+  font-size: 0.85rem;             /* Smaller font */
   box-shadow: var(--shadow-sm);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 .pd-brochure-download:hover {
-  background: #0f2948;
-  transform: translateY(-2px);
+  background: #0a1f38;
+  transform: translateY(-1px);    /* Reduced transform */
   box-shadow: var(--shadow-md);
 }
 
@@ -444,78 +450,87 @@
 @media (max-width: 1024px) {
   .pd-main-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+    gap: var(--spacing-md);       /* Reduced gap */
   }
   
   .pd-section {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md); /* Reduced margin */
   }
   
   .pd-section--card {
-    padding: var(--spacing-md);
+    padding: var(--spacing-md);    /* Reduced padding */
   }
 }
 
 @media (max-width: 768px) {
   .pd-hero-img {
-    height: 55vh;
-    min-height: 380px;
+    height: 45vh;                  /* Reduced height */
+    min-height: 300px;             /* Reduced min-height */
+  }
+  
+  .pd-hero-content {
+    padding: var(--spacing-md);    /* Reduced padding */
   }
   
   .pd-hero-content h1 {
     max-width: 100%;
-    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-size: clamp(1.4rem, 4vw, 1.8rem); /* Smaller font */
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
   }
 
   .pd-quick-grid,
   .pd-amenities-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-sm);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Reduced min-width */
+    gap: var(--spacing-sm);        /* Reduced gap */
   }
   
   .pd-section-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;             /* Smaller font */
   }
   
   .pd-description-text {
-    font-size: 1rem;
-    line-height: 1.7;
+    font-size: 0.9rem;             /* Smaller font */
+    line-height: 1.6;              /* Reduced line height */
   }
 }
 
 @media (max-width: 480px) {
   .pd-hero-img {
-    height: 45vh;
-    min-height: 300px;
+    height: 40vh;                  /* Reduced height */
+    min-height: 250px;             /* Reduced min-height */
+    filter: brightness(0.85);
   }
   
   .pd-hero-content {
-    padding: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-sm); /* Reduced padding */
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9) 60%);
   }
   
   .pd-hero-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;             /* Smaller font */
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
   }
   
   .pd-hero-meta {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-xs);        /* Reduced gap */
+    font-size: 0.85rem;            /* Smaller font */
   }
   
   .pd-section-title {
-    font-size: 1.2rem;
+    font-size: 1.05rem;            /* Smaller font */
   }
   
   .pd-description-text {
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.85rem;            /* Smaller font */
+    line-height: 1.5;              /* Reduced line height */
   }
   
   .pd-toggle-btn,
   .pd-brochure-download {
-    font-size: 0.9rem;
-    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;             /* Smaller font */
+    padding: 0.5rem 1.1rem;        /* Reduced padding */
     width: 100%;
     justify-content: center;
   }
@@ -528,12 +543,12 @@
   .pd-info-item,
   .pd-amenity-item,
   .pd-info-card {
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);    /* Reduced padding */
   }
   
   .pd-config-table th,
   .pd-config-table td {
-    padding: 0.75rem 1rem;
-    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;        /* Reduced padding */
+    font-size: 0.8rem;             /* Smaller font */
   }
 }
