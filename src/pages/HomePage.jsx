@@ -181,7 +181,7 @@ const HomePage = () => {
           )}
         </div>
         <div className="homepage-cta-container">
-          <a href="#/properties" className="homepage-cta-button homepage-secondary">View All Listings</a>
+        <a href="#/properties" className="homepage-cta-button homepage-secondary homepage-view-listings-button">View All Listings</a>
         </div>
       </AnimateOnScroll>
 

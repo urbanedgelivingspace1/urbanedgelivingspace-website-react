@@ -173,13 +173,16 @@ const QuickInfoGrid = ({ property }) => (
     <InfoItem label="Property Type" value={property.property_type} />
     <InfoItem label="BHK Configuration" value={property.bhk} />
     <InfoItem label="Area" value={property.carpet_area ? `${property.carpet_area} sq. yards` : null} />
-    <InfoItem label="Possession Date" value={property.possession} />
+    <InfoItem 
+      label="Possession Date" 
+      value={property.possession ? new Date(property.possession).toLocaleDateString('en-UK', { day: 'numeric', month: 'long', year: 'numeric' }) : null} 
+    />
     <InfoItem label="Total Units" value={property.no_of_units} />
     <InfoItem label="RERA Number" value={property.rera_no} />
     <InfoItem label="Developer" value={property.developed_by} />
     <InfoItem label="Project Area" value={property.project_area} />
     <InfoItem label="Towers" value={property.towers} />
-    <InfoItem label="Floors" value={property.towers_floor} />
+    <InfoItem label="Floors" value={property.floor} />
     <InfoItem label="View" value={property.property_view} />
     <InfoItem label="Alloted Parking" value={property.parking} />
   </div>

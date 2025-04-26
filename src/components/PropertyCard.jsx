@@ -6,6 +6,7 @@ import './PropertyCard.css';
 const PropertyCard = ({ property }) => {
   const title = property.title || property.name;
   const image = property.image || property.image_url;
+  const propertyType = property.property_type?.trim() || 'Residential'; // ✅ ensures actual DB value is used
 
   return (
     <Link to={`/properties/${property.id}`} className="property-card-link">
@@ -18,7 +19,7 @@ const PropertyCard = ({ property }) => {
           />
           <div className="property-type">
             <FaBuilding className="type-icon" />
-            <span>{property.type || 'Residential'}</span>
+            <span>{propertyType}</span>
           </div>
         </div>
         
