@@ -1,22 +1,20 @@
 {
   "files": {
     "main.css": "/static/css/main.8859f180.css",
-    "main.js": "/static/js/main.aa2a5402.js",
+    "main.js": "/static/js/main.bd4d3b38.js",
     "static/js/952.9a2e65b5.chunk.js": "/static/js/952.9a2e65b5.chunk.js",
     "static/media/property.jpg": "/static/media/property.37e2fb7fa6af32a4ae1d.jpg",
     "static/media/whyChooseUs.jpg": "/static/media/whyChooseUs.c84b8af937bc16e85751.jpg",
     "static/media/UrbanEdge_Living_Space_Logo_HD.jpg": "/static/media/UrbanEdge_Living_Space_Logo_HD.bfbae5b962fb07021c17.jpg",
     "static/media/pexels-cmoon-12558848.jpg": "/static/media/pexels-cmoon-12558848.dd4f9dc2d4ec6eaa19c9.jpg",
-    "static/media/review1.jpg": "/static/media/review1.1ed855c1dadb18231811.jpg",
-    "static/media/reviewfemale.jpg": "/static/media/reviewfemale.11d0053cfaaced6a81f6.jpg",
     "static/media/vpxgrowth.png": "/static/media/vpxgrowth.e5c09331b2402b83c47a.png",
     "index.html": "/index.html",
     "main.8859f180.css.map": "/static/css/main.8859f180.css.map",
-    "main.aa2a5402.js.map": "/static/js/main.aa2a5402.js.map",
+    "main.bd4d3b38.js.map": "/static/js/main.bd4d3b38.js.map",
     "952.9a2e65b5.chunk.js.map": "/static/js/952.9a2e65b5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.8859f180.css",
-    "static/js/main.aa2a5402.js"
+    "static/js/main.bd4d3b38.js"
   ]
 }
