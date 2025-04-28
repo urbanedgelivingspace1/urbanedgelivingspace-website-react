@@ -6,8 +6,6 @@ import Testimonial from '../components/Testimonial';
 import './HomePage.css';
 
 import propertyImage from '../assets/property.jpg';
-import testimonialMen from '../assets/review1.jpg';
-import testimonialFemale from '../assets/reviewfemale.jpg';
 import urbanEdgeLogo from '../assets/UrbanEdge_Living_Space_Logo_HD.jpg';
 import whyChooseUs from '../assets/whyChooseUs.jpg';
 
