@@ -79,10 +79,7 @@ const HeroSection = () => {
   );
 };
 
-const TESTIMONIALS = [
-  { text: 'RealEstatePro made my property buying experience seamless and stress-free!', author: 'John Doe', photo: testimonialMen },
-  { text: 'Their attention to detail and exceptional service truly stand out.', author: 'Jane Smith', photo: testimonialFemale },
-];
+const TESTIMONIALS = [];
 
 const WHY_CHOOSE_POINTS = [
   'A Proven Track Record of Excellence',
