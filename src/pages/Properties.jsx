@@ -87,6 +87,7 @@ const Properties = () => {
                 key={property.id}
                 property={{
                   id: property.id,
+                  property_type: property.property_type,
                   title: property.name,
                   description: property.description,
                   location: property.location,

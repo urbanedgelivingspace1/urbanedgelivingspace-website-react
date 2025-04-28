@@ -166,6 +166,7 @@ const HomePage = () => {
                 <PropertyCard
                   property={{
                     id: prop.id,
+                    property_type: prop.property_type,
                     title: prop.name,
                     description: prop.description,
                     location: prop.location,

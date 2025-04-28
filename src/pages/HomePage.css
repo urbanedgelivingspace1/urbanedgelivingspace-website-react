@@ -2,28 +2,28 @@
    Global Variables & Base Styles
 ================================================== */
 :root {
-  /* Colors & Gradients - Refined color palette */
-  --primary-color: #003366;           /* Deeper blue for stronger authority */
-  --secondary-color: #c8a951;         /* Warmer gold that's easier on eyes */
-  --accent-color: #9c7a4d;            /* Richer complementary accent */
-  --background-gradient: linear-gradient(135deg, #003366, #005599); /* Smoother gradient */
-  --light-color: #f9f9f9;             /* Softer off-white for less eye strain */
-  --dark-color: #333333;              /* Deeper color for better contrast */
+  /* Colors & Gradients - Royal British palette */
+  --primary-color: #0a1741;           /* Deep royal navy blue */
+  --secondary-color: #b8860b;         /* Royal gold */
+  --accent-color: #d4af37;            /* Regal gold accent */
+  --background-gradient: linear-gradient(135deg, #0a1741, #1a2a5e); /* Navy gradient */
+  --light-color: #f8f9fa;             /* Clean off-white for backgrounds */
+  --dark-color: #0a1741;              /* Deep navy for strong contrast */
   --white: #ffffff;
-  --text-light: #555555;              /* For secondary text elements */
+  --text-light: #3a4764;              /* Refined navy for secondary text */
 
-  /* Animation & Transition - Smoother and more accessible */
-  --transition-speed: 0.3s;           /* Quicker transitions for better UX */
-  --card-radius: 8px;                 /* More subtle radius for modern look */
-  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  /* Animation & Transition - Subtle and elegant */
+  --transition-speed: 0.25s;          /* Quicker for responsiveness */
+  --card-radius: 6px;                 /* Subtle radius for elegance */
+  --box-shadow: 0 3px 10px rgba(10, 23, 65, 0.1);
 
-  /* Spacing - More consistent */
-  --section-spacing: 60px;            /* More breathing room between sections */
-  --base-spacing: 24px;
+  /* Spacing - Refined */
+  --section-spacing: 50px;            /* Compact but breathable */
+  --base-spacing: 20px;
 
-  /* Typography - More accessible */
-  --primary-font: 'Merriweather', 'Georgia', serif;  /* Better fallbacks */
-  --body-font: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* System fonts for optimal performance */
+  /* Typography - Sophisticated */
+  --primary-font: 'Playfair Display', 'Georgia', serif;  /* Elegant serif for headings */
+  --body-font: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* ==================================================
@@ -38,7 +38,11 @@
 /* ==================================================
    Accessibility Improvements
 ================================================== */
-/* Only show focus outlines for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
 :focus:not(:focus-visible) {
   outline: none;
 }
@@ -54,41 +58,42 @@ textarea {
 }
 
 /* ==================================================
-   Base Typography & Background (Mobile-First)
+   Base Typography & Background
 ================================================== */
 body {
   margin: 0;
   font-family: var(--body-font);
   background-color: var(--light-color);
   color: var(--dark-color);
-  line-height: 1.6;
-  font-size: 16px;
+  line-height: 1.7;
+  font-size: 15px;
   overflow-x: hidden;
-  /* Refined subtle texture */
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.02) 1px, transparent 1px), var(--light-color);
+  /* Very subtle texture */
+  background: radial-gradient(circle at center, rgba(10, 23, 65, 0.01) 1px, transparent 1px), var(--light-color);
   background-size: 20px 20px;
 }
 
-/* Enhanced typography for readability */
+/* Refined typography for royal style */
 h1, h2, h3 {
   font-family: var(--primary-font);
-  letter-spacing: 0.5px;
-  line-height: 1.3;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
   color: var(--primary-color);
   margin-top: 0;
+  font-weight: 600;
 }
 
-/* Global Text Readability Enhancements */
+/* Enhanced text for property descriptions */
 body,
 .homepage-welcome-content p,
 .homepage-guaranteed-rent-content p,
 .homepage-why-choose-list li {
-  color: var(--dark-color);
-  line-height: 1.8;
+  color: var(--text-light);
+  line-height: 1.7;
   font-weight: 400;
 }
 
-/* Remove text shadow for better readability */
+/* No text shadows for clean design */
 .homepage-hero p,
 .homepage-welcome-content p,
 .homepage-guaranteed-rent-content p {
@@ -99,35 +104,34 @@ body,
    Background Overlays for Text Sections
 ================================================== */
 .text-background-overlay {
-  background-color: rgba(255, 255, 255, 0.85); /* More opaque for readability */
-  -webkit-backdrop-filter: blur(5px); /* Safari support */
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 18px;
   border-radius: var(--card-radius);
 }
 
 .dark-text-overlay {
-  background-color: rgba(0, 0, 0, 0.65);
+  background-color: rgba(10, 23, 65, 0.8);
   padding: 20px;
   border-radius: var(--card-radius);
   color: var(--white);
 }
 
 /* ==================================================
-   Layout Container - More responsive
+   Layout Container
 ================================================== */
 .homepage-container {
-  width: 90%;
-  max-width: 1200px; /* Slightly narrower for better readability */
+  width: 92%;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 16px 0;
+  padding: 0;
 }
 
 /* ==================================================
-   Refined Animations - Smoother & Less Motion
+   Refined Animations - Subtle & Professional
 ================================================== */
-/* Reduce motion option for accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -137,11 +141,11 @@ body,
   }
 }
 
-/* Slide in from left with softer transition */
+/* Slide in from left with gentler transition */
 @keyframes slideInLeft {
   0% {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-20px);
   }
   100% {
     opacity: 1;
@@ -149,11 +153,11 @@ body,
   }
 }
 
-/* Slide in from right with softer transition */
+/* Slide in from right with gentler transition */
 @keyframes slideInRight {
   0% {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(20px);
   }
   100% {
     opacity: 1;
@@ -161,11 +165,11 @@ body,
   }
 }
 
-/* Simpler rise animation */
+/* Elegant rise animation */
 @keyframes riseIn {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   100% {
     opacity: 1;
@@ -173,11 +177,11 @@ body,
   }
 }
 
-/* Fade effect for scroll reveal */
+/* Subtle fade effect for scroll reveal */
 @keyframes fadeInScale {
   0% {
     opacity: 0;
-    transform: scale(0.98);
+    transform: scale(0.99);
   }
   100% {
     opacity: 1;
@@ -186,31 +190,27 @@ body,
 }
 
 /* ==================================================
-   Scroll Animations & Slide Effects - Modified for performance
+   Scroll Animations & Slide Effects
 ================================================== */
-/* Base: elements start hidden */
 .scroll-animate {
   opacity: 0;
 }
 
-/* When element is in view */
 .scroll-animate.in-view {
   opacity: 1;
 }
 
-/* Slide animations when in view */
 .slide-left.in-view {
-  animation: slideInLeft 0.8s ease-out forwards;
+  animation: slideInLeft 0.6s ease-out forwards;
 }
 
 .slide-right.in-view {
-  animation: slideInRight 0.8s ease-out forwards;
+  animation: slideInRight 0.6s ease-out forwards;
 }
 
-/* Fade-in with scale variation */
 .fade-in.in-view,
 .fade-in-scale.in-view {
-  animation: fadeInScale 0.7s ease forwards;
+  animation: fadeInScale 0.5s ease forwards;
 }
 
 /* ==================================================
@@ -218,11 +218,10 @@ body,
 ================================================== */
 .homepage-hero {
   position: relative;
-  height: 70vh; /* Taller for better visual impact */
-  min-height: 400px; /* Minimum height for smaller screens */
-  background: var(--background-gradient),
+  height: 65vh;
+  min-height: 380px;
+  background: linear-gradient(rgba(10, 23, 65, 0.5), rgba(10, 23, 65, 0.6)),
     url('../assets/property.jpg') center/cover no-repeat;
-  background-blend-mode: multiply;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -240,20 +239,22 @@ body,
   height: 100%;
   pointer-events: none;
   z-index: 2;
-  /* Optimized overlay for better text readability */
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 40, 80, 0.5));
-  opacity: 0.8;
+  /* Enhanced overlay for elegant text display */
+  background: linear-gradient(rgba(10, 23, 65, 0.3), rgba(10, 23, 65, 0.5));
+  opacity: 0.7;
 }
 
-/* Hero content on top: fade-in effect */
+/* Hero content */
 .homepage-hero-content {
   position: relative;
   z-index: 3;
-  max-width: 900px;
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  padding: 24px;
-  background-color: rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  padding: 22px 28px;
+  background-color: rgba(10, 23, 65, 0.35);
   border-radius: var(--card-radius);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 }
 
 .homepage-hero-content.in-view {
@@ -261,54 +262,56 @@ body,
   transform: translate(0, 0);
 }
 
-/* Main header with improved typography */
+/* Main header for real estate impact */
 .homepage-hero h1 {
-  font-size: 2rem;
-  margin-bottom: 16px;
+  font-size: 2.1rem;
+  margin-bottom: 14px;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
-  animation: riseIn 1s ease-out forwards;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  animation: riseIn 0.8s ease-out forwards;
+  color: var(--white);
 }
 
 .homepage-hero p {
-  font-size: 1.1rem;
-  max-width: 700px;
-  margin: 0 auto 24px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  font-size: 1.05rem;
+  max-width: 650px;
+  margin: 0 auto 22px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  line-height: 1.6;
 }
 
 /* ==================================================
-   CTA Buttons - More accessible and touch-friendly
+   CTA Buttons - Royal style
 ================================================== */
 .homepage-cta-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
   justify-content: center;
 }
 
 .homepage-cta-button {
-  padding: 16px 28px;
-  border-radius: 4px; /* Less rounded for professional look */
-  background: var(--secondary-color); /* Solid color for better accessibility */
-  color: var(--dark-color); /* Better contrast */
+  padding: 14px 24px;
+  border-radius: 3px;
+  background: var(--accent-color);
+  color: var(--primary-color);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-decoration: none;
   transition: background var(--transition-speed), transform var(--transition-speed),
               box-shadow var(--transition-speed);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  min-width: 160px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
   text-align: center;
 }
 
 .homepage-cta-button:hover {
-  background: #d4b963; /* Lighter shade for hover */
+  background: #e6c14f;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .homepage-cta-button:active {
@@ -316,23 +319,23 @@ body,
 }
 
 .homepage-cta-button.homepage-secondary {
-  background: transparent;
-  border: 2px solid var(--secondary-color);
-  color: var(--secondary-color);
+  background: rgba(10, 23, 65, 0.9);
+  border: 1px solid var(--accent-color);
+  color: var(--white);
 }
 
 .homepage-cta-button.homepage-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0c057; /* Brighter for better visibility */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(10, 23, 65, 1);
+  color: var(--accent-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* ==================================================
    Section Headings with Elegant Underline
 ================================================== */
 .homepage-section-title {
-  font-size: 1.8rem;
-  margin-bottom: 32px;
+  font-size: 1.7rem;
+  margin-bottom: 28px;
   color: var(--primary-color);
   letter-spacing: 0.5px;
   font-family: var(--primary-font);
@@ -343,10 +346,10 @@ body,
 .homepage-section-title::after {
   content: '';
   position: absolute;
-  width: 50px;
-  height: 3px;
-  background: var(--secondary-color);
-  bottom: -10px;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-color);
+  bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 1px;
@@ -358,24 +361,23 @@ body,
 .section-divider {
   height: 1px;
   background-color: var(--primary-color);
-  margin: 40px 0;
-  opacity: 0.1;
+  margin: 35px 0;
+  opacity: 0.08;
 }
 
 /* ==================================================
    Welcome / About Section
 ================================================== */
-/* Welcome Section */
 .homepage-welcome-section {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.8rem;
   align-items: center;
-  padding: 3rem 1.5rem;
-  margin: 3rem 0;
+  padding: 2.5rem 1.5rem;
+  margin: 2.5rem 0;
   background: var(--white);
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(10,23,65,0.06);
 }
 
 .homepage-welcome-image {
@@ -385,32 +387,32 @@ body,
 }
 
 .homepage-logo {
-  max-width: 250px;
+  max-width: 220px;
   width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: transform 0.3s ease;
 }
 
 .homepage-logo:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .homepage-welcome-content h2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: var(--primary-color);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
   position: relative;
 }
 
 .homepage-welcome-content h2::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -7px;
   left: 0;
-  width: 50px;
+  width: 40px;
   height: 2px;
-  background: var(--secondary-color);
+  background: var(--accent-color);
 }
 
 /* ==================================================
@@ -418,48 +420,48 @@ body,
 ================================================== */
 .homepage-featured-properties {
   text-align: center;
-  padding: var(--section-spacing) 0 40px;
+  padding: var(--section-spacing) 0 35px;
 }
 
 .homepage-property-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 22px;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 35px;
 }
 
 /* ==================================================
-   Property Card - More professional
+   Property Card - Royal estate styling
 ================================================== */
 .card-hover {
   width: 100%;
-  min-height: 200px;
+  min-height: 190px;
   background-color: var(--white);
   border-radius: var(--card-radius);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 12px rgba(10, 23, 65, 0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .card-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(10, 23, 65, 0.1);
   cursor: pointer;
 }
 
 .card-hover img {
   width: 100%;
-  height: 200px;
+  height: 180px;
   object-fit: cover;
   border-top-left-radius: var(--card-radius);
   border-top-right-radius: var(--card-radius);
 }
 
 .card-hover .card-content {
-  padding: 20px;
+  padding: 18px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -467,7 +469,7 @@ body,
 }
 
 .homepage-cta-container {
-  margin-top: 24px;
+  margin-top: 22px;
 }
 
 /* ==================================================
@@ -477,7 +479,7 @@ body,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
   padding: var(--section-spacing) 0;
   text-align: center;
 }
@@ -488,8 +490,8 @@ body,
 }
 
 .homepage-why-choose-content h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+  font-size: 1.7rem;
+  margin-bottom: 18px;
   color: var(--primary-color);
   font-family: var(--primary-font);
 }
@@ -501,9 +503,9 @@ body,
 }
 
 .homepage-why-choose-list li {
-  font-size: 1rem;
-  margin-bottom: 12px;
-  padding-left: 28px;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  padding-left: 26px;
   position: relative;
   text-align: left;
 }
@@ -512,15 +514,16 @@ body,
   content: '✓';
   position: absolute;
   left: 0;
-  color: var(--secondary-color);
+  color: var(--accent-color);
   font-weight: bold;
 }
 
 .homepage-why-choose-image img {
   width: 100%;
-  max-width: 500px;
+  max-width: 460px;
   border-radius: var(--card-radius);
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
+  box-shadow: 0 3px 12px rgba(10, 23, 65, 0.08);
 }
 
 .homepage-why-choose-image img:hover {
@@ -534,7 +537,7 @@ body,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
   padding: var(--section-spacing) 0;
   text-align: center;
 }
@@ -546,9 +549,10 @@ body,
 
 .homepage-guaranteed-rent-image img {
   width: 100%;
-  max-width: 500px;
+  max-width: 460px;
   border-radius: var(--card-radius);
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
+  box-shadow: 0 3px 12px rgba(10, 23, 65, 0.08);
 }
 
 .homepage-guaranteed-rent-image img:hover {
@@ -556,25 +560,25 @@ body,
 }
 
 .homepage-guaranteed-rent-content h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+  font-size: 1.7rem;
+  margin-bottom: 18px;
   color: var(--primary-color);
   font-family: var(--primary-font);
 }
 
 .homepage-guaranteed-rent-content p {
-  font-size: 1rem;
-  margin-bottom: 24px;
+  font-size: 0.95rem;
+  margin-bottom: 22px;
 }
 
 /* ==================================================
-   New Bordered Text Section - Refined
+   New Bordered Text Section - Royal
 ================================================== */
 .text-border {
-  border: 1px solid rgba(0, 51, 102, 0.2);
-  padding: 24px;
+  border: 1px solid rgba(10, 23, 65, 0.15);
+  padding: 22px;
   border-radius: var(--card-radius);
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .text-border.connected-right {
@@ -600,8 +604,8 @@ body,
 
 .homepage-testimonial-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 22px;
   justify-content: center;
 }
 
@@ -615,9 +619,9 @@ body,
 
 .homepage-news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  margin-top: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 22px;
+  margin-top: 28px;
 }
 
 .homepage-news-item {
@@ -625,18 +629,18 @@ body,
   border-radius: var(--card-radius);
   overflow: hidden;
   box-shadow: var(--box-shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .homepage-news-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(10, 23, 65, 0.1);
 }
 
 .homepage-news-item img {
   width: 100%;
   height: auto;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
 .homepage-news-item img:hover {
@@ -644,15 +648,15 @@ body,
 }
 
 .homepage-news-item h3 {
-  font-size: 1.3rem;
-  margin: 16px 15px 8px;
+  font-size: 1.2rem;
+  margin: 14px 15px 6px;
   color: var(--primary-color);
   font-family: var(--primary-font);
 }
 
 .homepage-news-item p {
-  font-size: 0.95rem;
-  margin: 0 15px 16px;
+  font-size: 0.9rem;
+  margin: 0 15px 14px;
   color: var(--text-light);
 }
 
@@ -663,56 +667,56 @@ body,
 /* For small phones (up to 480px) */
 @media (max-width: 480px) {
   .homepage-container {
-    width: 92%;
-    padding: 8px 0;
+    width: 94%;
+    padding: 6px 0;
   }
   
   .homepage-hero h1 {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
   
   .homepage-hero p {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
   
   .homepage-section-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
   
   .homepage-cta-button {
-    padding: 14px 24px;
-    font-size: 0.9rem;
-    min-width: 140px;
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    min-width: 130px;
   }
 }
 
 /* For screens 481px to 768px */
 @media (min-width: 481px) and (max-width: 768px) {
   .homepage-hero {
-    height: 65vh;
+    height: 60vh;
   }
   
   .homepage-hero h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   
   .homepage-hero p {
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
   
   .homepage-welcome-section {
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 1.2rem;
   }
 }
 
 /* For screens 769px to 1024px */
 @media (min-width: 769px) {
   .homepage-hero {
-    height: 70vh;
+    height: 65vh;
   }
   
   .homepage-hero h1 {
-    font-size: 2.8rem;
+    font-size: 2.6rem;
   }
   
   /* Convert welcome section to grid */
@@ -746,26 +750,26 @@ body,
 /* For large screens 1025px and above */
 @media (min-width: 1025px) {
   .homepage-hero h1 {
-    font-size: 3.2rem;
+    font-size: 2.9rem;
   }
   
   .homepage-hero p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   
   .homepage-section-title {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   
   .homepage-welcome-content h2,
   .homepage-why-choose-content h2,
   .homepage-guaranteed-rent-content h2 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   
   .homepage-property-list,
   .homepage-testimonial-list {
-    gap: 30px;
+    gap: 25px;
   }
 }
 
@@ -774,7 +778,7 @@ body,
   body {
     background: white;
     color: black;
-    font-size: 12pt;
+    font-size: 11pt;
   }
   
   .homepage-hero,
@@ -785,7 +789,7 @@ body,
   
   a {
     text-decoration: underline;
-    color: #000066;
+    color: #0a1741;
   }
   
   .homepage-container {
