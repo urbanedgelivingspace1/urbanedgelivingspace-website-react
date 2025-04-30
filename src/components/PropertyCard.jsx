@@ -52,7 +52,7 @@ const PropertyCard = ({ property }) => {
             <div className="property-price">
               <span className="price">${property.price.toLocaleString()}</span>
               {property.price_per_sqft && (
-                <span className="price-per"> (${property.price_per_sqft}/sq.ft)</span>
+                <span className="price-per"> (₹{property.price_per_sqft}/sq.ft)</span>
               )}
             </div>
           )}
