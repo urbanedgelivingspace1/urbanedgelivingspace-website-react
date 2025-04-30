@@ -2,12 +2,14 @@
 import React from 'react';
 import './OurTeam.css';
 import vpxgrowth from '../assets/vpxgrowth.png';
+import mantavya from '../assets/mantavya.jpg';
+import lawyer from '../assets/lawyer.jpg';
 
 const teamMembers = [
   {
     name: 'Mantavya Patel',
     role: 'CEO & Founder',
-    image: '/images/team/mantavya.jpg',
+    image: mantavya,
     description:
       'Mantavya leads Urban Edge Living Space with strategic foresight, driving innovation and excellence across all ventures.',
   },
@@ -21,7 +23,7 @@ const teamMembers = [
   {
     name: 'Narendrasinh M. Vihol',
     role: 'Legal Expert',
-    image: '/images/team/narendrasinh.jpg',
+    image: lawyer,
     description:
       'Narendrasinh ensures full legal compliance and provides expert counsel to protect and strengthen operations.',
   },

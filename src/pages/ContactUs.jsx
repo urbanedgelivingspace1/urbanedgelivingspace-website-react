@@ -136,8 +136,7 @@ const ContactUs = () => {
           {/* Contact Details */}
           <div className="contact-details" aria-labelledby="contact-info-heading">
             <h3 id="contact-info-heading">Contact Information</h3>
-            <p><strong>Phone:</strong> +91 7487094556</p>
-            <p><strong>Phone:</strong> +91 7984619362</p>
+           <p><strong>Phone:</strong> +91 9408663544</p>
             <p><strong>Email:</strong> urbanedgelivingspace@gmail.com</p>
 
             <h4>Office Address</h4>
