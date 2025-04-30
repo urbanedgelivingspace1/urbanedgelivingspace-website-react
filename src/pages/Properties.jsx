@@ -56,6 +56,13 @@ const Properties = () => {
   // Mobile drawer state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerRef = useRef(null);
+  
+  // Mobile filter temp states (for pending changes)
+  const [tempSearchTerm, setTempSearchTerm] = useState('');
+  const [tempSelectedPropertyTypes, setTempSelectedPropertyTypes] = useState([]);
+  const [tempSelectedBHKs, setTempSelectedBHKs] = useState([]);
+  const [tempLocationFilter, setTempLocationFilter] = useState('');
+  const [tempSelectedAmenities, setTempSelectedAmenities] = useState([]);
 
   // Fetch properties on component mount
   useEffect(() => {
@@ -74,6 +81,17 @@ const Properties = () => {
     sortOption,
     properties
   ]);
+  
+  // Initialize temp states when drawer opens
+  useEffect(() => {
+    if (isDrawerOpen) {
+      setTempSearchTerm(searchTerm);
+      setTempSelectedPropertyTypes([...selectedPropertyTypes]);
+      setTempSelectedBHKs([...selectedBHKs]);
+      setTempLocationFilter(locationFilter);
+      setTempSelectedAmenities([...selectedAmenities]);
+    }
+  }, [isDrawerOpen]);
 
   // Swipe-down to close drawer
   useEffect(() => {
@@ -163,6 +181,11 @@ const Properties = () => {
   const toggleBHK = bhk => toggleArrayItem(bhk, setSelectedBHKs, selectedBHKs);
   const toggleAmenity = amenity => toggleArrayItem(amenity, setSelectedAmenities, selectedAmenities);
   const toggleFavourite = id => toggleArrayItem(id, setFavourites, favourites);
+  
+  // Mobile temp toggle helpers
+  const toggleTempPropertyType = type => toggleArrayItem(type, setTempSelectedPropertyTypes, tempSelectedPropertyTypes);
+  const toggleTempBHK = bhk => toggleArrayItem(bhk, setTempSelectedBHKs, tempSelectedBHKs);
+  const toggleTempAmenity = amenity => toggleArrayItem(amenity, setTempSelectedAmenities, tempSelectedAmenities);
 
   const resetAllFilters = () => {
     setSearchTerm('');
@@ -172,6 +195,14 @@ const Properties = () => {
     setLocationFilter('');
     setSortOption('newest');
   };
+  
+  const resetTempFilters = () => {
+    setTempSearchTerm('');
+    setTempSelectedPropertyTypes([]);
+    setTempSelectedBHKs([]);
+    setTempSelectedAmenities([]);
+    setTempLocationFilter('');
+  };
 
   const scrollToFilters = () => filtersSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
 
@@ -180,6 +211,16 @@ const Properties = () => {
     e.preventDefault();
     applyFilters();
     scrollToFilters();
+  };
+  
+  // Apply mobile filters
+  const applyMobileFilters = () => {
+    setSearchTerm(tempSearchTerm);
+    setSelectedPropertyTypes(tempSelectedPropertyTypes);
+    setSelectedBHKs(tempSelectedBHKs);
+    setLocationFilter(tempLocationFilter);
+    setSelectedAmenities(tempSelectedAmenities);
+    setIsDrawerOpen(false);
   };
 
   // Pagination
@@ -198,8 +239,18 @@ const Properties = () => {
     if (locationFilter) count++;
     return count;
   };
+  
+  const getTempActiveFilterCount = () => {
+    let count = 0;
+    if (tempSearchTerm) count++;
+    count += tempSelectedPropertyTypes.length;
+    count += tempSelectedBHKs.length;
+    count += tempSelectedAmenities.length;
+    if (tempLocationFilter) count++;
+    return count;
+  };
 
-  // Reusable filter components
+  // Reusable filter components for desktop
   const FilterContent = () => (
     <>
       {/* Search + Reset */}
@@ -365,6 +416,173 @@ const Properties = () => {
       )}
     </>
   );
+  
+  // Mobile filters content
+  const MobileFilterContent = () => (
+    <>
+      {/* Search + Reset */}
+      <div className="search-and-reset">
+        <div className="search-bar-container">
+          <Search className="search-icon" size={18} />
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search by name or location..."
+            value={tempSearchTerm}
+            onChange={e => setTempSearchTerm(e.target.value)}
+          />
+          {tempSearchTerm && (
+            <button className="search-clear" onClick={() => setTempSearchTerm('')} aria-label="Clear search">
+              <X size={14} />
+            </button>
+          )}
+        </div>
+        <button className="btn-reset-all" onClick={resetTempFilters}>
+          <RefreshCw size={16} /> Reset All Filters
+        </button>
+      </div>
+
+      {/* Filters Panel */}
+      <div className="filters-panel">
+        {/* Property Type */}
+        <div className="filter-group">
+          <label><Home size={16} /> Property Type</label>
+          <div className="checkbox-group">
+            {propertyTypeOptions.map(type => (
+              <div key={type} className="checkbox-option">
+                <input
+                  type="checkbox"
+                  id={`mobile-type-${type}`}
+                  checked={tempSelectedPropertyTypes.includes(type)}
+                  onChange={() => toggleTempPropertyType(type)}
+                />
+                <label htmlFor={`mobile-type-${type}`}>{type}</label>
+              </div>
+            ))}
+          </div>
+          {tempSelectedPropertyTypes.length > 0 && (
+            <button className="checkbox-clear" onClick={() => setTempSelectedPropertyTypes([])}>Clear</button>
+          )}
+        </div>
+
+        {/* BHK Configuration */}
+        <div className="filter-group">
+          <label><Building size={16} /> BHK Configuration</label>
+          <div className="checkbox-group">
+            {bhkOptions.map(bhk => (
+              <div key={bhk} className="checkbox-option">
+                <input
+                  type="checkbox"
+                  id={`mobile-bhk-${bhk}`}
+                  checked={tempSelectedBHKs.includes(bhk)}
+                  onChange={() => toggleTempBHK(bhk)}
+                />
+                <label htmlFor={`mobile-bhk-${bhk}`}>{bhk === '6+' ? '6+ BHK' : `${bhk} BHK`}</label>
+              </div>
+            ))}
+          </div>
+          {tempSelectedBHKs.length > 0 && (
+            <button className="checkbox-clear" onClick={() => setTempSelectedBHKs([])}>Clear</button>
+          )}
+        </div>
+
+        {/* Location */}
+        <div className="filter-group">
+          <label><MapPin size={16} /> Location</label>
+          <div className="filter-dropdown-container">
+            <select
+              className="filter-dropdown"
+              value={tempLocationFilter}
+              onChange={e => setTempLocationFilter(e.target.value)}
+            >
+              <option value="">All Locations</option>
+              {locationOptions.map(loc => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+            {tempLocationFilter && (
+              <button className="filter-clear" onClick={() => setTempLocationFilter('')}>
+                <X size={14} />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Advanced Filters Toggle */}
+      <div className="advanced-filters-toggle">
+        <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}>
+          <Sliders size={16} />
+          {showAdvancedFilters ? 'Hide' : 'Show'} Amenities
+          <ChevronDown size={16} className={showAdvancedFilters ? 'rotate' : ''} />
+        </button>
+      </div>
+
+      {/* Advanced Filters */}
+      {showAdvancedFilters && (
+        <div className="advanced-filters">
+          <div className="filter-group">
+            <label><Briefcase size={16} /> Amenities</label>
+            <div className="checkbox-group">
+              {amenitiesOptions.map(amenity => (
+                <div key={amenity} className="checkbox-option">
+                  <input
+                    type="checkbox"
+                    id={`mobile-amenity-${amenity}`}
+                    checked={tempSelectedAmenities.includes(amenity)}
+                    onChange={() => toggleTempAmenity(amenity)}
+                  />
+                  <label htmlFor={`mobile-amenity-${amenity}`}>{amenity}</label>
+                </div>
+              ))}
+            </div>
+            {tempSelectedAmenities.length > 0 && (
+              <button className="checkbox-clear" onClick={() => setTempSelectedAmenities([])}>Clear</button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Active Filter Tags */}
+      {getTempActiveFilterCount() > 0 && (
+        <div className="active-filters-container">
+          <div className="active-filters-title">Active Filters:</div>
+          <div className="active-filters">
+            {tempSearchTerm && (
+              <span className="filter-tag">
+                Search: {tempSearchTerm}
+                <button onClick={() => setTempSearchTerm('')}><X size={14} /></button>
+              </span>
+            )}
+            {tempSelectedPropertyTypes.map(type => (
+              <span key={type} className="filter-tag">
+                {type}
+                <button onClick={() => toggleTempPropertyType(type)}><X size={14} /></button>
+              </span>
+            ))}
+            {tempSelectedBHKs.map(bhk => (
+              <span key={bhk} className="filter-tag">
+                {bhk} BHK
+                <button onClick={() => toggleTempBHK(bhk)}><X size={14} /></button>
+              </span>
+            ))}
+            {tempLocationFilter && (
+              <span className="filter-tag">
+                Location Coming Soon: {tempLocationFilter}
+                <button onClick={() => setTempLocationFilter('')}><X size={14} /></button>
+              </span>
+            )}
+            {tempSelectedAmenities.map(amenity => (
+              <span key={amenity} className="filter-tag">
+                {amenity}
+                <button onClick={() => toggleTempAmenity(amenity)}><X size={14} /></button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <div className="properties-page">
@@ -520,7 +738,7 @@ const Properties = () => {
         <div className="filter-drawer-header">
           <div className="filter-drawer-title">
             <Filter size={20} /> Filters
-            {getActiveFilterCount() > 0 && <span className="filter-badge">{getActiveFilterCount()}</span>}
+            {getTempActiveFilterCount() > 0 && <span className="filter-badge">{getTempActiveFilterCount()}</span>}
           </div>
           <button
             className="filter-drawer-close"
@@ -531,14 +749,14 @@ const Properties = () => {
           </button>
         </div>
         <div className="filter-drawer-content">
-          {/* Reusing the FilterContent component for mobile */}
-          <FilterContent />
+          {/* Using the mobile-specific filter content */}
+          <MobileFilterContent />
         </div>
         <div className="filter-drawer-actions">
           <button
             className="filter-drawer-cancel"
             onClick={() => {
-              resetAllFilters();
+              resetTempFilters();
               setIsDrawerOpen(false);
             }}
           >
@@ -546,10 +764,7 @@ const Properties = () => {
           </button>
           <button
             className="filter-drawer-apply"
-            onClick={() => {
-              applyFilters();
-              setIsDrawerOpen(false);
-            }}
+            onClick={applyMobileFilters}
           >
             Apply Filters
           </button>
