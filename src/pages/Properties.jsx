@@ -42,7 +42,7 @@ const Properties = () => {
   const propertyTypeOptions = ['Residential', 'Commercial', 'Rental', 'Group Housing', 'Apartment', 'Villa', 'Penthouse'];
   const bhkOptions = ['1', '2', '3', '4', '5', '6+'];
   const amenitiesOptions = ['Swimming Pool', 'Gym', 'Garden', 'Security', 'Parking', 'Power Backup', 'Club House'];
-  const locationOptions = ['Downtown', 'Suburban', 'Waterfront', 'City Center', 'Beachside', 'Mountain View', 'Countryside'];
+  const locationOptions = ['Coming Soon'];
 
   // Advanced filters
   const [selectedAmenities, setSelectedAmenities] = useState([]);
@@ -343,7 +343,7 @@ const Properties = () => {
             ))}
             {locationFilter && (
               <span className="filter-tag">
-                Location: {locationFilter}
+                Location Coming Soon: {locationFilter}
                 <button onClick={() => setLocationFilter('')}><X size={14} /></button>
               </span>
             )}
