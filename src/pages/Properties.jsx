@@ -192,6 +192,173 @@ const Properties = () => {
     return count;
   };
 
+  // Reusable filter components
+  const FilterContent = () => (
+    <>
+      {/* Search + Reset */}
+      <div className="search-and-reset">
+        <div className="search-bar-container">
+          <Search className="search-icon" size={18} />
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search by name or location..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button className="search-clear" onClick={() => setSearchTerm('')} aria-label="Clear search">
+              <X size={14} />
+            </button>
+          )}
+        </div>
+        <button className="btn-reset-all" onClick={resetAllFilters}>
+          <RefreshCw size={16} /> Reset All Filters
+        </button>
+      </div>
+
+      {/* Filters Panel */}
+      <div className="filters-panel">
+        {/* Property Type */}
+        <div className="filter-group">
+          <label><Home size={16} /> Property Type</label>
+          <div className="checkbox-group">
+            {propertyTypeOptions.map(type => (
+              <div key={type} className="checkbox-option">
+                <input
+                  type="checkbox"
+                  id={`type-${type}`}
+                  checked={selectedPropertyTypes.includes(type)}
+                  onChange={() => togglePropertyType(type)}
+                />
+                <label htmlFor={`type-${type}`}>{type}</label>
+              </div>
+            ))}
+          </div>
+          {selectedPropertyTypes.length > 0 && (
+            <button className="checkbox-clear" onClick={() => setSelectedPropertyTypes([])}>Clear</button>
+          )}
+        </div>
+
+        {/* BHK Configuration */}
+        <div className="filter-group">
+          <label><Building size={16} /> BHK Configuration</label>
+          <div className="checkbox-group">
+            {bhkOptions.map(bhk => (
+              <div key={bhk} className="checkbox-option">
+                <input
+                  type="checkbox"
+                  id={`bhk-${bhk}`}
+                  checked={selectedBHKs.includes(bhk)}
+                  onChange={() => toggleBHK(bhk)}
+                />
+                <label htmlFor={`bhk-${bhk}`}>{bhk === '6+' ? '6+ BHK' : `${bhk} BHK`}</label>
+              </div>
+            ))}
+          </div>
+          {selectedBHKs.length > 0 && (
+            <button className="checkbox-clear" onClick={() => setSelectedBHKs([])}>Clear</button>
+          )}
+        </div>
+
+        {/* Location */}
+        <div className="filter-group">
+          <label><MapPin size={16} /> Location</label>
+          <div className="filter-dropdown-container">
+            <select
+              className="filter-dropdown"
+              value={locationFilter}
+              onChange={e => setLocationFilter(e.target.value)}
+            >
+              <option value="">All Locations</option>
+              {locationOptions.map(loc => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+            {locationFilter && (
+              <button className="filter-clear" onClick={() => setLocationFilter('')}>
+                <X size={14} />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Advanced Filters Toggle */}
+      <div className="advanced-filters-toggle">
+        <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}>
+          <Sliders size={16} />
+          {showAdvancedFilters ? 'Hide' : 'Show'} Amenities
+          <ChevronDown size={16} className={showAdvancedFilters ? 'rotate' : ''} />
+        </button>
+      </div>
+
+      {/* Advanced Filters */}
+      {showAdvancedFilters && (
+        <div className="advanced-filters">
+          <div className="filter-group">
+            <label><Briefcase size={16} /> Amenities</label>
+            <div className="checkbox-group">
+              {amenitiesOptions.map(amenity => (
+                <div key={amenity} className="checkbox-option">
+                  <input
+                    type="checkbox"
+                    id={`amenity-${amenity}`}
+                    checked={selectedAmenities.includes(amenity)}
+                    onChange={() => toggleAmenity(amenity)}
+                  />
+                  <label htmlFor={`amenity-${amenity}`}>{amenity}</label>
+                </div>
+              ))}
+            </div>
+            {selectedAmenities.length > 0 && (
+              <button className="checkbox-clear" onClick={() => setSelectedAmenities([])}>Clear</button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Active Filter Tags */}
+      {getActiveFilterCount() > 0 && (
+        <div className="active-filters-container">
+          <div className="active-filters-title">Active Filters:</div>
+          <div className="active-filters">
+            {searchTerm && (
+              <span className="filter-tag">
+                Search: {searchTerm}
+                <button onClick={() => setSearchTerm('')}><X size={14} /></button>
+              </span>
+            )}
+            {selectedPropertyTypes.map(type => (
+              <span key={type} className="filter-tag">
+                {type}
+                <button onClick={() => togglePropertyType(type)}><X size={14} /></button>
+              </span>
+            ))}
+            {selectedBHKs.map(bhk => (
+              <span key={bhk} className="filter-tag">
+                {bhk} BHK
+                <button onClick={() => toggleBHK(bhk)}><X size={14} /></button>
+              </span>
+            ))}
+            {locationFilter && (
+              <span className="filter-tag">
+                Location: {locationFilter}
+                <button onClick={() => setLocationFilter('')}><X size={14} /></button>
+              </span>
+            )}
+            {selectedAmenities.map(amenity => (
+              <span key={amenity} className="filter-tag">
+                {amenity}
+                <button onClick={() => toggleAmenity(amenity)}><X size={14} /></button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className="properties-page">
       {/* Hero Section */}
@@ -221,167 +388,8 @@ const Properties = () => {
             {getActiveFilterCount() > 0 && <span className="filter-badge">{getActiveFilterCount()}</span>}
           </div>
 
-          {/* Search + Reset */}
-          <div className="search-and-reset">
-            <div className="search-bar-container">
-              <Search className="search-icon" size={18} />
-              <input
-                type="text"
-                className="search-bar"
-                placeholder="Search by name or location..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <button className="search-clear" onClick={() => setSearchTerm('')} aria-label="Clear search">
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-            <button className="btn-reset-all" onClick={resetAllFilters}>
-              <RefreshCw size={16} /> Reset All Filters
-            </button>
-          </div>
-
-          {/* Filters Panel */}
-          <div className="filters-panel">
-            {/* Property Type */}
-            <div className="filter-group">
-              <label><Home size={16} /> Property Type</label>
-              <div className="checkbox-group">
-                {propertyTypeOptions.map(type => (
-                  <div key={type} className="checkbox-option">
-                    <input
-                      type="checkbox"
-                      id={`type-${type}`}
-                      checked={selectedPropertyTypes.includes(type)}
-                      onChange={() => togglePropertyType(type)}
-                    />
-                    <label htmlFor={`type-${type}`}>{type}</label>
-                  </div>
-                ))}
-              </div>
-              {selectedPropertyTypes.length > 0 && (
-                <button className="checkbox-clear" onClick={() => setSelectedPropertyTypes([])}>Clear</button>
-              )}
-            </div>
-
-            {/* BHK Configuration */}
-            <div className="filter-group">
-              <label><Building size={16} /> BHK Configuration</label>
-              <div className="checkbox-group">
-                {bhkOptions.map(bhk => (
-                  <div key={bhk} className="checkbox-option">
-                    <input
-                      type="checkbox"
-                      id={`bhk-${bhk}`}
-                      checked={selectedBHKs.includes(bhk)}
-                      onChange={() => toggleBHK(bhk)}
-                    />
-                    <label htmlFor={`bhk-${bhk}`}>{bhk === '6+' ? '6+ BHK' : `${bhk} BHK`}</label>
-                  </div>
-                ))}
-              </div>
-              {selectedBHKs.length > 0 && (
-                <button className="checkbox-clear" onClick={() => setSelectedBHKs([])}>Clear</button>
-              )}
-            </div>
-
-            {/* Location */}
-            <div className="filter-group">
-              <label><MapPin size={16} /> Location</label>
-              <div className="filter-dropdown-container">
-                <select
-                  className="filter-dropdown"
-                  value={locationFilter}
-                  onChange={e => setLocationFilter(e.target.value)}
-                >
-                  <option value="">All Locations</option>
-                  {locationOptions.map(loc => (
-                    <option key={loc} value={loc}>{loc}</option>
-                  ))}
-                </select>
-                {locationFilter && (
-                  <button className="filter-clear" onClick={() => setLocationFilter('')}>
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Advanced Filters Toggle */}
-          <div className="advanced-filters-toggle">
-            <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}>
-              <Sliders size={16} />
-              {showAdvancedFilters ? 'Hide' : 'Show'} Amenities
-              <ChevronDown size={16} className={showAdvancedFilters ? 'rotate' : ''} />
-            </button>
-          </div>
-
-          {/* Advanced Filters */}
-          {showAdvancedFilters && (
-            <div className="advanced-filters">
-              <div className="filter-group">
-                <label><Briefcase size={16} /> Amenities</label>
-                <div className="checkbox-group">
-                  {amenitiesOptions.map(amenity => (
-                    <div key={amenity} className="checkbox-option">
-                      <input
-                        type="checkbox"
-                        id={`amenity-${amenity}`}
-                        checked={selectedAmenities.includes(amenity)}
-                        onChange={() => toggleAmenity(amenity)}
-                      />
-                      <label htmlFor={`amenity-${amenity}`}>{amenity}</label>
-                    </div>
-                  ))}
-                </div>
-                {selectedAmenities.length > 0 && (
-                  <button className="checkbox-clear" onClick={() => setSelectedAmenities([])}>Clear</button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Active Filter Tags */}
-          {getActiveFilterCount() > 0 && (
-            <div className="active-filters-container">
-              <div className="active-filters-title">Active Filters:</div>
-              <div className="active-filters">
-                {searchTerm && (
-                  <span className="filter-tag">
-                    Search: {searchTerm}
-                    <button onClick={() => setSearchTerm('')}><X size={14} /></button>
-                  </span>
-                )}
-                {selectedPropertyTypes.map(type => (
-                  <span key={type} className="filter-tag">
-                    {type}
-                    <button onClick={() => togglePropertyType(type)}><X size={14} /></button>
-                  </span>
-                ))}
-                {selectedBHKs.map(bhk => (
-                  <span key={bhk} className="filter-tag">
-                    {bhk} BHK
-                    <button onClick={() => toggleBHK(bhk)}><X size={14} /></button>
-                  </span>
-                ))}
-                {locationFilter && (
-                  <span className="filter-tag">
-                    Location: {locationFilter}
-                    <button onClick={() => setLocationFilter('')}><X size={14} /></button>
-                  </span>
-                )}
-                {selectedAmenities.map(amenity => (
-                  <span key={amenity} className="filter-tag">
-                    {amenity}
-                    <button onClick={() => toggleAmenity(amenity)}><X size={14} /></button>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Reusing the FilterContent component for desktop */}
+          <FilterContent />
         </div>
 
         {/* Results Section */}
@@ -399,53 +407,54 @@ const Properties = () => {
                 </select>
               </div>
               <div className="view-toggle">
-                <button className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`} onClick={() => setViewMode('grid')}>Grid</button>
-                <button className={`view-btn ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')}>List</button>
+                <button className={`view-btn ${viewMode==='grid'? 'active':''}`} onClick={()=>setViewMode('grid')}>Grid</button>
+                <button className={`view-btn ${viewMode==='list'? 'active':''}`} onClick={()=>setViewMode('list')}>List</button>
               </div>
             </div>
+          </div>
 
-            {loading && (
-              <div className="loading-container">
-                <div className="loading-spinner"></div>
-                <p>Loading properties...</p>
-              </div>
-            )}
+          {loading && (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>Loading properties...</p>
+            </div>
+          )}
 
-            {error && (
-              <div className="error-message">
-                <p>{error}</p>
-                <button onClick={fetchProperties}>Try Again</button>
-              </div>
-            )}
+          {error && (
+            <div className="error-message">
+              <p>{error}</p>
+              <button onClick={fetchProperties}>Try Again</button>
+            </div>
+          )}
 
-            {!loading && !error && (
-              <>
-                {filteredProperties.length > 0 ? (
-                  <div className={`property-${viewMode}`}>
-                    {currentProperties.map(p => (
-                      <PropertyCard
-                        key={p.id}
-                        property={{
-                          id: p.id,
-                          property_type: p.property_type,
-                          title: p.name,
-                          description: p.description,
-                          location: p.location,
-                          image: p.image_url || propertyImage,
-                          carpet_area: p.carpet_area,
-                          bhk: p.bhk,
-                          price: p.price,
-                          amenities: p.amenities || [],
-                          date_added: p.created_at,
-                          agent: p.agent,
-                        }}
-                        isFavorite={favourites.includes(p.id)}
-                        onToggleFavorite={() => toggleFavourite(p.id)}
-                        viewMode={viewMode}
-                        enableVirtualTour={ENABLE_VIRTUAL_TOURS && p.has_virtual_tour}
-                      />
-                    ))}
-                  </div>
+          {!loading && !error && (
+            <>
+              {filteredProperties.length > 0 ? (
+                <div className={`property-${viewMode}`}>
+                  {currentProperties.map(p => (
+                    <PropertyCard
+                      key={p.id}
+                      property={{
+                        id: p.id,
+                        property_type: p.property_type,
+                        title: p.name,
+                        description: p.description,
+                        location: p.location,
+                        image: p.image_url || propertyImage,
+                        carpet_area: p.carpet_area,
+                        bhk: p.bhk,
+                        price: p.price,
+                        amenities: p.amenities || [],
+                        date_added: p.created_at,
+                        agent: p.agent,
+                      }}
+                      isFavorite={favourites.includes(p.id)}
+                      onToggleFavorite={() => toggleFavourite(p.id)}
+                      viewMode={viewMode}
+                      enableVirtualTour={ENABLE_VIRTUAL_TOURS && p.has_virtual_tour}
+                    />
+                  ))}
+                </div>
                 ) : (
                   <div className="no-results">
                     <h3>No properties found</h3>
@@ -474,7 +483,6 @@ const Properties = () => {
                 )}
               </>
             )}
-          </div>
         </section>
       </main>
 
@@ -485,6 +493,7 @@ const Properties = () => {
         onClick={() => setIsDrawerOpen(true)}
       >
         <Filter size={24} />
+        {getActiveFilterCount() > 0 && <span className="filter-badge mobile-badge">{getActiveFilterCount()}</span>}
       </button>
 
       {/* Filter Drawer Overlay */}
@@ -504,6 +513,7 @@ const Properties = () => {
         <div className="filter-drawer-header">
           <div className="filter-drawer-title">
             <Filter size={20} /> Filters
+            {getActiveFilterCount() > 0 && <span className="filter-badge">{getActiveFilterCount()}</span>}
           </div>
           <button
             className="filter-drawer-close"
@@ -514,9 +524,8 @@ const Properties = () => {
           </button>
         </div>
         <div className="filter-drawer-content">
-          {/* replicate the entire filter-card inner JSX here */}
-          {/* (Search+Reset, filters-panel, advanced toggle, advanced filters, active tags) */}
-          {/* for brevity copy/paste from above */}
+          {/* Reusing the FilterContent component for mobile */}
+          <FilterContent />
         </div>
         <div className="filter-drawer-actions">
           <button
@@ -526,7 +535,7 @@ const Properties = () => {
               setIsDrawerOpen(false);
             }}
           >
-            <X size={16} /> Reset
+            <X size={16} /> Reset All
           </button>
           <button
             className="filter-drawer-apply"
@@ -535,7 +544,7 @@ const Properties = () => {
               setIsDrawerOpen(false);
             }}
           >
-            <RefreshCw size={16} /> Apply
+            Apply Filters
           </button>
         </div>
       </aside>
