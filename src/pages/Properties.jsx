@@ -175,6 +175,13 @@ const Properties = () => {
 
   const scrollToFilters = () => filtersSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
 
+  // New function to handle search from hero section
+  const handleHeroSearch = (e) => {
+    e.preventDefault();
+    applyFilters();
+    scrollToFilters();
+  };
+
   // Pagination
   const indexOfLast = currentPage * propertiesPerPage;
   const indexOfFirst = indexOfLast - propertiesPerPage;
@@ -367,15 +374,15 @@ const Properties = () => {
         <div className="hero-content">
           <h1>Discover Your Dream Property</h1>
           <p>Find exclusive listings in the most coveted locations.</p>
-          <div className="hero-search">
+          <form className="hero-search" onSubmit={handleHeroSearch}>
             <input
               type="text"
               placeholder="Search by location, type, features..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
-            <button onClick={scrollToFilters}>Find Properties</button>
-          </div>
+            <button type="submit">Find Properties</button>
+          </form>
         </div>
       </header>
 
