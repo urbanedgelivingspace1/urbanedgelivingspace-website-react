@@ -130,6 +130,7 @@ button {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: 24px;
+  position: -webkit-sticky;
   position: sticky;
   top: 20px;
   height: fit-content;
@@ -439,22 +440,6 @@ button {
   background-position: right 8px center;
 }
 
-/* Property Category Desktop Toggle */
-.property-category-toggle {
-  display: flex;
-  border: 1px solid var(--neutral-medium);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  width: auto;
-}
-
-.property-category-toggle .category-btn {
-  padding: 6px 12px;
-  font-size: 0.8rem;
-  min-width: 80px;
-  flex: 0 0 auto;
-}
-
 /* Properties Grid/List Views */
 .properties-list {
   display: grid;
@@ -524,7 +509,7 @@ button {
   cursor: not-allowed;
 }
 
-/* Mobile Styles */
+/* Mobile Styles - Enhanced for Better UX */
 .btn-mobile-filters {
   display: none;
   position: fixed;
@@ -535,15 +520,16 @@ button {
   color: var(--white);
   border: none;
   border-radius: 30px;
-  padding: 12px 24px;
+  padding: 14px 28px;
   font-weight: 600;
   box-shadow: var(--shadow-md);
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   z-index: 10;
+  font-size: 1rem;
 }
 
-/* Fixed Mobile Filter Drawer */
+/* Improved Mobile Filter Drawer */
 .mobile-filter-drawer {
   display: none;
   position: fixed;
@@ -552,12 +538,12 @@ button {
   right: 0;
   background-color: var(--white);
   border-radius: 20px 20px 0 0;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
+  padding: 24px 20px;
   z-index: 100;
   transform: translateY(100%);
-  transition: transform 0.3s ease;
-  max-height: 85vh;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
   overflow-y: auto;
 }
 
@@ -569,13 +555,13 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
-  padding-bottom: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
   border-bottom: 1px solid var(--neutral-medium);
 }
 
 .drawer-header h2 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
   display: flex;
@@ -586,7 +572,7 @@ button {
   background: none;
   border: none;
   color: var(--text-light);
-  padding: 8px;
+  padding: 10px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -594,26 +580,27 @@ button {
 }
 
 .btn-apply-filters {
+  position: -webkit-sticky;
   position: sticky;
   bottom: 0;
   width: 100%;
   background-color: var(--accent-color);
   color: var(--white);
   border: none;
-  padding: 14px;
+  padding: 16px;
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 1rem;
-  margin-top: 15px;
+  margin-top: 20px;
   transition: var(--transition);
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .btn-apply-filters:hover {
   background-color: var(--accent-hover);
 }
 
-/* Responsive Styles */
+/* Enhanced Responsive Styles */
 @media (max-width: 1024px) {
   .main-content {
     grid-template-columns: 260px 1fr;
@@ -643,8 +630,13 @@ button {
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
   .main-content {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
   
   .filter-card {
@@ -660,59 +652,88 @@ button {
   }
   
   .properties-hero {
-    height: 300px;
+    height: 280px;
+    margin-bottom: 30px;
   }
   
   .hero-content h1 {
     font-size: 1.8rem;
+    margin-bottom: 0.8rem;
   }
   
   .hero-content p {
     font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
   
   .hero-search {
     flex-direction: column;
-    width: 85%;
+    width: 90%;
   }
   
   .hero-search input {
     width: 100%;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    padding: 14px 20px;
+    padding: 14px 18px;
+    font-size: 0.95rem;
   }
   
   .hero-search button {
     width: 100%;
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    padding: 12px;
+    padding: 14px;
   }
   
   .results-section {
-    padding: 16px;
+    padding: 18px;
+    border-radius: var(--radius-md);
   }
   
   .properties-list.grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
   
-  /* Improved mobile filters */
+  /* Enhanced filter experience */
   .mobile-filter-drawer {
-    padding-bottom: 80px;
+    padding: 24px 20px 100px;
   }
   
   .checkbox-group {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .checkbox-option {
+    gap: 10px;
+  }
+  
+  .checkbox-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .filter-group > label {
+    font-size: 1rem;
+    margin-bottom: 14px;
+  }
+  
+  .filter-dropdown {
+    padding: 12px 14px;
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 480px) {
   .container {
-    padding: 0 15px;
+    padding: 0 12px;
   }
   
   .hero-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+  }
+  
+  .hero-content p {
+    font-size: 0.95rem;
   }
   
   .properties-list.grid {
@@ -722,11 +743,16 @@ button {
   .results-controls {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 14px;
   }
   
   .property-category-toggle {
     width: 100%;
+  }
+  
+  .property-category-toggle .category-btn {
+    padding: 10px 12px;
+    font-size: 0.9rem;
   }
   
   .results-sorting {
@@ -736,27 +762,62 @@ button {
   
   .results-sorting select {
     flex: 1;
+    font-size: 0.9rem;
+    padding: 10px 30px 10px 12px;
   }
   
   .active-filters {
-    gap: 6px;
+    gap: 8px;
   }
   
   .filter-tag {
-    font-size: 0.75rem;
+    padding: 6px 12px 6px 14px;
+  }
+  
+  .pagination {
+    gap: 6px;
   }
   
   .pagination button {
-    min-width: 36px;
-    height: 36px;
+    min-width: 38px;
+    height: 38px;
+    font-size: 0.85rem;
   }
   
   .drawer-header h2 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   
   .btn-mobile-filters {
-    width: 80%;
-    justify-content: center;
+    width: 85%;
+    padding: 16px 24px;
+    border-radius: 30px;
+    font-size: 1rem;
+    bottom: 15px;
+  }
+  
+  /* Touch-friendly improvements */
+  .btn-close {
+    padding: 12px;
+  }
+  
+  .checkbox-option label,
+  .filter-dropdown {
+    font-size: 1rem;
+  }
+  
+  .btn-apply-filters {
+    padding: 16px;
+    font-size: 1.05rem;
+    border-radius: var(--radius-md);
+  }
+  
+  /* Fix for better touch target size */
+  .search-bar {
+    padding: 12px 35px 12px 40px;
+  }
+  
+  .btn-reset-all {
+    padding: 10px 14px;
   }
 }
