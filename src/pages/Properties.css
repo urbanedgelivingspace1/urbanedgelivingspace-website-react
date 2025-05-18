@@ -1,4 +1,5 @@
-/* Properties.css - Professional Real Estate Listings Page */
+
+*//* Properties.css - Professional Real Estate Listings Page */
 
 /* Global Styles & Variables */
 :root {
@@ -113,7 +114,7 @@ button {
 }
 
 .hero-search button:hover {
-  background-color: var(--accent-hover);
+  background-color: navy;
 }
 
 /* Main Content Layout */
@@ -393,6 +394,8 @@ button {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: 24px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .results-info {
@@ -444,6 +447,8 @@ button {
 .properties-list {
   display: grid;
   gap: 20px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .properties-list.grid {
@@ -525,8 +530,10 @@ button {
   box-shadow: var(--shadow-md);
   align-items: center;
   gap: 10px;
-  z-index: 10;
+  z-index: 50;
   font-size: 1rem;
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
 /* Improved Mobile Filter Drawer */
@@ -637,6 +644,7 @@ button {
   .main-content {
     grid-template-columns: 1fr;
     gap: 16px;
+    padding-bottom: 80px; /* Add space for fixed filter button */
   }
   
   .filter-card {
@@ -687,10 +695,14 @@ button {
   .results-section {
     padding: 18px;
     border-radius: var(--radius-md);
+    width: 100%;
+    overflow-x: hidden;
   }
   
   .properties-list.grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    width: 100%;
+    margin: 0;
   }
   
   /* Enhanced filter experience */
@@ -721,6 +733,22 @@ button {
     padding: 12px 14px;
     font-size: 0.95rem;
   }
+  
+  /* Fix for filter button visibility during scroll */
+  .btn-mobile-filters.sticky {
+    position: fixed;
+    bottom: 20px;
+    display: flex !important;
+    opacity: 1;
+  }
+  
+  /* Ensure property cards are centered and visible */
+  .properties-list > * {
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -738,6 +766,11 @@ button {
   
   .properties-list.grid {
     grid-template-columns: 1fr;
+    width: 100%;
+  }
+  
+  .properties-list.list {
+    width: 100%;
   }
   
   .results-controls {
@@ -819,5 +852,18 @@ button {
   
   .btn-reset-all {
     padding: 10px 14px;
+  }
+  
+  /* Ensure properties are centered and fully visible */
+  .results-section {
+    padding: 16px 12px;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Fix any horizontal scrolling issues */
+  body, html {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 }
