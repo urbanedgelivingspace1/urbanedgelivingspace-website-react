@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import PropertyCard from '../components/PropertyCard';
 import './Properties.css';
-import propertyImage from '../assets/property.jpg';
 import {
   Search,
   MapPin,
@@ -30,6 +29,9 @@ const Properties = () => {
   const [locationFilter, setLocationFilter] = useState('');
   const [sortOption, setSortOption] = useState('newest');
   const [viewMode, setViewMode] = useState('grid');
+  
+  // New state for property category (buy/rental) toggle
+  const [propertyCategory, setPropertyCategory] = useState('buy');
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,7 +41,7 @@ const Properties = () => {
   const filtersSectionRef = useRef(null);
 
   // Hardcoded options
-  const propertyTypeOptions = ['Residential', 'Commercial', 'Rental', 'Group Housing', 'Apartment', 'Villa', 'Penthouse'];
+  const propertyTypeOptions = ['Residential', 'Commercial', 'Group Housing', 'Apartment', 'Villa', 'Penthouse'];
   const bhkOptions = ['1', '2', '3', '4', '5', '6+'];
   const amenitiesOptions = ['Swimming Pool', 'Gym', 'Garden', 'Security', 'Parking', 'Power Backup', 'Club House'];
   const locationOptions = ['Coming Soon'];
@@ -63,6 +65,7 @@ const Properties = () => {
   const [tempSelectedBHKs, setTempSelectedBHKs] = useState([]);
   const [tempLocationFilter, setTempLocationFilter] = useState('');
   const [tempSelectedAmenities, setTempSelectedAmenities] = useState([]);
+  const [tempPropertyCategory, setTempPropertyCategory] = useState('buy');
 
   // Fetch properties on component mount
   useEffect(() => {
@@ -79,6 +82,7 @@ const Properties = () => {
     selectedAmenities,
     locationFilter,
     sortOption,
+    propertyCategory,
     properties
   ]);
   
@@ -90,29 +94,45 @@ const Properties = () => {
       setTempSelectedBHKs([...selectedBHKs]);
       setTempLocationFilter(locationFilter);
       setTempSelectedAmenities([...selectedAmenities]);
+      setTempPropertyCategory(propertyCategory);
     }
   }, [isDrawerOpen]);
 
-  // Swipe-down to close drawer
-  useEffect(() => {
-    const dr = drawerRef.current;
-    if (!dr) return;
-
-    let startY = 0, currentY = 0;
-    const onTouchStart = e => {
-      startY = e.touches[0].clientY;
-      const onTouchMove = ev => { currentY = ev.touches[0].clientY; };
-      const onTouchEnd = () => {
-        if (currentY - startY > 60) setIsDrawerOpen(false);
-        dr.removeEventListener('touchmove', onTouchMove);
-        dr.removeEventListener('touchend', onTouchEnd);
-      };
-      dr.addEventListener('touchmove', onTouchMove);
-      dr.addEventListener('touchend', onTouchEnd);
-    };
-    dr.addEventListener('touchstart', onTouchStart);
-    return () => dr.removeEventListener('touchstart', onTouchStart);
-  }, []);
+// Swipe-down to close drawer
+useEffect(() => {
+  // Only attach listener when drawer is open
+  if (!isDrawerOpen || !drawerRef.current) return;
+  
+  const dr = drawerRef.current;
+  let startY = 0, currentY = 0;
+  
+  // Define all functions at the same level
+  const onTouchMove = (ev) => { 
+    currentY = ev.touches[0].clientY; 
+  };
+  
+  const onTouchEnd = () => {
+    if (currentY - startY > 60) {
+      setIsDrawerOpen(false);
+    }
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+  };
+  
+  const onTouchStart = (e) => {
+    startY = e.touches[0].clientY;
+    document.addEventListener('touchmove', onTouchMove);
+    document.addEventListener('touchend', onTouchEnd);
+  };
+  
+  dr.addEventListener('touchstart', onTouchStart);
+  
+  return () => {
+    dr.removeEventListener('touchstart', onTouchStart);
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+  };
+}, [isDrawerOpen]);
 
   const fetchProperties = async () => {
     setLoading(true);
@@ -123,8 +143,23 @@ const Properties = () => {
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
-      setProperties(data);
-      setFilteredProperties(data);
+      
+      // Normalize property data to ensure consistent formats
+      const normalizedData = data.map(property => ({
+        ...property,
+        // Ensure amenities is always an array
+        amenities: Array.isArray(property.amenities) ? property.amenities : 
+                   (property.amenities ? [property.amenities] : []),
+        // Ensure property_type is a string
+        property_type: property.property_type ? String(property.property_type) : '',
+        // Ensure location is a string
+        location: property.location ? String(property.location) : '',
+        // Ensure bhk is a number
+        bhk: Number(property.bhk) || 0
+      }));
+      
+      setProperties(normalizedData);
+      setFilteredProperties(normalizedData);
     } catch (err) {
       console.error('Error fetching properties:', err);
       setError('Failed to load properties. Please try again later.');
@@ -133,49 +168,92 @@ const Properties = () => {
     }
   };
 
-  const applyFilters = () => {
-    const term = searchTerm.toLowerCase().trim();
-    let filtered = properties.filter(p => {
-      const textMatch =
-        !term ||
-        p.name?.toLowerCase().includes(term) ||
-        p.description?.toLowerCase().includes(term) ||
-        p.location?.toLowerCase().includes(term) ||
-        p.property_type?.toLowerCase().includes(term);
+const applyFilters = () => {
+  const term = searchTerm.toLowerCase().trim();
+  
+  let filtered = properties.filter(property => {
+    // Search term filter - check across multiple fields
+    const textMatch = !term || [
+      property.name,
+      property.description,
+      property.location,
+      property.property_type
+    ].some(field => 
+      field && String(field).toLowerCase().includes(term)
+    );
+    
+    // Property type filter - Check if ANY of the selected types is INCLUDED in the property type
+    const typeMatch = selectedPropertyTypes.length === 0 || 
+      (property.property_type && 
+       selectedPropertyTypes.some(type => 
+         property.property_type.toLowerCase().includes(type.toLowerCase())
+       ));
+    
+    // BHK configuration filter
+    const bhkMatch = selectedBHKs.length === 0 || 
+      selectedBHKs.some(bhk => {
+        if (bhk === '6+') return property.bhk >= 6;
+        return property.bhk === parseInt(bhk, 10);
+      });
+    
+    // Location filter - Check if the location filter term is included in the property location
+    const locationMatch = !locationFilter || 
+      (property.location && 
+       property.location.toLowerCase().includes(locationFilter.toLowerCase()));
+    
+    // Amenities filter - Check if ANY of the property's amenities INCLUDES the selected amenities
+    const amenitiesMatch = selectedAmenities.length === 0 || 
+      (Array.isArray(property.amenities) && 
+       selectedAmenities.every(amenity => 
+         property.amenities.some(a => 
+           a && a.toLowerCase().includes(amenity.toLowerCase())
+         )
+       ));
+       
+    // Property category filter (buy/rental)
+    const categoryMatch = propertyCategory === 'all' || 
+      (propertyCategory === 'buy' && 
+       (!property.property_type || 
+        !property.property_type.toLowerCase().includes('rental'))) ||
+      (propertyCategory === 'rental' && 
+       property.property_type && 
+       property.property_type.toLowerCase().includes('rental'));
+    
+    return textMatch && typeMatch && bhkMatch && locationMatch && amenitiesMatch && categoryMatch;
+  });
 
-      const typeMatch =
-        selectedPropertyTypes.length === 0 ||
-        selectedPropertyTypes.includes(p.property_type);
+  // Apply sorting
+  filtered = sortProperties(filtered, sortOption);
+  
+  setFilteredProperties(filtered);
+  setCurrentPage(1); // Reset to first page when filters change
+};
 
-      const bhkMatch =
-        selectedBHKs.length === 0 ||
-        selectedBHKs.includes(String(p.bhk)) ||
-        (selectedBHKs.includes('6+') && p.bhk >= 6);
-
-      const locationMatch =
-        !locationFilter ||
-        p.location?.toLowerCase().includes(locationFilter.toLowerCase());
-
-      const amenitiesMatch =
-        selectedAmenities.length === 0 ||
-        selectedAmenities.every(a => p.amenities?.includes(a));
-
-      return textMatch && typeMatch && bhkMatch && locationMatch && amenitiesMatch;
+  const sortProperties = (list, sortBy) => {
+    if (!Array.isArray(list)) return [];
+    
+    return [...list].sort((a, b) => {
+      // Make sure created_at exists and is a valid date
+      const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+      const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+      
+      return sortBy === 'oldest' 
+        ? dateA - dateB 
+        : dateB - dateA;
     });
-
-    filtered = sortProperties(filtered, sortOption);
-    setFilteredProperties(filtered);
-    setCurrentPage(1);
   };
 
-  const sortProperties = (list, sortBy) =>
-    sortBy === 'oldest'
-      ? [...list].sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-      : [...list].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-  // Toggle helpers
-  const toggleArrayItem = (item, setter, state) =>
-    setter(state.includes(item) ? state.filter(i => i !== item) : [...state, item]);
+  // Toggle helpers with improved handling
+  const toggleArrayItem = (item, setter, state) => {
+    if (!item) return;
+    
+    const exists = state.includes(item);
+    if (exists) {
+      setter(state.filter(i => i !== item));
+    } else {
+      setter([...state, item]);
+    }
+  };
 
   const togglePropertyType = type => toggleArrayItem(type, setSelectedPropertyTypes, selectedPropertyTypes);
   const toggleBHK = bhk => toggleArrayItem(bhk, setSelectedBHKs, selectedBHKs);
@@ -194,6 +272,7 @@ const Properties = () => {
     setSelectedAmenities([]);
     setLocationFilter('');
     setSortOption('newest');
+    setPropertyCategory('buy'); // Reset to buy by default
   };
   
   const resetTempFilters = () => {
@@ -202,13 +281,17 @@ const Properties = () => {
     setTempSelectedBHKs([]);
     setTempSelectedAmenities([]);
     setTempLocationFilter('');
+    setTempPropertyCategory('all'); // Reset to buy by default
   };
 
-  const scrollToFilters = () => filtersSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToFilters = () => {
+    filtersSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-  // New function to handle search from hero section
+  // Handle search from hero section
   const handleHeroSearch = (e) => {
     e.preventDefault();
+    // Apply filters and scroll to results
     applyFilters();
     scrollToFilters();
   };
@@ -220,6 +303,7 @@ const Properties = () => {
     setSelectedBHKs(tempSelectedBHKs);
     setLocationFilter(tempLocationFilter);
     setSelectedAmenities(tempSelectedAmenities);
+    setPropertyCategory(tempPropertyCategory);
     setIsDrawerOpen(false);
   };
 
@@ -228,7 +312,11 @@ const Properties = () => {
   const indexOfFirst = indexOfLast - propertiesPerPage;
   const currentProperties = filteredProperties.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
-  const paginate = num => setCurrentPage(num);
+  
+  const paginate = num => {
+    if (num < 1 || num > totalPages) return;
+    setCurrentPage(num);
+  };
 
   const getActiveFilterCount = () => {
     let count = 0;
@@ -237,6 +325,7 @@ const Properties = () => {
     count += selectedBHKs.length;
     count += selectedAmenities.length;
     if (locationFilter) count++;
+    if (propertyCategory !== 'all') count++;
     return count;
   };
   
@@ -247,6 +336,7 @@ const Properties = () => {
     count += tempSelectedBHKs.length;
     count += tempSelectedAmenities.length;
     if (tempLocationFilter) count++;
+    if (tempPropertyCategory !== 'all') count++;
     return count;
   };
 
@@ -296,6 +386,26 @@ const Properties = () => {
           {selectedPropertyTypes.length > 0 && (
             <button className="checkbox-clear" onClick={() => setSelectedPropertyTypes([])}>Clear</button>
           )}
+        </div>
+
+        {/* Property Category */}
+        <div className="filter-group">
+          <label><Building size={16} /> Property Category</label>
+          <div className="filter-category-toggle">
+
+            <button 
+              className={`category-btn ${propertyCategory === 'rental' ? 'active' : ''}`} 
+              onClick={() => setPropertyCategory('rental')}
+            >
+              For Rent
+            </button>
+            <button 
+              className={`category-btn ${propertyCategory === 'all' ? 'active' : ''}`} 
+              onClick={() => setPropertyCategory('all')}
+            >
+              All
+            </button>
+          </div>
         </div>
 
         {/* BHK Configuration */}
@@ -393,15 +503,21 @@ const Properties = () => {
                 <button onClick={() => togglePropertyType(type)}><X size={14} /></button>
               </span>
             ))}
+            {propertyCategory !== 'all' && (
+              <span className="filter-tag">
+                {propertyCategory === 'buy' ? 'For Sale' : 'For Rent'}
+                <button onClick={() => setPropertyCategory('all')}><X size={14} /></button>
+              </span>
+            )}
             {selectedBHKs.map(bhk => (
               <span key={bhk} className="filter-tag">
-                {bhk} BHK
+                {bhk === '6+' ? '6+ BHK' : `${bhk} BHK`}
                 <button onClick={() => toggleBHK(bhk)}><X size={14} /></button>
               </span>
             ))}
             {locationFilter && (
               <span className="filter-tag">
-                Location Coming Soon: {locationFilter}
+                Location: {locationFilter}
                 <button onClick={() => setLocationFilter('')}><X size={14} /></button>
               </span>
             )}
@@ -463,6 +579,25 @@ const Properties = () => {
           {tempSelectedPropertyTypes.length > 0 && (
             <button className="checkbox-clear" onClick={() => setTempSelectedPropertyTypes([])}>Clear</button>
           )}
+        </div>
+
+        {/* Property Category */}
+        <div className="filter-group">
+          <label><Building size={16} /> Property Category</label>
+          <div className="filter-category-toggle">
+            <button 
+              className={`category-btn ${tempPropertyCategory === 'rental' ? 'active' : ''}`} 
+              onClick={() => setTempPropertyCategory('rental')}
+            >
+              For Rent
+            </button>
+            <button 
+              className={`category-btn ${tempPropertyCategory === 'all' ? 'active' : ''}`} 
+              onClick={() => setTempPropertyCategory('all')}
+            >
+              All
+            </button>
+          </div>
         </div>
 
         {/* BHK Configuration */}
@@ -560,15 +695,21 @@ const Properties = () => {
                 <button onClick={() => toggleTempPropertyType(type)}><X size={14} /></button>
               </span>
             ))}
+            {tempPropertyCategory !== 'all' && (
+              <span className="filter-tag">
+                {tempPropertyCategory === 'buy' ? 'For Sale' : 'For Rent'}
+                <button onClick={() => setTempPropertyCategory('all')}><X size={14} /></button>
+              </span>
+            )}
             {tempSelectedBHKs.map(bhk => (
               <span key={bhk} className="filter-tag">
-                {bhk} BHK
+                {bhk === '6+' ? '6+ BHK' : `${bhk} BHK`}
                 <button onClick={() => toggleTempBHK(bhk)}><X size={14} /></button>
               </span>
             ))}
             {tempLocationFilter && (
               <span className="filter-tag">
-                Location Coming Soon: {tempLocationFilter}
+                Location: {tempLocationFilter}
                 <button onClick={() => setTempLocationFilter('')}><X size={14} /></button>
               </span>
             )}
@@ -621,7 +762,7 @@ const Properties = () => {
         <section className="results-section">
           <div className="results-info">
             <div className="results-count">
-              Showing <strong>{currentProperties.length}</strong> of <strong>{filteredProperties.length}</strong>
+              Showing <strong>{currentProperties.length}</strong> of <strong>{filteredProperties.length}</strong> properties
             </div>
             <div className="results-controls">
               <div className="results-sorting">
@@ -631,147 +772,88 @@ const Properties = () => {
                   <option value="oldest">Oldest First</option>
                 </select>
               </div>
-              <div className="view-toggle">
-                <button className={`view-btn ${viewMode==='grid'? 'active':''}`} onClick={()=>setViewMode('grid')}>Grid</button>
-                <button className={`view-btn ${viewMode==='list'? 'active':''}`} onClick={()=>setViewMode('list')}>List</button>
+              {/* Property Category Toggle (Replacing Grid/List View) */}
+              <div className="property-category-toggle">
+                <button 
+                  className={`category-btn ${propertyCategory === 'rental' ? 'active' : ''}`} 
+                  onClick={() => setPropertyCategory('rental')}
+                >
+                  For Rent
+                </button>
+                <button 
+                  className={`category-btn ${propertyCategory === 'all' ? 'active' : ''}`} 
+                  onClick={() => setPropertyCategory('all')}
+                >
+                  All
+                </button>
               </div>
             </div>
           </div>
-
-          {loading && (
-            <div className="loading-container">
-              <div className="loading-spinner"></div>
-              <p>Loading properties...</p>
-            </div>
-          )}
-
-          {error && (
-            <div className="error-message">
-              <p>{error}</p>
-              <button onClick={fetchProperties}>Try Again</button>
-            </div>
-          )}
-
-          {!loading && !error && (
-            <>
-              {filteredProperties.length > 0 ? (
-                <div className={`property-${viewMode}`}>
-                  {currentProperties.map(p => (
-                    <PropertyCard
-                      key={p.id}
-                      property={{
-                        id: p.id,
-                        property_type: p.property_type,
-                        title: p.name,
-                        description: p.description,
-                        location: p.location,
-                        image: p.image_url || propertyImage,
-                        carpet_area: p.carpet_area,
-                        bhk: p.bhk,
-                        price: p.price,
-                        amenities: p.amenities || [],
-                        date_added: p.created_at,
-                        agent: p.agent,
-                      }}
-                      isFavorite={favourites.includes(p.id)}
-                      onToggleFavorite={() => toggleFavourite(p.id)}
-                      viewMode={viewMode}
-                      enableVirtualTour={ENABLE_VIRTUAL_TOURS && p.has_virtual_tour}
-                    />
-                  ))}
-                </div>
-                ) : (
-                  <div className="no-results">
-                    <h3>No properties found</h3>
-                    <p>Try adjusting your filters or search terms.</p>
-                    <button className="no-results-btn" onClick={resetAllFilters}>
-                      <RefreshCw size={16} /> Reset All Filters
-                    </button>
-                  </div>
-                )}
-
-                {filteredProperties.length > propertiesPerPage && (
-                  <div className="pagination">
-                    <button onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)} disabled={currentPage === 1}>&laquo;</button>
-                    {Array.from({ length: totalPages }).map((_, i) => {
-                      const num = i + 1;
-                      if (num === 1 || num === totalPages || Math.abs(num - currentPage) <= 1) {
-                        return <button key={num} className={currentPage === num ? 'active' : ''} onClick={() => paginate(num)}>{num}</button>;
-                      }
-                      if ((num === 2 && currentPage > 3) || (num === totalPages - 1 && currentPage < totalPages - 2)) {
-                        return <span key={num} className="page-ellipsis">…</span>;
-                      }
-                      return null;
-                    })}
-                    <button onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)} disabled={currentPage === totalPages}>&raquo;</button>
-                  </div>
-                )}
-              </>
+          <div className={`properties-list ${viewMode}`}>
+            {loading ? (
+              <div className="loading">Loading properties...</div>
+            ) : error ? (
+              <div className="error">{error}</div>
+            ) : currentProperties.length === 0 ? (
+              <div className="no-results">No properties found matching your criteria.</div>
+            ) : (
+              currentProperties.map(property => (
+                <PropertyCard
+                  key={property.id}
+                  property={property}
+                  isFavourite={favourites.includes(property.id)}
+                  onToggleFavourite={() => toggleFavourite(property.id)}
+                  viewMode={viewMode}
+                />
+              ))
             )}
-        </section>
-      </main>
-
-      {/* Mobile Filter Toggle */}
-      <button
-        className="mobile-filter-toggle"
-        aria-label="Open filters"
-        onClick={() => setIsDrawerOpen(true)}
-      >
-        <Filter size={24} />
-        {getActiveFilterCount() > 0 && <span className="filter-badge mobile-badge">{getActiveFilterCount()}</span>}
-      </button>
-
-      {/* Filter Drawer Overlay */}
-      <div
-        className={`filter-drawer-overlay ${isDrawerOpen ? 'visible' : ''}`}
-        onClick={() => setIsDrawerOpen(false)}
-      />
-
-      {/* Filter Drawer */}
-      <aside
-        ref={drawerRef}
-        className={`filter-drawer ${isDrawerOpen ? 'visible' : ''}`}
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="filter-drawer-handle" />
-        <div className="filter-drawer-header">
-          <div className="filter-drawer-title">
-            <Filter size={20} /> Filters
-            {getTempActiveFilterCount() > 0 && <span className="filter-badge">{getTempActiveFilterCount()}</span>}
           </div>
-          <button
-            className="filter-drawer-close"
-            aria-label="Close filters"
-            onClick={() => setIsDrawerOpen(false)}
-          >
-            <X size={20} />
-          </button>
-        </div>
-        <div className="filter-drawer-content">
-          {/* Using the mobile-specific filter content */}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => paginate(i + 1)}
+                  className={currentPage === i + 1 ? 'active' : ''}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
+                Next
+              </button>
+            </div>
+          )}  
+        </section>
+        {/* Mobile Filter Drawer */}
+        <div className={`mobile-filter-drawer ${isDrawerOpen ? 'open' : ''}`} ref={drawerRef}>
+          <div className="drawer-header">
+            <h2>Filter Properties</h2>
+            {getTempActiveFilterCount() > 0 && (
+              <span className="filter-badge">{getTempActiveFilterCount()}</span>
+            )}
+            <button className="btn-close" onClick={() => setIsDrawerOpen(false)}>
+              <X size={20} />
+            </button>
+          </div>
+          {/* Reusing the MobileFilterContent component for mobile */}
           <MobileFilterContent />
+          <button className="btn-apply-filters" onClick={applyMobileFilters}>Apply Filters</button>
         </div>
-        <div className="filter-drawer-actions">
-          <button
-            className="filter-drawer-cancel"
-            onClick={() => {
-              resetTempFilters();
-              setIsDrawerOpen(false);
-            }}
-          >
-            <X size={16} /> Reset All
-          </button>
-          <button
-            className="filter-drawer-apply"
-            onClick={applyMobileFilters}
-          >
-            Apply Filters
-          </button>
-        </div>
-      </aside>
+      </main>
+      {/* Mobile Filter Button */}
+      <button className="btn-mobile-filters" onClick={() => setIsDrawerOpen(true)}>
+        <Filter size={20} />
+        {getTempActiveFilterCount() > 0 && (
+          <span className="filter-badge">{getTempActiveFilterCount()}</span>
+        )}
+        Filters
+      </button>
     </div>
   );
-};
-
+}
 export default Properties;
