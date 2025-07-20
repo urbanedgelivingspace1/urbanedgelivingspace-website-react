@@ -140,7 +140,7 @@ const ContactUs = () => {
             <p><strong>Email:</strong> urbanedgelivingspace@gmail.com</p>
 
             <h4>Office Address</h4>
-            <p>UrbanEdge living space office<br/>Shiholi Moti, Gandhinagar 382355</p>
+            <p>UrbanEdge living space office<br/>Shop no.130 sanskruti by Kaavyaratna,near dholeshwar park,Randesan,Gandhinagar,Gujarat,382421</p>
 
             <h4>Business Hours</h4>
             <p>Mon - Fri: 9:00 AM - 6:00 PM<br/>Sat: 10:00 AM - 4:00 PM<br/>Sun: Closed</p>
@@ -149,7 +149,7 @@ const ContactUs = () => {
             <div className="map-container">
               <iframe
                 title="UrbanEdge Living Office"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3666.0349841636835!2d72.73002327532032!3d23.241813979020765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395dd51d5ba695b1%3A0x99bd44906e708c19!2sRadhe%20residency!5e0!3m2!1sen!2sin!4v1744967575679!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14670.579401370644!2d72.6478357!3d23.1831588!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395c2bf0469b056b%3A0x9be13844a7842440!2sSANSKRUTI!5e0!3m2!1sen!2sin!4v1752990682824!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
                 width="100%"
                 height="200"
                 frameBorder="0"
