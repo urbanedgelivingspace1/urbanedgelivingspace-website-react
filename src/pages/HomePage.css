@@ -1,0 +1,848 @@
+/* ==================================================
+   Global Variables & Base Styles
+================================================== */
+:root {
+  /* Colors & Gradients - Royal British palette */
+  --primary-color: #0a1741;           /* Deep royal navy blue */
+  --secondary-color: #b8860b;         /* Royal gold */
+  --accent-color: #d4af37;            /* Regal gold accent */
+  --background-gradient: linear-gradient(135deg, #0a1741, #1a2a5e); /* Navy gradient */
+  --light-color: #f8f9fa;             /* Clean off-white for backgrounds */
+  --dark-color: #0a1741;              /* Deep navy for strong contrast */
+  --white: #ffffff;
+  --text-light: #3a4764;              /* Refined navy for secondary text */
+
+  /* Animation & Transition - Subtle and elegant */
+  --transition-speed: 0.25s;          /* Quicker for responsiveness */
+  --card-radius: 6px;                 /* Subtle radius for elegance */
+  --box-shadow: 0 3px 10px rgba(10, 23, 65, 0.1);
+
+  /* Spacing - Refined */
+  --section-spacing: 50px;            /* Compact but breathable */
+  --base-spacing: 20px;
+
+  /* Typography - Sophisticated */
+  --primary-font: 'Playfair Display', 'Georgia', serif;  /* Elegant serif for headings */
+  --body-font: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ==================================================
+   Reset & Box Sizing
+================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ==================================================
+   Accessibility Improvements
+================================================== */
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Improve tap target sizes for mobile */
+button, 
+a, 
+input, 
+select, 
+textarea {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ==================================================
+   Base Typography & Background
+================================================== */
+body {
+  margin: 0;
+  font-family: var(--body-font);
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  line-height: 1.7;
+  font-size: 15px;
+  overflow-x: hidden;
+  /* Very subtle texture */
+  background: radial-gradient(circle at center, rgba(10, 23, 65, 0.01) 1px, transparent 1px), var(--light-color);
+  background-size: 20px 20px;
+}
+
+/* Refined typography for royal style */
+h1, h2, h3 {
+  font-family: var(--primary-font);
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  color: var(--primary-color);
+  margin-top: 0;
+  font-weight: 600;
+}
+
+/* Enhanced text for property descriptions */
+body,
+.homepage-welcome-content p,
+.homepage-guaranteed-rent-content p,
+.homepage-why-choose-list li {
+  color: var(--text-light);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* No text shadows for clean design */
+.homepage-hero p,
+.homepage-welcome-content p,
+.homepage-guaranteed-rent-content p {
+  text-shadow: none;
+}
+
+/* ==================================================
+   Background Overlays for Text Sections
+================================================== */
+.text-background-overlay {
+  background-color: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 18px;
+  border-radius: var(--card-radius);
+}
+
+.dark-text-overlay {
+  background-color: rgba(10, 23, 65, 0.8);
+  padding: 20px;
+  border-radius: var(--card-radius);
+  color: var(--white);
+}
+
+/* ==================================================
+   Layout Container
+================================================== */
+.homepage-container {
+  width: 92%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ==================================================
+   Refined Animations - Subtle & Professional
+================================================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Slide in from left with gentler transition */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* Slide in from right with gentler transition */
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* Elegant rise animation */
+@keyframes riseIn {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle fade effect for scroll reveal */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==================================================
+   Scroll Animations & Slide Effects
+================================================== */
+.scroll-animate {
+  opacity: 0;
+}
+
+.scroll-animate.in-view {
+  opacity: 1;
+}
+
+.slide-left.in-view {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.slide-right.in-view {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+.fade-in.in-view,
+.fade-in-scale.in-view {
+  animation: fadeInScale 0.5s ease forwards;
+}
+
+/* ==================================================
+   Hero Section with Enhanced Background & Parallax
+================================================== */
+.homepage-hero {
+  position: relative;
+  height: 65vh;
+  min-height: 380px;
+  background: linear-gradient(rgba(10, 23, 65, 0.5), rgba(10, 23, 65, 0.6)),
+    url('../assets/property.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  overflow: hidden;
+  padding: 16px;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  /* Enhanced overlay for elegant text display */
+  background: linear-gradient(rgba(10, 23, 65, 0.3), rgba(10, 23, 65, 0.5));
+  opacity: 0.7;
+}
+
+/* Hero content */
+.homepage-hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 800px;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  padding: 22px 28px;
+  background-color: rgba(10, 23, 65, 0.35);
+  border-radius: var(--card-radius);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.homepage-hero-content.in-view {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Main header for real estate impact */
+.homepage-hero h1 {
+  font-size: 2.1rem;
+  margin-bottom: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  animation: riseIn 0.8s ease-out forwards;
+  color: var(--white);
+}
+
+.homepage-hero p {
+  font-size: 1.05rem;
+  max-width: 650px;
+  margin: 0 auto 22px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  line-height: 1.6;
+}
+
+/* ==================================================
+   CTA Buttons - Royal style
+================================================== */
+.homepage-cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+.homepage-cta-button {
+  padding: 14px 24px;
+  border-radius: 3px;
+  background: var(--accent-color);
+  color: var(--primary-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background var(--transition-speed), transform var(--transition-speed),
+              box-shadow var(--transition-speed);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  text-align: center;
+}
+
+.homepage-cta-button:hover {
+  background: #e6c14f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.homepage-cta-button:active {
+  transform: translateY(1px);
+}
+
+.homepage-cta-button.homepage-secondary {
+  background: rgba(10, 23, 65, 0.9);
+  border: 1px solid var(--accent-color);
+  color: var(--white);
+}
+
+.homepage-cta-button.homepage-secondary:hover {
+  background: rgba(10, 23, 65, 1);
+  color: var(--accent-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================================================
+   Section Headings with Elegant Underline
+================================================== */
+.homepage-section-title {
+  font-size: 1.7rem;
+  margin-bottom: 28px;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+  font-family: var(--primary-font);
+  position: relative;
+  text-align: center;
+}
+
+.homepage-section-title::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-color);
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+
+/* ==================================================
+   Section Dividers
+================================================== */
+.section-divider {
+  height: 1px;
+  background-color: var(--primary-color);
+  margin: 35px 0;
+  opacity: 0.08;
+}
+
+/* ==================================================
+   Welcome / About Section
+================================================== */
+.homepage-welcome-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.8rem;
+  align-items: center;
+  padding: 2.5rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--white);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(10,23,65,0.06);
+}
+
+.homepage-welcome-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.homepage-logo {
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+
+.homepage-logo:hover {
+  transform: scale(1.02);
+}
+
+.homepage-welcome-content h2 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 1.1rem;
+  position: relative;
+}
+
+.homepage-welcome-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-color);
+}
+
+/* ==================================================
+   Featured Properties Section
+================================================== */
+.homepage-featured-properties {
+  text-align: center;
+  padding: var(--section-spacing) 0 35px;
+}
+
+.homepage-property-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 22px;
+  justify-content: center;
+  margin-bottom: 35px;
+}
+
+/* ==================================================
+   Property Card - Royal estate styling
+================================================== */
+.card-hover {
+  width: 100%;
+  min-height: 190px;
+  background-color: var(--white);
+  border-radius: var(--card-radius);
+  box-shadow: 0 3px 12px rgba(10, 23, 65, 0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(10, 23, 65, 0.1);
+  cursor: pointer;
+}
+
+.card-hover img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
+}
+
+.card-hover .card-content {
+  padding: 18px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.homepage-cta-container {
+  margin-top: 22px;
+}
+
+/* ==================================================
+   Why Choose Us Section
+================================================== */
+.homepage-why-choose {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: var(--section-spacing) 0;
+  text-align: center;
+}
+
+.homepage-why-choose-content,
+.homepage-why-choose-image {
+  flex: 1 1 100%;
+}
+
+.homepage-why-choose-content h2 {
+  font-size: 1.7rem;
+  margin-bottom: 18px;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+
+.homepage-why-choose-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.homepage-why-choose-list li {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  padding-left: 26px;
+  position: relative;
+  text-align: left;
+}
+
+.homepage-why-choose-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.homepage-why-choose-image img {
+  width: 100%;
+  max-width: 460px;
+  border-radius: var(--card-radius);
+  transition: transform 0.25s ease;
+  box-shadow: 0 3px 12px rgba(10, 23, 65, 0.08);
+}
+
+.homepage-why-choose-image img:hover {
+  transform: scale(1.01);
+}
+
+/* ==================================================
+   Guaranteed Rent Section
+================================================== */
+.homepage-guaranteed-rent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: var(--section-spacing) 0;
+  text-align: center;
+}
+
+.homepage-guaranteed-rent-image,
+.homepage-guaranteed-rent-content {
+  flex: 1 1 100%;
+}
+
+.homepage-guaranteed-rent-image img {
+  width: 100%;
+  max-width: 460px;
+  border-radius: var(--card-radius);
+  transition: transform 0.25s ease;
+  box-shadow: 0 3px 12px rgba(10, 23, 65, 0.08);
+}
+
+.homepage-guaranteed-rent-image img:hover {
+  transform: scale(1.01);
+}
+
+.homepage-guaranteed-rent-content h2 {
+  font-size: 1.7rem;
+  margin-bottom: 18px;
+  color: var(--primary-color);
+  font-family: var(--primary-font);
+}
+
+.homepage-guaranteed-rent-content p {
+  font-size: 0.95rem;
+  margin-bottom: 22px;
+}
+
+/* ==================================================
+   New Bordered Text Section - Royal
+================================================== */
+.text-border {
+  border: 1px solid rgba(10, 23, 65, 0.15);
+  padding: 22px;
+  border-radius: var(--card-radius);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.text-border.connected-right {
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.text-border.connected-left {
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* ==================================================
+   Testimonials Section
+================================================== */
+.homepage-testimonials {
+  text-align: center;
+  padding: var(--section-spacing) 0;
+  background-color: var(--white);
+}
+
+.homepage-testimonial-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 22px;
+  justify-content: center;
+}
+
+/* ==================================================
+   Latest News Section
+================================================== */
+/* News Section - Clean & Professional */
+.homepage-latest-news {
+  text-align: center;
+  padding: 60px 0;
+  background-color: #fafbfc;
+}
+
+.homepage-news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.homepage-news-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.homepage-news-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.homepage-news-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.homepage-news-item:hover .homepage-news-image {
+  transform: scale(1.02);
+}
+
+.homepage-news-content {
+  padding: 24px;
+}
+
+.homepage-news-item h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #1a1a1a;
+  line-height: 1.4;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.homepage-news-item p {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.homepage-news-meta {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .homepage-latest-news {
+    padding: 40px 0;
+  }
+  
+  .homepage-news-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 0 16px;
+  }
+  
+  .homepage-news-content {
+    padding: 20px;
+  }
+  
+  .homepage-news-item h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* ==================================================
+   Responsive Design - Enhanced for All Device Sizes
+================================================== */
+
+/* For small phones (up to 480px) */
+@media (max-width: 480px) {
+  .homepage-container {
+    width: 94%;
+    padding: 6px 0;
+  }
+  
+  .homepage-hero h1 {
+    font-size: 1.7rem;
+  }
+  
+  .homepage-hero p {
+    font-size: 0.95rem;
+  }
+  
+  .homepage-section-title {
+    font-size: 1.5rem;
+  }
+  
+  .homepage-cta-button {
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    min-width: 130px;
+  }
+}
+
+/* For screens 481px to 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+  .homepage-hero {
+    height: 60vh;
+  }
+  
+  .homepage-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .homepage-hero p {
+    font-size: 1rem;
+  }
+  
+  .homepage-welcome-section {
+    padding: 2rem 1.2rem;
+  }
+}
+
+/* For screens 769px to 1024px */
+@media (min-width: 769px) {
+  .homepage-hero {
+    height: 65vh;
+  }
+  
+  .homepage-hero h1 {
+    font-size: 2.6rem;
+  }
+  
+  /* Convert welcome section to grid */
+  .homepage-welcome-section {
+    grid-template-columns: 1fr 2fr;
+    text-align: left;
+  }
+  
+  /* Convert why choose section to flex row */
+  .homepage-why-choose {
+    flex-direction: row;
+    text-align: left;
+  }
+  
+  /* Convert guaranteed rent section to flex row */
+  .homepage-guaranteed-rent {
+    flex-direction: row;
+    text-align: left;
+  }
+  
+  /* Alternate the order for visual interest */
+  .homepage-guaranteed-rent-image {
+    order: 2;
+  }
+  
+  .homepage-guaranteed-rent-content {
+    order: 1;
+  }
+}
+
+/* For large screens 1025px and above */
+@media (min-width: 1025px) {
+  .homepage-hero h1 {
+    font-size: 2.9rem;
+  }
+  
+  .homepage-hero p {
+    font-size: 1.1rem;
+  }
+  
+  .homepage-section-title {
+    font-size: 2rem;
+  }
+  
+  .homepage-welcome-content h2,
+  .homepage-why-choose-content h2,
+  .homepage-guaranteed-rent-content h2 {
+    font-size: 2rem;
+  }
+  
+  .homepage-property-list,
+  .homepage-testimonial-list {
+    gap: 25px;
+  }
+}
+
+/* Print styles for better accessibility */
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-size: 11pt;
+  }
+  
+  .homepage-hero,
+  .homepage-cta-buttons,
+  .homepage-welcome-image {
+    display: none;
+  }
+  
+  a {
+    text-decoration: underline;
+    color: #0a1741;
+  }
+  
+  .homepage-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}

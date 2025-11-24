@@ -1,0 +1,157 @@
+/* src/components/OurTeam.css */
+
+/* --- Variables for Easy Theming --- */
+:root {
+  --primary-navy: #0f172a;    /* Deep, professional navy */
+  --accent-gold: #c5a47e;     /* Luxury real estate gold */
+  --text-dark: #1e293b;
+  --text-light: #64748b;
+  --bg-light: #f8fafc;
+  --card-bg: #ffffff;
+}
+
+.our-team-section {
+  background-color: var(--bg-light);
+  padding: 5rem 1.5rem;
+  font-family: 'Montserrat', sans-serif; /* Ensure this font is imported in index.html */
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* --- Header Styling --- */
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-tagline {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: var(--primary-navy);
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.5px;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* --- Grid Layout --- */
+.team-grid {
+  display: grid;
+  /* Auto-fit creates a responsive grid without media queries */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  justify-content: center;
+}
+
+/* --- Card Styling --- */
+.team-card {
+  background: var(--card-bg);
+  border: 1px solid #e2e8f0; /* Subtle border instead of heavy shadow */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  border-color: var(--accent-gold); /* Gold border on hover */
+}
+
+/* Image Area */
+.team-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Square Aspect Ratio for professional headshots */
+  background: #eef2f6;
+  overflow: hidden;
+}
+
+.team-card-image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  filter: grayscale(10%); /* Slight desaturation for elegance */
+}
+
+.team-card:hover .team-card-image-wrapper img {
+  transform: scale(1.05);
+  filter: grayscale(0%);
+}
+
+/* Content Area */
+.team-card-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.member-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-navy);
+  margin: 0 0 0.35rem 0;
+}
+
+.member-role {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0;
+}
+
+.divider {
+  height: 1px;
+  width: 40px;
+  background-color: #e2e8f0;
+  margin: 1.25rem auto;
+}
+
+.member-description {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+}
