@@ -1,24 +1,25 @@
 {
   "files": {
     "main.css": "/static/css/main.15b58c38.css",
-    "main.js": "/static/js/main.2a4da2ea.js",
+    "main.js": "/static/js/main.6b9ab1ef.js",
     "static/js/952.9a2e65b5.chunk.js": "/static/js/952.9a2e65b5.chunk.js",
     "static/media/property.jpg": "/static/media/property.37e2fb7fa6af32a4ae1d.jpg",
     "static/media/whyChooseUs.jpg": "/static/media/whyChooseUs.c84b8af937bc16e85751.jpg",
     "static/media/UrbanEdge_Living_Space_Logo_HD.jpg": "/static/media/UrbanEdge_Living_Space_Logo_HD.bfbae5b962fb07021c17.jpg",
     "static/media/pexels-cmoon-12558848.jpg": "/static/media/pexels-cmoon-12558848.dd4f9dc2d4ec6eaa19c9.jpg",
     "static/media/mantavya.jpg": "/static/media/mantavya.b54d372ddb2ed6bd5a62.jpg",
+    "static/media/yug.jpg": "/static/media/yug.a01ae0a2f67a762c855d.jpg",
     "static/media/riya-Yug.jpg": "/static/media/riya-Yug.017df5318ca85b705b0d.jpg",
     "static/media/riya-mantavya.jpg": "/static/media/riya-mantavya.edd654d6b1f569f1d5f9.jpg",
     "static/media/lawyer.jpg": "/static/media/lawyer.230ee0f50eb6e80ed96b.jpg",
     "static/media/vpxgrowth.png": "/static/media/vpxgrowth.e5c09331b2402b83c47a.png",
     "index.html": "/index.html",
     "main.15b58c38.css.map": "/static/css/main.15b58c38.css.map",
-    "main.2a4da2ea.js.map": "/static/js/main.2a4da2ea.js.map",
+    "main.6b9ab1ef.js.map": "/static/js/main.6b9ab1ef.js.map",
     "952.9a2e65b5.chunk.js.map": "/static/js/952.9a2e65b5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.15b58c38.css",
-    "static/js/main.2a4da2ea.js"
+    "static/js/main.6b9ab1ef.js"
   ]
 }
