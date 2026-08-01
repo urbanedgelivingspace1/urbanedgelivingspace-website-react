@@ -274,7 +274,7 @@ textarea {
   fill: var(--secondary-color);
 }
 
-.homepage-hero-stat dt {
+.homepage-hero-stat-value {
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--secondary-color);
@@ -284,7 +284,11 @@ textarea {
   justify-content: center;
 }
 
-.homepage-hero-stat dd {
+.homepage-hero-stat-value .homepage-hero-stat-skeleton {
+  display: inline-block;
+}
+
+.homepage-hero-stat-label {
   margin: 0;
   font-size: 0.72rem;
   letter-spacing: 0.15px;
