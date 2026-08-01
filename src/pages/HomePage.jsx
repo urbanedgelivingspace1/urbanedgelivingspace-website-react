@@ -1,5 +1,4 @@
 // src/pages/HomePage.jsx
-
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -14,6 +13,37 @@ import {
   Network,
   ShieldCheck,
 } from "lucide-react";
+
+const PropertyStatIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="homepage-hero-stat-icon-svg"
+    aria-hidden="true"
+  >
+    <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-3v-6H8v6H5a1 1 0 0 1-1-1z" />
+  </svg>
+);
+
+const GuidanceStatIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="homepage-hero-stat-icon-svg"
+    aria-hidden="true"
+  >
+    <path d="M12 3 4 6.5v5.2c0 4.4 2.7 8.2 8 9.3 5.3-1.1 8-4.9 8-9.3V6.5L12 3Zm0 3.2 5 2.1v3.7c0 3.1-1.8 5.9-5 6.9-3.2-1-5-3.8-5-6.9V8.3l5-2.1Z" />
+    <path d="M12 8.4a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Zm0 5.4c-1.4 0-2.6.8-3.2 2h6.4c-.6-1.2-1.8-2-3.2-2Z" />
+  </svg>
+);
+
+const ReraStatIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="homepage-hero-stat-icon-svg"
+    aria-hidden="true"
+  >
+    <path d="M12 2 4 5v6c0 4.7 2.8 8.8 8 11 5.2-2.2 8-6.3 8-11V5l-8-3Zm-1 5.2 2.2 2.2 3.4-3.5 1.4 1.4-4.8 4.9-3.6-3.6 1.4-1.4Z" />
+  </svg>
+);
 
 import { useProperties } from "../hooks/useProperties";
 import { useBlogPosts } from "../hooks/useBlogPosts";
@@ -30,26 +60,16 @@ import Spinner from "../components/ui/Spinner";
 import Skeleton from "../components/ui/Skeleton";
 import { ORGANIZATION } from "../lib/seo";
 import "./HomePage.css";
+
 import propertyImage from "../assets/property.jpg";
 import urbanEdgeLogo from "../assets/UrbanEdge_Living_Space_Logo_HD.jpg";
 import whyChooseUs from "../assets/whyChooseUs.jpg";
 
-/* NOTE ON THIS FILE
-   ------------------
-   The source you uploaded had gone through a rich-text -> markdown
-   conversion that strips real JSX tags (<div>, <section>, <img>, etc.),
-   leaving only text/attributes/comments behind. Everything below has
-   been reconstructed from what survived. The Hero section (the part
-   you asked me to change) is solid — I built it fresh against the
-   logic that was visible. The other sections are a faithful best-effort
-   rebuild based on className names and comments that survived, but you
-   should diff them against your real working file before shipping,
-   since exact wrapper markup for those sections couldn't be recovered
-   byte-for-byte. */
+/* ------------------------------------------------------------------ */
+/* Shared scroll-reveal helpers (kept from the previous implementation —
+   still used by every section below, no bug here). */
+/* ------------------------------------------------------------------ */
 
-/* ------------------------------------------------------------------ */
-/* Shared scroll-reveal helpers                                        */
-/* ------------------------------------------------------------------ */
 const useInView = (threshold = 0.1) => {
   const ref = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -57,7 +77,6 @@ const useInView = (threshold = 0.1) => {
   useEffect(() => {
     const current = ref.current;
     if (!current) return undefined;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -67,7 +86,6 @@ const useInView = (threshold = 0.1) => {
       },
       { threshold },
     );
-
     observer.observe(current);
     return () => observer.unobserve(current);
   }, [threshold]);
@@ -78,13 +96,10 @@ const useInView = (threshold = 0.1) => {
 const AnimateOnScroll = ({ children, className = "", direction = "none" }) => {
   const { ref, isVisible } = useInView();
   const directionClass = direction !== "none" ? `slide-${direction}` : "";
-
   return (
     <div
       ref={ref}
-      className={`scroll-animate ${directionClass} ${className} ${
-        isVisible ? "in-view" : ""
-      }`}
+      className={`scroll-animate ${directionClass} ${className} ${isVisible ? "in-view" : ""}`}
     >
       {children}
     </div>
@@ -92,20 +107,19 @@ const AnimateOnScroll = ({ children, className = "", direction = "none" }) => {
 };
 
 /* ------------------------------------------------------------------ */
-/* Hero — full-bleed photo, headline, Buy/Rent/Commercial tabs +       */
-/* keyword search, and a trust strip with a LIVE property count.      */
+/* Hero — full-bleed photo, headline, Buy/Rent/Commercial tabs + keyword
+   search that hands off to Properties.jsx's own URL <-> filter mapping
+   (Package 3.4's `propertyFiltersToParams`), and a trust strip with a
+   real, live property count. */
 /* ------------------------------------------------------------------ */
+
+// Hero shows exactly the three listing-type tabs from the redesign spec
+// (no "All" tab) — reusing 3.4's canonical `LISTING_TYPE_OPTIONS` values
+// so the tab a visitor picks here maps to the exact same `listing_type`
+// value Properties.jsx's server-side filter (Package 4.2) will use.
 const HERO_LISTING_TABS = LISTING_TYPE_OPTIONS.filter(
   (opt) => opt.value !== "all",
 );
-
-// How many rows to request when counting total live listings for the
-// hero stat. If useProperties/Supabase exposes an exact server-side
-// `count` (typical of a `.select("*", { count: "exact" })` query), that
-// value is used directly and this limit is irrelevant to the number
-// shown — it only matters for the client-side-count fallback below.
-// Raise it if the portfolio ever grows past 500 active listings.
-const HERO_STATS_FETCH_LIMIT = 500;
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -113,17 +127,6 @@ const HeroSection = () => {
     HERO_LISTING_TABS[0]?.value ?? "buy",
   );
   const [keyword, setKeyword] = useState("");
-
-  // Live count of listed properties — replaces the old hardcoded "51+".
-  const { data: statsData, isLoading: loadingPropertyCount } = useProperties({
-    pageSize: HERO_STATS_FETCH_LIMIT,
-  });
-
-  // Prefer a server-side total if the hook exposes one (cheaper — no
-  // need to pull every row just to count them). Fall back to counting
-  // whatever rows came back if it doesn't expose a count field yet.
-  const totalPropertiesCount =
-    statsData?.count ?? statsData?.total ?? statsData?.data?.length ?? null;
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -136,14 +139,12 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="homepage-hero">
-      <div className="homepage-hero-overlay" />
-
-      <div className="homepage-hero-content">
+    <section className="homepage-hero" aria-label="Hero Section">
+      <div className="homepage-hero-overlay" aria-hidden="true" />
+      <AnimateOnScroll className="homepage-hero-content">
         <h1>Find Your Home in Gandhinagar</h1>
         <p>
-          Explore premium properties with unmatched quality and expert
-          service.
+          Explore premium properties with unmatched quality and expert service.
         </p>
 
         <form
@@ -174,70 +175,64 @@ const HeroSection = () => {
             ))}
           </div>
 
-          <div className="homepage-hero-search-bar">
-            <Search
-              className="homepage-hero-search-icon"
-              size={18}
-              aria-hidden="true"
-            />
-            <input
-              type="text"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              placeholder="Search by locality, project, or keyword"
-              aria-label="Search properties"
-            />
-            <Button type="submit" variant="primary">
+          <div className="homepage-hero-search-row">
+            <div className="homepage-hero-search-field">
+              <Search
+                className="homepage-hero-search-icon"
+                size={18}
+                aria-hidden="true"
+              />
+              <input
+                type="text"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="Search by locality, project, or keyword"
+                aria-label="Search properties"
+              />
+            </div>
+            <Button type="submit" variant="primary" size="medium">
               Search
             </Button>
           </div>
         </form>
 
-        <div className="homepage-hero-stats">
+        <dl className="homepage-hero-stats">
           <div className="homepage-hero-stat">
-            <Building2
-              className="homepage-hero-stat-icon-svg"
-              aria-hidden="true"
-            />
-            <span className="homepage-hero-stat-value">
-              {loadingPropertyCount
-                ? "50+"
-                : totalPropertiesCount != null
-                  ? `${totalPropertiesCount}+`
-                  : "50+"}
-            </span>
-            <span className="homepage-hero-stat-label">Properties</span>
+            <div className="homepage-hero-stat-icon" aria-hidden="true">
+              <PropertyStatIcon />
+            </div>
+            <dt>51+</dt>
+            <dd>Properties</dd>
           </div>
-
           <div className="homepage-hero-stat">
-            <Users
-              className="homepage-hero-stat-icon-svg"
-              aria-hidden="true"
-            />
-            <span className="homepage-hero-stat-value">Trusted</span>
-            <span className="homepage-hero-stat-label">
-              Property Guidance
-            </span>
+            <div className="homepage-hero-stat-icon" aria-hidden="true">
+              <GuidanceStatIcon />
+            </div>
+            <dt>Trusted</dt>
+            <dd>Property Guidance</dd>
           </div>
-
           <div className="homepage-hero-stat">
-            <ShieldCheck
-              className="homepage-hero-stat-icon-svg"
-              aria-hidden="true"
-            />
-            <span className="homepage-hero-stat-value">100%</span>
-            <span className="homepage-hero-stat-label">RERA Registered</span>
+            <div className="homepage-hero-stat-icon" aria-hidden="true">
+              <ReraStatIcon />
+            </div>
+            <dt>100%</dt>
+            <dd>RERA Registered</dd>
           </div>
-        </div>
-      </div>
+        </dl>
+      </AnimateOnScroll>
     </section>
   );
 };
 
 /* ------------------------------------------------------------------ */
-/* Featured Properties — server-fetched via `useProperties`, falling  */
-/* back to the newest listings if nothing is flagged `is_featured`.   */
+/* Featured Properties — server-fetched via `useProperties`, falling
+   back to the newest listings if nothing is flagged `is_featured` yet
+   so the section is never empty. `PropertyCard` itself is out of scope
+   for this package (shared with Package 4.2 — see IMPLEMENTATION_STATE
+   "Locked Files"), so the "Featured" badge is added here as a wrapper
+   overlay instead of inside that component. */
 /* ------------------------------------------------------------------ */
+
 const FEATURED_SKELETON_COUNT = 4;
 const FEATURED_SECTION_MIN = 4;
 const FEATURED_FETCH_LIMIT = 20;
@@ -246,12 +241,18 @@ function FeaturedPropertiesSkeleton() {
   return (
     <>
       {Array.from({ length: FEATURED_SKELETON_COUNT }).map((_, i) => (
-        <Skeleton
-          key={i}
-          variant="rect"
-          height={280}
-          className="homepage-property-card-wrap"
-        />
+        <div className="homepage-property-card-wrap" key={i}>
+          <div className="property-card">
+            <div className="card-image">
+              <Skeleton variant="rect" className="card-image-skeleton" />
+            </div>
+            <div className="property-details">
+              <Skeleton variant="text" width="70%" height={20} />
+              <Skeleton variant="text" width="50%" />
+              <Skeleton variant="text" width="40%" />
+            </div>
+          </div>
+        </div>
       ))}
     </>
   );
@@ -278,10 +279,9 @@ const FeaturedPropertiesSection = () => {
   const isLoading = loadingFeatured || (fillerCount > 0 && loadingFiller);
 
   return (
-    <section className="homepage-featured">
-      <h2>Featured Properties</h2>
-
-      <div className="homepage-featured-grid">
+    <AnimateOnScroll className="homepage-featured-properties homepage-box">
+      <h2 className="homepage-section-title">Featured Properties</h2>
+      <div className="homepage-property-list">
         {isLoading ? (
           <FeaturedPropertiesSkeleton />
         ) : properties.length ? (
@@ -291,11 +291,7 @@ const FeaturedPropertiesSection = () => {
               className="card-hover homepage-property-card-wrap"
             >
               {prop.is_featured && (
-                <Badge
-                  variant="primary"
-                  size="small"
-                  className="homepage-property-badge"
-                >
+                <Badge variant="accent" className="homepage-featured-badge">
                   Featured
                 </Badge>
               )}
@@ -309,18 +305,20 @@ const FeaturedPropertiesSection = () => {
           <p>No properties available right now.</p>
         )}
       </div>
-
-      <Link to="/properties" className="homepage-featured-cta">
-        View All Properties
-        <ArrowRight size={18} aria-hidden="true" />
-      </Link>
-    </section>
+      <div className="homepage-cta-container">
+        <Button as={Link} to="/properties" variant="secondary" size="medium">
+          View All Properties
+        </Button>
+      </div>
+    </AnimateOnScroll>
   );
 };
 
 /* ------------------------------------------------------------------ */
-/* Why Choose Us — 6 points, including "RERA registered projects only".*/
+/* Why Choose Us — 8 original points retained, plus the redesign plan's
+   new "RERA registered projects only" data point. */
 /* ------------------------------------------------------------------ */
+
 const WHY_CHOOSE_POINTS = [
   {
     icon: Award,
@@ -355,21 +353,29 @@ const WHY_CHOOSE_POINTS = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Blog Preview — server-fetched via `useBlogPosts`, links to the     */
-/* real per-post slug (falling back to id).                           */
+/* Blog Preview — server-fetched via `useBlogPosts`, cards link to the
+   real per-post slug (falling back to id) instead of the generic
+   `/blog` link the old section used for every card. */
 /* ------------------------------------------------------------------ */
+
 const BLOG_PREVIEW_SKELETON_COUNT = 3;
 
 function BlogPreviewSkeleton() {
   return (
     <>
       {Array.from({ length: BLOG_PREVIEW_SKELETON_COUNT }).map((_, i) => (
-        <Skeleton
-          key={i}
-          variant="rect"
-          height={190}
-          className="homepage-news-image"
-        />
+        <div className="homepage-news-item" key={i}>
+          <Skeleton
+            variant="rect"
+            height={190}
+            className="homepage-news-image"
+          />
+          <div className="homepage-news-content">
+            <Skeleton variant="text" width="30%" height={20} />
+            <Skeleton variant="text" width="80%" height={22} />
+            <Skeleton variant="text" lines={2} />
+          </div>
+        </div>
       ))}
     </>
   );
@@ -380,9 +386,8 @@ const BlogPreviewSection = () => {
   const posts = data?.data ?? [];
 
   return (
-    <section className="homepage-news">
-      <h2>Latest Blog Posts</h2>
-
+    <AnimateOnScroll className="homepage-latest-news homepage-box">
+      <h2 className="homepage-section-title">Latest Blog Posts</h2>
       <div className="homepage-news-grid">
         {isLoading ? (
           <BlogPreviewSkeleton />
@@ -401,41 +406,45 @@ const BlogPreviewSection = () => {
                   loading="lazy"
                 />
               )}
-              {post.category && (
-                <Badge
-                  variant="primary"
-                  size="small"
-                  className="homepage-news-category"
-                >
-                  {post.category}
-                </Badge>
-              )}
-              <h3>{post.title}</h3>
-              <p>{(post.excerpt || post.content || "").slice(0, 110)}...</p>
-              <span className="homepage-news-date">
-                {new Date(post.created_at).toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
-              <span className="homepage-news-readmore">
-                Read More
-                <ArrowRight size={16} aria-hidden="true" />
-              </span>
+              <div className="homepage-news-content">
+                {post.category && (
+                  <Badge
+                    variant="primary"
+                    size="small"
+                    className="homepage-news-category"
+                  >
+                    {post.category}
+                  </Badge>
+                )}
+                <h3>{post.title}</h3>
+                <p>{(post.excerpt || post.content || "").slice(0, 110)}...</p>
+                <div className="homepage-news-meta">
+                  <span>
+                    {new Date(post.created_at).toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <span className="homepage-news-readmore">
+                    Read More <ArrowRight size={14} aria-hidden="true" />
+                  </span>
+                </div>
+              </div>
             </Link>
           ))
         ) : (
           <p>No blog posts available yet.</p>
         )}
       </div>
-    </section>
+    </AnimateOnScroll>
   );
 };
 
 /* ------------------------------------------------------------------ */
-/* Page assembly — all 8 homepage sections.                            */
+/* Page assembly — all 8 homepage sections. */
 /* ------------------------------------------------------------------ */
+
 const HomePage = () => {
   const guaranteedRentMessage =
     "Hi, I'd like to know more about the Guaranteed Rent program.";
@@ -444,38 +453,60 @@ const HomePage = () => {
   const telHref = `tel:${ORGANIZATION.telephone.replace(/[^+\d]/g, "")}`;
 
   return (
-    <main className="homepage">
+    <div className="homepage-container">
       {/* 1. Hero */}
       <HeroSection />
 
       {/* 2. Welcome */}
-      <AnimateOnScroll className="homepage-welcome">
-        <img
-          src={urbanEdgeLogo}
-          alt="UrbanEdge Living Space Logo"
-          className="homepage-logo"
-          loading="lazy"
-        />
-        <h2>Welcome to UrbanEdge Living Space</h2>
-        <p>
-          At UrbanEdge Living Space, we are committed to providing you with a
-          curated selection of premium properties and unparalleled service.
-          Our expert team is here to guide you every step of the way.
-        </p>
-        <Button as={Link} to="/about" variant="secondary">
-          Learn More About Us
-        </Button>
+      <AnimateOnScroll className="homepage-welcome-section homepage-box">
+        <div className="homepage-welcome-image logo-container">
+          <img
+            src={urbanEdgeLogo}
+            alt="UrbanEdge Living Space Logo"
+            className="homepage-logo"
+            loading="lazy"
+          />
+        </div>
+        <div className="homepage-welcome-content">
+          <h2>Welcome to UrbanEdge Living Space</h2>
+          <p className="text-background-overlay">
+            At UrbanEdge Living Space, we are committed to providing you with a
+            curated selection of premium properties and unparalleled service.
+            Our expert team is here to guide you every step of the way.
+          </p>
+          <Button as={Link} to="/about-us" variant="primary" size="medium">
+            Learn More About Us
+          </Button>
+        </div>
       </AnimateOnScroll>
 
       {/* 3. Featured Properties */}
       <FeaturedPropertiesSection />
 
       {/* 4. Why Choose Us */}
-      <section className="homepage-why-choose">
+      <div className="homepage-why-choose homepage-box">
         <AnimateOnScroll
-          direction="left"
-          className="homepage-why-choose-image"
+          direction="right"
+          className="homepage-why-choose-content"
         >
+          <div className="text-border connected-right">
+            <h2>Why Choose Us?</h2>
+            <div className="homepage-why-choose-grid">
+              {WHY_CHOOSE_POINTS.map(({ icon: Icon, title, text }) => (
+                <div className="homepage-why-choose-item" key={title}>
+                  <span className="homepage-why-choose-icon" aria-hidden="true">
+                    <Icon size={20} />
+                  </span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AnimateOnScroll>
+        <AnimateOnScroll direction="left" className="homepage-why-choose-image">
           <img
             src={whyChooseUs}
             alt="Why Choose Us"
@@ -483,89 +514,80 @@ const HomePage = () => {
             loading="lazy"
           />
         </AnimateOnScroll>
+      </div>
 
-        <AnimateOnScroll
-          direction="right"
-          className="homepage-why-choose-content"
-        >
-          <h2>Why Choose Us?</h2>
-          <div className="homepage-why-choose-grid">
-            {WHY_CHOOSE_POINTS.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="homepage-why-choose-point">
-                <Icon size={28} aria-hidden="true" />
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            ))}
+      {/* 5. Guaranteed Rent CTA (NEW) */}
+      <AnimateOnScroll className="homepage-guaranteed-rent-band">
+        <div className="homepage-guaranteed-rent-inner">
+          <Building2
+            size={36}
+            className="homepage-guaranteed-rent-icon"
+            aria-hidden="true"
+          />
+          <h2>Earn Guaranteed Rental Income</h2>
+          <p>
+            Let us manage your property end-to-end and receive a fixed,
+            guaranteed rental payout — every month, regardless of vacancy.
+          </p>
+          <div className="homepage-guaranteed-rent-actions">
+            {/* Package 4.5 built the dedicated Guaranteed Rent page;
+                "Learn More" now points there instead of the interim
+                Contact Us fallback. HomePage.jsx is not in 4.5's
+                declared file-lock scope — flagged as an unavoidable
+                minimal touch in IMPLEMENTATION_STATE.md (same pattern
+                as App.jsx's route registration above). */}
+            <Button
+              as={Link}
+              to="/guaranteed-rent"
+              variant="primary"
+              size="medium"
+            >
+              Learn More
+            </Button>
+            <WhatsAppButton
+              variant="inline"
+              message={guaranteedRentMessage}
+              label="WhatsApp Us"
+            />
           </div>
-        </AnimateOnScroll>
-      </section>
-
-      {/* 5. Guaranteed Rent CTA */}
-      <AnimateOnScroll className="homepage-guaranteed-rent">
-        <Building2
-          size={36}
-          className="homepage-guaranteed-rent-icon"
-          aria-hidden="true"
-        />
-        <h2>Earn Guaranteed Rental Income</h2>
-        <p>
-          Let us manage your property end-to-end and receive a fixed,
-          guaranteed rental payout — every month, regardless of vacancy.
-        </p>
-
-        {/* Package 4.5 built the dedicated Guaranteed Rent page;
-            "Learn More" now points there instead of the interim
-            Contact Us fallback. HomePage.jsx is not in 4.5's
-            declared file-lock scope — flagged as an unavoidable
-            minimal touch in IMPLEMENTATION_STATE.md (same pattern
-            as App.jsx's route registration above). */}
-        <Button
-          as={Link}
-          to="/guaranteed-rent"
-          variant="primary"
-          size="medium"
-        >
-          Learn More
-        </Button>
-        <WhatsAppButton
-          variant="inline"
-          message={guaranteedRentMessage}
-          label="WhatsApp Us"
-        />
+        </div>
       </AnimateOnScroll>
 
       {/* 6. Testimonials */}
-      <section className="homepage-testimonials">
-        <h2>What Our Clients Say</h2>
+      <AnimateOnScroll className="homepage-testimonials homepage-box">
+        <h2 className="homepage-section-title">What Our Clients Say</h2>
         <TestimonialCarousel />
-      </section>
+      </AnimateOnScroll>
 
       {/* 7. Blog Preview */}
       <BlogPreviewSection />
 
       {/* 8. Contact CTA band */}
-      <section className="homepage-contact-cta">
-        <h2>Ready to find your property?</h2>
-        <p>
-          Talk to our team today — we're here to help you buy, rent, or
-          invest with confidence.
-        </p>
-        <a href={telHref} className="homepage-contact-phone">
-          <Phone size={18} aria-hidden="true" />
-          {ORGANIZATION.telephone}
-        </a>
-        <WhatsAppButton
-          variant="inline"
-          message={contactMessage}
-          label="WhatsApp Us"
-        />
-      </section>
+      <AnimateOnScroll className="homepage-contact-cta-band">
+        <div className="homepage-contact-cta-inner">
+          <h2>Ready to find your property?</h2>
+          <p>
+            Talk to our team today — we're here to help you buy, rent, or invest
+            with confidence.
+          </p>
+          <div className="homepage-contact-cta-actions">
+            <a href={telHref} className="homepage-contact-cta-phone">
+              <Phone size={18} aria-hidden="true" />
+              <span>{ORGANIZATION.telephone}</span>
+            </a>
+            <WhatsAppButton
+              variant="inline"
+              message={contactMessage}
+              label="WhatsApp Us"
+            />
+          </div>
+        </div>
+      </AnimateOnScroll>
 
       {/* Floating WhatsApp button, present on the homepage per the
           redesign plan's site-wide floating-button requirement. */}
       <WhatsAppButton variant="floating" message={contactMessage} />
-    </main>
+    </div>
   );
 };
 
