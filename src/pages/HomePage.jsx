@@ -17,6 +17,7 @@ import {
 
 import { useProperties, usePropertiesCount } from "../hooks/useProperties";
 import { useBlogPosts } from "../hooks/useBlogPosts";
+import { getExcerpt } from "../components/blog/blogText";
 import {
   LISTING_TYPE_OPTIONS,
   propertyFiltersToParams,
@@ -421,7 +422,7 @@ const BlogPreviewSection = () => {
                   </Badge>
                 )}
                 <h3>{post.title}</h3>
-                <p>{(post.excerpt || post.content || "").slice(0, 110)}...</p>
+                <p>{getExcerpt(post, 110)}</p>
                 <div className="homepage-news-meta">
                   <span className="homepage-news-date">
                     {new Date(post.created_at).toLocaleDateString("en-US", {
