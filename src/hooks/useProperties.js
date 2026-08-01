@@ -43,6 +43,8 @@ export const propertyKeys = {
   list: (filters) => [...propertyKeys.lists(), filters],
   details: () => [...propertyKeys.all, "detail"],
   detail: (identifier) => [...propertyKeys.details(), identifier],
+  counts: () => [...propertyKeys.all, "count"],
+  count: (filters) => [...propertyKeys.counts(), filters],
 };
 
 export const DEFAULT_PROPERTIES_PAGE_SIZE = 6;
@@ -68,10 +70,15 @@ function buildBhkFilter(bhkValues) {
   return clauses.length > 0 ? clauses.join(",") : null;
 }
 
-export async function fetchProperties(filters = {}) {
+/**
+ * Applies every WHERE-clause filter (publish state, listing type, property
+ * type, bhk range, location, price range, featured flag, search) to a
+ * Supabase query builder. Shared by `fetchProperties` (full rows, paged)
+ * and `fetchPropertiesCount` (count only, no rows) so the two can never
+ * drift apart and silently return mismatched counts vs. listings.
+ */
+function applyPropertyFilters(query, filters = {}) {
   const {
-    page = 1,
-    pageSize = DEFAULT_PROPERTIES_PAGE_SIZE,
     listingType,
     propertyTypes,
     bhk,
@@ -81,11 +88,8 @@ export async function fetchProperties(filters = {}) {
     maxPrice,
     isFeatured,
     search,
-    sortBy = "newest",
     includeUnpublished = false,
   } = filters;
-
-  let query = supabase.from("properties").select("*", { count: "exact" });
 
   if (!includeUnpublished) {
     query = query.eq("is_published", true);
@@ -140,20 +144,33 @@ export async function fetchProperties(filters = {}) {
     // characters as filter-list delimiters and an unescaped one in raw user
     // input would break filter parsing (a pre-existing risk shared with the
     // prior ilike-only implementation, not introduced by this change).
-  const safeTerm = search.trim().replace(/[(),]/g, " ").trim();
-  if (safeTerm) {
-    query = query.or(
-      [
-        `name.ilike.%${safeTerm}%`,
-        `location.ilike.%${safeTerm}%`,
-        `about_property.ilike.%${safeTerm}%`,
-        `name.wfts(english).${safeTerm}`,
-        `location.wfts(english).${safeTerm}`,
-        `about_property.wfts(english).${safeTerm}`,
-      ].join(","),
-    );
+    const safeTerm = search.trim().replace(/[(),]/g, " ").trim();
+    if (safeTerm) {
+      query = query.or(
+        [
+          `name.ilike.%${safeTerm}%`,
+          `location.ilike.%${safeTerm}%`,
+          `about_property.ilike.%${safeTerm}%`,
+          `name.wfts(english).${safeTerm}`,
+          `location.wfts(english).${safeTerm}`,
+          `about_property.wfts(english).${safeTerm}`,
+        ].join(","),
+      );
+    }
   }
+
+  return query;
 }
+
+export async function fetchProperties(filters = {}) {
+  const {
+    page = 1,
+    pageSize = DEFAULT_PROPERTIES_PAGE_SIZE,
+    sortBy = "newest",
+  } = filters;
+
+  let query = supabase.from("properties").select("*", { count: "exact" });
+  query = applyPropertyFilters(query, filters);
 
   if (sortBy === "price_asc") {
     query = query.order("price", { ascending: true });
@@ -174,11 +191,51 @@ export async function fetchProperties(filters = {}) {
   return { data: data ?? [], count: count ?? 0 };
 }
 
+/**
+ * fetchPropertiesCount
+ *
+ * Returns just the number of properties matching `filters` — no rows are
+ * transferred (`head: true`), so this stays cheap no matter how large the
+ * `properties` table grows. This backs the homepage hero's live "N+
+ * Properties" stat (previously a hardcoded "50+"): whatever this returns
+ * is the number shown, with no upper limit baked in.
+ *
+ * Reuses `applyPropertyFilters` so the count can never disagree with what
+ * `fetchProperties` would actually list for the same filters.
+ */
+export async function fetchPropertiesCount(filters = {}) {
+  let query = supabase
+    .from("properties")
+    .select("*", { count: "exact", head: true });
+  query = applyPropertyFilters(query, filters);
+
+  const { error, count } = await query;
+  if (error) throw error;
+
+  return { count: count ?? 0 };
+}
+
 export function useProperties(filters = {}, options = {}) {
   return useQuery({
     queryKey: propertyKeys.list(filters),
     queryFn: () => fetchProperties(filters),
     placeholderData: keepPreviousData,
+    staleTime: 60_000,
+    ...options,
+  });
+}
+
+/**
+ * usePropertiesCount
+ *
+ * Lightweight companion to `useProperties` for when only the total count
+ * is needed (e.g. the hero "N+ Properties" stat, or a results-count badge)
+ * — avoids pulling full rows just to read `.length`.
+ */
+export function usePropertiesCount(filters = {}, options = {}) {
+  return useQuery({
+    queryKey: propertyKeys.count(filters),
+    queryFn: () => fetchPropertiesCount(filters),
     staleTime: 60_000,
     ...options,
   });
