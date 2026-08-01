@@ -285,10 +285,10 @@ const FeaturedPropertiesSection = () => {
   const isLoading = loadingFeatured || (fillerCount > 0 && loadingFiller);
 
   return (
-    <section className="homepage-featured">
-      <h2>Featured Properties</h2>
+    <section className="homepage-featured-properties">
+      <h2 className="homepage-section-title">Featured Properties</h2>
 
-      <div className="homepage-featured-grid">
+      <div className="homepage-property-list">
         {isLoading ? (
           <FeaturedPropertiesSkeleton />
         ) : properties.length ? (
@@ -301,7 +301,7 @@ const FeaturedPropertiesSection = () => {
                 <Badge
                   variant="primary"
                   size="small"
-                  className="homepage-property-badge"
+                  className="homepage-featured-badge"
                 >
                   Featured
                 </Badge>
@@ -317,10 +317,12 @@ const FeaturedPropertiesSection = () => {
         )}
       </div>
 
-      <Link to="/properties" className="homepage-featured-cta">
-        View All Properties
-        <ArrowRight size={18} aria-hidden="true" />
-      </Link>
+      <div className="homepage-cta-container">
+        <Button as={Link} to="/properties" variant="secondary">
+          View All Properties
+          <ArrowRight size={18} aria-hidden="true" />
+        </Button>
+      </div>
     </section>
   );
 };
@@ -387,8 +389,8 @@ const BlogPreviewSection = () => {
   const posts = data?.data ?? [];
 
   return (
-    <section className="homepage-news">
-      <h2>Latest Blog Posts</h2>
+    <section className="homepage-latest-news">
+      <h2 className="homepage-section-title">Latest Blog Posts</h2>
 
       <div className="homepage-news-grid">
         {isLoading ? (
@@ -408,28 +410,32 @@ const BlogPreviewSection = () => {
                   loading="lazy"
                 />
               )}
-              {post.category && (
-                <Badge
-                  variant="primary"
-                  size="small"
-                  className="homepage-news-category"
-                >
-                  {post.category}
-                </Badge>
-              )}
-              <h3>{post.title}</h3>
-              <p>{(post.excerpt || post.content || "").slice(0, 110)}...</p>
-              <span className="homepage-news-date">
-                {new Date(post.created_at).toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
-              <span className="homepage-news-readmore">
-                Read More
-                <ArrowRight size={16} aria-hidden="true" />
-              </span>
+              <div className="homepage-news-content">
+                {post.category && (
+                  <Badge
+                    variant="primary"
+                    size="small"
+                    className="homepage-news-category"
+                  >
+                    {post.category}
+                  </Badge>
+                )}
+                <h3>{post.title}</h3>
+                <p>{(post.excerpt || post.content || "").slice(0, 110)}...</p>
+                <div className="homepage-news-meta">
+                  <span className="homepage-news-date">
+                    {new Date(post.created_at).toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <span className="homepage-news-readmore">
+                    Read More
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </span>
+                </div>
+              </div>
             </Link>
           ))
         ) : (
@@ -452,122 +458,146 @@ const HomePage = () => {
 
   return (
     <main className="homepage">
-      {/* 1. Hero */}
+      {/* 1. Hero — intentionally full-bleed, sits outside homepage-container */}
       <HeroSection />
 
-      {/* 2. Welcome */}
-      <AnimateOnScroll className="homepage-welcome">
-        <img
-          src={urbanEdgeLogo}
-          alt="UrbanEdge Living Space Logo"
-          className="homepage-logo"
-          loading="lazy"
-        />
-        <h2>Welcome to UrbanEdge Living Space</h2>
-        <p>
-          At UrbanEdge Living Space, we are committed to providing you with a
-          curated selection of premium properties and unparalleled service.
-          Our expert team is here to guide you every step of the way.
-        </p>
-        <Button as={Link} to="/about" variant="secondary">
-          Learn More About Us
-        </Button>
-      </AnimateOnScroll>
-
-      {/* 3. Featured Properties */}
-      <FeaturedPropertiesSection />
-
-      {/* 4. Why Choose Us */}
-      <section className="homepage-why-choose">
-        <AnimateOnScroll
-          direction="left"
-          className="homepage-why-choose-image"
-        >
-          <img
-            src={whyChooseUs}
-            alt="Why Choose Us"
-            className="card-hover"
-            loading="lazy"
-          />
-        </AnimateOnScroll>
-
-        <AnimateOnScroll
-          direction="right"
-          className="homepage-why-choose-content"
-        >
-          <h2>Why Choose Us?</h2>
-          <div className="homepage-why-choose-grid">
-            {WHY_CHOOSE_POINTS.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="homepage-why-choose-point">
-                <Icon size={28} aria-hidden="true" />
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            ))}
+      {/* Everything below the hero is width-constrained and centered by
+          .homepage-container (defined in HomePage.css). Without this
+          wrapper every section below renders full-viewport-width with
+          none of the page's max-width/centering/background treatment. */}
+      <div className="homepage-container">
+        {/* 2. Welcome */}
+        <AnimateOnScroll className="homepage-welcome-section">
+          <div className="homepage-welcome-image">
+            <img
+              src={urbanEdgeLogo}
+              alt="UrbanEdge Living Space Logo"
+              className="homepage-logo"
+              loading="lazy"
+            />
+          </div>
+          <div className="homepage-welcome-content">
+            <h2>Welcome to UrbanEdge Living Space</h2>
+            <p>
+              At UrbanEdge Living Space, we are committed to providing you
+              with a curated selection of premium properties and
+              unparalleled service. Our expert team is here to guide you
+              every step of the way.
+            </p>
+            <Button as={Link} to="/about" variant="secondary">
+              Learn More About Us
+            </Button>
           </div>
         </AnimateOnScroll>
-      </section>
 
-      {/* 5. Guaranteed Rent CTA */}
-      <AnimateOnScroll className="homepage-guaranteed-rent">
-        <Building2
-          size={36}
-          className="homepage-guaranteed-rent-icon"
-          aria-hidden="true"
-        />
-        <h2>Earn Guaranteed Rental Income</h2>
-        <p>
-          Let us manage your property end-to-end and receive a fixed,
-          guaranteed rental payout — every month, regardless of vacancy.
-        </p>
+        {/* 3. Featured Properties */}
+        <FeaturedPropertiesSection />
 
-        {/* Package 4.5 built the dedicated Guaranteed Rent page;
-            "Learn More" now points there instead of the interim
-            Contact Us fallback. HomePage.jsx is not in 4.5's
-            declared file-lock scope — flagged as an unavoidable
-            minimal touch in IMPLEMENTATION_STATE.md (same pattern
-            as App.jsx's route registration above). */}
-        <Button
-          as={Link}
-          to="/guaranteed-rent"
-          variant="primary"
-          size="medium"
-        >
-          Learn More
-        </Button>
-        <WhatsAppButton
-          variant="inline"
-          message={guaranteedRentMessage}
-          label="WhatsApp Us"
-        />
-      </AnimateOnScroll>
+        {/* 4. Why Choose Us */}
+        <section className="homepage-why-choose">
+          <AnimateOnScroll
+            direction="left"
+            className="homepage-why-choose-image"
+          >
+            <img
+              src={whyChooseUs}
+              alt="Why Choose Us"
+              className="card-hover"
+              loading="lazy"
+            />
+          </AnimateOnScroll>
 
-      {/* 6. Testimonials */}
-      <section className="homepage-testimonials">
-        <h2>What Our Clients Say</h2>
-        <TestimonialCarousel />
-      </section>
+          <AnimateOnScroll
+            direction="right"
+            className="homepage-why-choose-content"
+          >
+            <h2>Why Choose Us?</h2>
+            <div className="homepage-why-choose-grid">
+              {WHY_CHOOSE_POINTS.map(({ icon: Icon, title, text }) => (
+                <div key={title} className="homepage-why-choose-item">
+                  <div className="homepage-why-choose-icon">
+                    <Icon size={20} aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </AnimateOnScroll>
+        </section>
 
-      {/* 7. Blog Preview */}
-      <BlogPreviewSection />
+        {/* 5. Guaranteed Rent CTA */}
+        <AnimateOnScroll className="homepage-guaranteed-rent-band">
+          <div className="homepage-guaranteed-rent-inner">
+            <Building2
+              size={36}
+              className="homepage-guaranteed-rent-icon"
+              aria-hidden="true"
+            />
+            <h2>Earn Guaranteed Rental Income</h2>
+            <p>
+              Let us manage your property end-to-end and receive a fixed,
+              guaranteed rental payout — every month, regardless of
+              vacancy.
+            </p>
 
-      {/* 8. Contact CTA band */}
-      <section className="homepage-contact-cta">
-        <h2>Ready to find your property?</h2>
-        <p>
-          Talk to our team today — we're here to help you buy, rent, or
-          invest with confidence.
-        </p>
-        <a href={telHref} className="homepage-contact-phone">
-          <Phone size={18} aria-hidden="true" />
-          {ORGANIZATION.telephone}
-        </a>
-        <WhatsAppButton
-          variant="inline"
-          message={contactMessage}
-          label="WhatsApp Us"
-        />
-      </section>
+            {/* Package 4.5 built the dedicated Guaranteed Rent page;
+                "Learn More" now points there instead of the interim
+                Contact Us fallback. HomePage.jsx is not in 4.5's
+                declared file-lock scope — flagged as an unavoidable
+                minimal touch in IMPLEMENTATION_STATE.md (same pattern
+                as App.jsx's route registration above). */}
+            <div className="homepage-guaranteed-rent-actions">
+              <Button
+                as={Link}
+                to="/guaranteed-rent"
+                variant="primary"
+                size="medium"
+              >
+                Learn More
+              </Button>
+              <WhatsAppButton
+                variant="inline"
+                message={guaranteedRentMessage}
+                label="WhatsApp Us"
+              />
+            </div>
+          </div>
+        </AnimateOnScroll>
+
+        {/* 6. Testimonials */}
+        <section className="homepage-testimonials">
+          <h2 className="homepage-section-title">What Our Clients Say</h2>
+          <TestimonialCarousel />
+        </section>
+
+        {/* 7. Blog Preview */}
+        <BlogPreviewSection />
+
+        {/* 8. Contact CTA band */}
+        <section className="homepage-contact-cta-band">
+          <div className="homepage-contact-cta-inner">
+            <h2>Ready to find your property?</h2>
+            <p>
+              Talk to our team today — we're here to help you buy, rent, or
+              invest with confidence.
+            </p>
+            <div className="homepage-contact-cta-actions">
+              <a href={telHref} className="homepage-contact-cta-phone">
+                <Phone size={18} aria-hidden="true" />
+                {ORGANIZATION.telephone}
+              </a>
+              <WhatsAppButton
+                variant="inline"
+                message={contactMessage}
+                label="WhatsApp Us"
+              />
+            </div>
+          </div>
+        </section>
+      </div>
 
       {/* Floating WhatsApp button, present on the homepage per the
           redesign plan's site-wide floating-button requirement. */}
