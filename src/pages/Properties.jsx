@@ -177,7 +177,7 @@ const Properties = () => {
             <span aria-current="page">Properties</span>
           </nav>
           <h1>
-            {isLoading ? 'Properties in Gandhinagar' : `${totalCount} Propert${totalCount === 1 ? 'y' : 'ies'} in Gandhinagar`}
+            {isLoading ? 'Properties in Gandhinagar & Ahmedabad' : `${totalCount} Propert${totalCount === 1 ? 'y' : 'ies'} in Gandhinagar & Ahmedabad`}
           </h1>
           <form className="hero-search" onSubmit={handleHeroSearchSubmit}>
             <input
