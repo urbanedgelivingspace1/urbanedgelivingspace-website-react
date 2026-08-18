@@ -127,6 +127,18 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
+// Guarantees the slug we send to Supabase doesn't collide with a slug
+// already in use (e.g. identical/blank titles, or resubmitting the same
+// create form). Appends -2, -3, ... until it finds a free one. `existingSlugs`
+// should already exclude the post's own current slug when editing.
+function uniqueSlug(base, existingSlugs) {
+  const safeBase = base || "post";
+  if (!existingSlugs.includes(safeBase)) return safeBase;
+  let suffix = 2;
+  while (existingSlugs.includes(`${safeBase}-${suffix}`)) suffix += 1;
+  return `${safeBase}-${suffix}`;
+}
+
 /* ------------------------------------------------------------------ */
 /* Small in-file field primitives (no new shared ui/ files — this      */
 /* package's Blueprint row lists no "Files to Create").                */
@@ -396,7 +408,7 @@ function RichTextEditor({ value, onChange }) {
 /* Shared form — used for both Add and Edit                            */
 /* ------------------------------------------------------------------ */
 
-function BlogForm({ post, onSave, onCancel, saving, isCreate }) {
+function BlogForm({ post, onSave, onCancel, saving, isCreate, existingSlugs = [] }) {
   const buildFieldsFromPost = (p) => {
     const base = { ...emptyFields };
     if (p) {
@@ -487,16 +499,19 @@ function BlogForm({ post, onSave, onCancel, saving, isCreate }) {
     [fields.content],
   );
 
-  const buildPayload = (publishState) => ({
-    ...fields,
-    slug: fields.slug || slugify(fields.title),
-    is_published: publishState,
-    tags,
-    reading_time_minutes:
-      fields.reading_time_minutes === ""
-        ? suggestedReadingTime
-        : Number(fields.reading_time_minutes),
-  });
+  const buildPayload = (publishState) => {
+    const baseSlug = fields.slug || slugify(fields.title);
+    return {
+      ...fields,
+      slug: uniqueSlug(baseSlug, existingSlugs),
+      is_published: publishState,
+      tags,
+      reading_time_minutes:
+        fields.reading_time_minutes === ""
+          ? suggestedReadingTime
+          : Number(fields.reading_time_minutes),
+    };
+  };
 
   const submit = async (e, { asDraft } = {}) => {
     e.preventDefault();
@@ -739,6 +754,11 @@ const BlogModule = () => {
   const [loadingList, setLoadingList] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  // Bumped after every successful create so <BlogForm key=...> below
+  // remounts with fresh (empty) state — otherwise the "Add New Post"
+  // form keeps showing the just-saved title/slug and a second click
+  // (e.g. Save as Draft, then Publish) resubmits the same slug.
+  const [createFormKey, setCreateFormKey] = useState(0);
   const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
@@ -773,6 +793,13 @@ const BlogModule = () => {
     return data.publicUrl;
   };
 
+  // Turns the raw Postgres unique-violation message into something an
+  // admin can actually act on, instead of the bare constraint name.
+  const friendlyErrorMessage = (err) =>
+    err?.message?.includes("blog_posts_slug_unique_idx")
+      ? "A post with this slug already exists. Please change the Title or Slug and try again."
+      : err.message;
+
   const handleCreate = async (payload, imageFile) => {
     setSaving(true);
     try {
@@ -783,9 +810,10 @@ const BlogModule = () => {
         .insert([{ ...payload, image_url }]);
       if (error) throw error;
       await fetchPosts();
+      setCreateFormKey((k) => k + 1); // reset the Add New Post form
       return true;
     } catch (err) {
-      alert("Error saving post: " + err.message);
+      alert("Error saving post: " + friendlyErrorMessage(err));
       return false;
     } finally {
       setSaving(false);
@@ -806,7 +834,7 @@ const BlogModule = () => {
       setEditingId(null);
       return true;
     } catch (err) {
-      alert("Error updating post: " + err.message);
+      alert("Error updating post: " + friendlyErrorMessage(err));
       return false;
     } finally {
       setSaving(false);
@@ -829,7 +857,14 @@ const BlogModule = () => {
     <div className="bm-module">
       <section className="bm-section">
         <h2>📝 Add New Post</h2>
-        <BlogForm key="create" post={null} isCreate saving={saving} onSave={handleCreate} />
+        <BlogForm
+          key={`create-${createFormKey}`}
+          post={null}
+          isCreate
+          saving={saving}
+          onSave={handleCreate}
+          existingSlugs={posts.map((p) => p.slug).filter(Boolean)}
+        />
       </section>
 
       <section className="bm-section">
@@ -916,6 +951,10 @@ const BlogModule = () => {
             onSave={(payload, imageFile) =>
               handleUpdate(editingPost.id, payload, imageFile)
             }
+            existingSlugs={posts
+              .filter((p) => p.id !== editingPost.id)
+              .map((p) => p.slug)
+              .filter(Boolean)}
           />
         )}
       </Modal>
