@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 import App from "./App";
 import { queryClient } from "./lib/queryClient";
 import "./styles/tokens.css";
@@ -14,6 +16,8 @@ root.render(
       <div className="app-container">
         <App />
       </div>
+      <SpeedInsights />
+      <Analytics />
     </QueryClientProvider>
   </React.StrictMode>,
 );
