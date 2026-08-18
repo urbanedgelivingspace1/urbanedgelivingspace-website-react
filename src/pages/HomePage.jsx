@@ -138,7 +138,7 @@ const HeroSection = () => {
       <div className="homepage-hero-overlay" />
 
       <div className="homepage-hero-content">
-        <h1>Find Your Home in Gandhinagar</h1>
+        <h1>Find Your Home in Gandhinagar & Ahemdabad</h1>
         <p>
           Explore premium properties with unmatched quality and expert
           service.
