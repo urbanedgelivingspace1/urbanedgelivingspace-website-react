@@ -1,61 +1,34 @@
-/* Global typography with explicit Gujarati and Devanagari coverage. */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+/* src/styles/typography.css
+   Font imports and typographic scale, split out of the old src/index.css
+   as part of Package 1.2 (Design Token System). Depends on the tokens
+   defined in styles/tokens.css (--heading-font, --body-font, etc.), so
+   this file must be imported after tokens.css.
+   ===================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+
+/* Single, global heading rule for the whole app. Page-level CSS must
+   never redeclare a bare `h1, h2, h3` selector (it did previously in
+   HomePage.css, colliding with this rule at identical specificity and
+   leaving the winner decided by import order rather than intent) — page
+   CSS should only target specific classes, e.g. `.homepage-hero h1`. */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--heading-font);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.3;
   margin-bottom: 0.5em;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: var(--primary-color);
 }
 
-h1 { font-size: clamp(1.9rem, 5vw, 3.2rem); }
-h2 { font-size: clamp(1.55rem, 4vw, 2.35rem); }
-h3 { font-size: clamp(1.2rem, 3vw, 1.65rem); }
-h4 { font-size: clamp(1.08rem, 2vw, 1.35rem); }
-h5 { font-size: clamp(1rem, 1.5vw, 1.2rem); }
+h1 { font-size: clamp(1.75rem, 5vw, 2.75rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+h4 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
+h5 { font-size: clamp(1rem, 1.5vw, 1.25rem); }
 
 p {
   margin-bottom: 1rem;
-  max-width: 72ch;
-  line-height: 1.72;
-}
-
-html[lang="gu"] body,
-html[lang="gu"] button,
-html[lang="gu"] input,
-html[lang="gu"] select,
-html[lang="gu"] textarea {
-  font-family: 'Noto Sans Gujarati', var(--font-body), sans-serif;
-}
-
-html[lang="hi"] body,
-html[lang="hi"] button,
-html[lang="hi"] input,
-html[lang="hi"] select,
-html[lang="hi"] textarea {
-  font-family: 'Noto Sans Devanagari', var(--font-body), sans-serif;
-}
-
-html[lang="gu"] h1,
-html[lang="gu"] h2,
-html[lang="gu"] h3,
-html[lang="gu"] h4,
-html[lang="gu"] h5,
-html[lang="gu"] h6 {
-  font-family: 'Noto Sans Gujarati', var(--font-body), sans-serif;
-  letter-spacing: 0;
-  line-height: 1.3;
-}
-
-html[lang="hi"] h1,
-html[lang="hi"] h2,
-html[lang="hi"] h3,
-html[lang="hi"] h4,
-html[lang="hi"] h5,
-html[lang="hi"] h6 {
-  font-family: 'Noto Sans Devanagari', var(--font-body), sans-serif;
-  letter-spacing: 0;
-  line-height: 1.3;
+  max-width: 72ch; /* Improved readability */
+  line-height: 1.7; /* Better line spacing */
 }
