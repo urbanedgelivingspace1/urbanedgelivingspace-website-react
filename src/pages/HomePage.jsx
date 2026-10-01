@@ -32,6 +32,7 @@ import Skeleton from "../components/ui/Skeleton";
 import { ORGANIZATION, organizationSchema } from "../lib/seo";
 import { useLanguage } from "../i18n/LanguageContext";
 import "./HomePage.css";
+import "./HomePage.modern.css";
 import propertyImage from "../assets/property.jpg";
 import urbanEdgeLogo from "../assets/UrbanEdge_Living_Space_Logo_HD.jpg";
 import whyChooseUs from "../assets/whyChooseUs.jpg";
