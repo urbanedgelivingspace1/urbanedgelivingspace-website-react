@@ -1,34 +1,24 @@
 // src/lib/seo.js
-//
-// Shared SEO constants and helpers, consumed by
-// `components/shared/SEOHead.jsx` and (from Phase 4 onward) by
-// individual pages that need to build page-specific JSON-LD (e.g. the
-// `RealEstateListing` schema on the property detail page, or the
-// `Article` schema on blog posts).
-//
-// Kept dependency-free (no react-helmet-async import here) so it can
-// be unit-tested or reused outside of a component context.
+// Shared SEO and public business constants.
 
 export const SITE_NAME = "UrbanEdge Living Space";
 
 export const DEFAULT_TITLE =
-  "UrbanEdge Living Space | Real Estate in Gandhinagar";
+  "UrbanEdge Living Space | Real Estate in Gandhinagar & Ahmedabad";
 
 export const DEFAULT_DESCRIPTION =
-  "UrbanEdge Living Space is a real estate consultancy in Gandhinagar, Gujarat, helping you buy, rent, and invest in residential and commercial properties.";
+  "UrbanEdge Living Space helps buyers, tenants, investors and property owners discover residential real estate across Gandhinagar and Ahmedabad with direct local support.";
 
 export const DEFAULT_LOGO_IMAGE = "/UrbanEdge_Living_Space_Logo_HD.jpg";
-
 export const DEFAULT_OG_IMAGE = DEFAULT_LOGO_IMAGE;
 
-// Organization contact details, sourced from the office address/phone/
-// email already shown on ContactUs.jsx (see Known Deviations in
-// IMPLEMENTATION_STATE.md — AboutUs.jsx currently shows a different,
-// conflicting office address; unifying the two is Phase 4 scope per
-// Blueprint Section 10, item 30, not this package).
+// Canonical public business details. These values are consolidated from the
+// contact details already used by the repository; do not duplicate them in
+// Navbar/Footer/Contact/WhatsApp components.
 export const ORGANIZATION = {
   name: SITE_NAME,
   telephone: "+91-9408663544",
+  whatsappNumber: "919408663544",
   email: "urbanedgelivingspace@gmail.com",
   streetAddress:
     "Shop no. 130, Sanskruti by Kaavyaratna, near Dholeshwar Park, Randesan",
@@ -36,34 +26,25 @@ export const ORGANIZATION = {
   addressRegion: "Gujarat",
   postalCode: "382421",
   addressCountry: "IN",
+  instagram: "https://www.instagram.com/urbanedgelivingspace_official/",
+  mapsEmbed:
+    "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14670.579401370644!2d72.6478357!3d23.1831588!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395c2bf0469b056b%3A0x9be13844a7842440!2sSANSKRUTI!5e0!3m2!1sen!2sin!4v1752990682824!5m2!1sen!2sin",
+  mapsDirections:
+    "https://www.google.com/maps/search/?api=1&query=Sanskruti%20by%20Kaavyaratna%20Randesan%20Gandhinagar",
 };
 
 const DEFAULT_OG_TYPE = "website";
 const DEFAULT_TWITTER_CARD = "summary_large_image";
 
-/**
- * Resolves the site's own origin, used to build absolute canonical/OG
- * URLs. Prefers an explicit VITE_SITE_URL (useful once a production
- * domain is provisioned) and falls back to the browser's current
- * origin, so this works correctly in dev, preview, and prod without
- * requiring any new env var to be set up front.
- */
 export function getSiteUrl() {
   const configured = import.meta.env.VITE_SITE_URL?.trim();
-  if (configured) {
-    return configured.replace(/\/+$/, "");
-  }
+  if (configured) return configured.replace(/\/+$/, "");
   if (typeof window !== "undefined" && window.location?.origin) {
     return window.location.origin;
   }
   return "";
 }
 
-/**
- * Builds an absolute URL for the given path against the site's origin.
- * Accepts already-absolute URLs (e.g. a Supabase-hosted image URL) and
- * returns them unchanged.
- */
 export function resolveUrl(path) {
   if (!path) return "";
   if (/^https?:\/\//i.test(path)) return path;
@@ -72,12 +53,6 @@ export function resolveUrl(path) {
   return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-/**
- * Builds the `<title>` for a page. Pass just the page-specific part —
- * this appends the site name unless the page already supplies a
- * fully-formed title (e.g. the property detail page's
- * "{Name} — {BHK} BHK in {Area}, Gandhinagar | UrbanEdge" format).
- */
 export function buildTitle(pageTitle) {
   if (!pageTitle) return DEFAULT_TITLE;
   return pageTitle.includes(SITE_NAME)
@@ -85,10 +60,6 @@ export function buildTitle(pageTitle) {
     : `${pageTitle} | ${SITE_NAME}`;
 }
 
-/**
- * Truncates a description to a search-result-friendly length without
- * cutting a word in half.
- */
 export function truncateDescription(text, maxLength = 160) {
   if (!text) return DEFAULT_DESCRIPTION;
   const clean = text.replace(/\s+/g, " ").trim();
@@ -98,10 +69,6 @@ export function truncateDescription(text, maxLength = 160) {
   return `${truncated.slice(0, lastSpace > 0 ? lastSpace : maxLength - 1)}…`;
 }
 
-/**
- * Assembles the full set of resolved values SEOHead needs, applying
- * defaults for anything the caller doesn't supply.
- */
 export function buildMeta({
   title,
   description,
@@ -121,7 +88,6 @@ export function buildMeta({
   };
 }
 
-/** JSON-LD: Organization/LocalBusiness schema — safe to use on every page. */
 export function organizationSchema() {
   return {
     "@context": "https://schema.org",
@@ -132,6 +98,7 @@ export function organizationSchema() {
     url: getSiteUrl(),
     logo: resolveUrl(DEFAULT_LOGO_IMAGE),
     image: resolveUrl(DEFAULT_LOGO_IMAGE),
+    sameAs: [ORGANIZATION.instagram],
     address: {
       "@type": "PostalAddress",
       streetAddress: ORGANIZATION.streetAddress,
@@ -143,10 +110,6 @@ export function organizationSchema() {
   };
 }
 
-/**
- * JSON-LD: BreadcrumbList schema. `items` is an ordered array of
- * `{ name, path }`, e.g. [{ name: 'Home', path: '/' }, { name: 'Properties', path: '/properties' }].
- */
 export function breadcrumbSchema(items = []) {
   return {
     "@context": "https://schema.org",
@@ -160,13 +123,6 @@ export function breadcrumbSchema(items = []) {
   };
 }
 
-/**
- * JSON-LD: BlogPosting (Article) schema — added in Package 4.4, per this
- * file's own top-of-file forward reference ("the `Article` schema on
- * blog posts"). Additive-only export, mirroring the pattern already
- * established by `realEstateListingSchema` in 4.3: no existing export
- * touched, no signature changes.
- */
 export function blogPostingSchema(post = {}, { path } = {}) {
   const publishedDate = post?.created_at
     ? new Date(post.created_at).toISOString()
@@ -184,31 +140,19 @@ export function blogPostingSchema(post = {}, { path } = {}) {
     ...(post?.image_url ? { image: resolveUrl(post.image_url) } : {}),
     ...(publishedDate ? { datePublished: publishedDate } : {}),
     ...(modifiedDate ? { dateModified: modifiedDate } : {}),
-    author: {
-      "@type": "Organization",
-      name: SITE_NAME,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-    },
+    author: { "@type": "Organization", name: SITE_NAME },
+    publisher: { "@type": "Organization", name: SITE_NAME },
   };
 }
 
 export function realEstateListingSchema(property = {}, { path } = {}) {
   const priceType = property?.price_type;
   const priceValue =
-    typeof property?.price === "number"
-      ? property.price
-      : Number(property?.price);
+    typeof property?.price === "number" ? property.price : Number(property?.price);
   const hasPrice = Number.isFinite(priceValue) && priceValue > 0;
   const offers =
     hasPrice && priceType !== "on_request"
-      ? {
-          "@type": "Offer",
-          priceCurrency: "INR",
-          price: String(priceValue),
-        }
+      ? { "@type": "Offer", priceCurrency: "INR", price: String(priceValue) }
       : undefined;
 
   return {
