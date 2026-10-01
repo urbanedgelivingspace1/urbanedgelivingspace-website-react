@@ -17,6 +17,7 @@ import Skeleton from "./ui/Skeleton";
 import { useFavouriteState } from "../hooks/useFavouriteState";
 import defaultImage from "../assets/property.jpg";
 import "./PropertyCard.css";
+import "./PropertyCard.modern.css";
 
 const LISTING_TYPE_META = {
   buy: { label: "For Sale", modifier: "buy" },
@@ -122,14 +123,17 @@ const PropertyCard = ({
             decoding="async"
           />
 
-          {listingMeta && (!isFeatured || showListingBadgeWhenFeatured) && (
-            <span className={`property-listing-badge property-listing-badge--${listingMeta.modifier}`}>
-              {listingMeta.label}
-            </span>
-          )}
-
-          {isFeatured && (
-            <span className="property-featured-badge"><Star size={12} strokeWidth={2.5} /> Featured</span>
+          {(listingMeta || isFeatured) && (
+            <div className="property-badges-left">
+              {listingMeta && (!isFeatured || showListingBadgeWhenFeatured) && (
+                <span className={`property-listing-badge property-listing-badge--${listingMeta.modifier}`}>
+                  {listingMeta.label}
+                </span>
+              )}
+              {isFeatured && (
+                <span className="property-featured-badge"><Star size={12} strokeWidth={2.5} /> Featured</span>
+              )}
+            </div>
           )}
 
           <div className="property-type">
