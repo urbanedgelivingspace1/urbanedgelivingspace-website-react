@@ -16,6 +16,7 @@ import Skeleton from '../components/ui/Skeleton';
 import Pagination from '../components/ui/Pagination';
 import { useLanguage } from '../i18n/LanguageContext';
 import './Properties.css';
+import './Properties.modern.css';
 
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest First' },
