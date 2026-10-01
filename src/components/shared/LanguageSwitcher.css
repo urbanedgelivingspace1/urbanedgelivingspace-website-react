@@ -1,0 +1,35 @@
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid rgba(218, 186, 82, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.language-switcher__option {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  min-width: 34px;
+  min-height: 32px;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.language-switcher__option:hover,
+.language-switcher__option:focus-visible {
+  color: #fff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(218, 186, 82, 0.4);
+}
+
+.language-switcher__option.is-active {
+  background: var(--accent-color);
+  color: var(--primary-color);
+}
