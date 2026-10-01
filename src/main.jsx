@@ -9,6 +9,7 @@ import { LanguageProvider } from "./i18n/LanguageContext";
 import "./styles/tokens.css";
 import "./styles/typography.css";
 import "./styles/global.css";
+import "./styles/accessibility.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
