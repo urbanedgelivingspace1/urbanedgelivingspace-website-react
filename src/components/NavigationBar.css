@@ -1,229 +1,306 @@
-.site-header {
+/* NOTE (Design Audit §1.9): the `* { box-sizing: border-box; }` reset
+   and redundant `body` background rule that used to live here have
+   been removed — both are already established once, globally, in
+   src/styles/global.css. Duplicating them here served no purpose and
+   was one of five places this same reset was declared across the app. */
+
+/* Navbar Container Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px; /* Slightly more breathing room on mobile */
+  min-height: 58px;
+  background-color: var(--bg-nav);
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(0, 22, 54, 0.96);
-  border-bottom: 1px solid rgba(218, 186, 82, 0.14);
-  transition: box-shadow 180ms ease, background 180ms ease;
+  transition: all var(--transition-speed) ease;
 }
 
-.site-header.is-scrolled {
-  background: rgba(0, 22, 54, 0.985);
-  box-shadow: 0 10px 30px rgba(0, 12, 45, 0.14);
-  backdrop-filter: blur(12px);
+/* Navbar Effect on Scroll */
+.navbar.scrolled {
+  background-color: rgba(0, 31, 63, 0.92);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
 
-.navbar {
-  min-height: 72px;
-  width: min(100% - 28px, 1440px);
-  margin: 0 auto;
+/* Navbar Logo Styles */
+.navbar-logo {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
 }
 
-.navbar-brand {
-  display: inline-flex;
-  align-items: center;
-  flex: 0 0 auto;
-}
-
-.navbar-brand__logo {
-  width: 168px;
-  height: 50px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 3px;
-}
-
-.navbar-desktop-actions {
-  display: none;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-
-.navbar-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar-menu--desktop {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.navbar-menu a,
-.navbar-account {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 9px;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 0.86rem;
+.navbar-logo a {
+  font-family: var(--font-heading);
+  font-size: 1.5rem; /* Slightly smaller for mobile */
   font-weight: 600;
-  border-radius: 8px;
-  white-space: nowrap;
-}
-
-.navbar-menu a:hover,
-.navbar-menu a.active,
-.navbar-account:hover,
-.navbar-account.active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.navbar-menu a.active {
-  box-shadow: inset 0 -2px 0 var(--accent-color);
-}
-
-.navbar-account {
-  width: 42px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.navbar-whatsapp.wa-btn--inline {
-  min-height: 42px;
-  padding: 0 14px;
-  font-size: 0.86rem;
-}
-
-.navbar-mobile-actions {
+  color: var(--secondary-color);
+  text-decoration: none;
+  text-shadow: 0.5px 0.5px 3px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 4px;
+  line-height: 1.05;
+  margin: 0;
 }
 
-.navbar-toggle {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  cursor: pointer;
+.navbar-logo a span {
+  color: white;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
-.navbar-toggle:focus-visible,
-.navbar-menu a:focus-visible,
-.navbar-account:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 3px;
-}
-
+/* Overlay for closing mobile navigation by tapping the page */
 .navbar-overlay {
   position: fixed;
   inset: 0;
-  z-index: 998;
   border: 0;
-  background: rgba(2, 10, 28, 0.52);
-  backdrop-filter: blur(3px);
+  background: rgba(3, 10, 22, 0.38);
+  backdrop-filter: blur(2px);
+  z-index: 998;
+  cursor: pointer;
 }
 
-.navbar-drawer {
-  position: fixed;
-  z-index: 999;
-  top: 0;
-  right: 0;
-  width: min(360px, 88vw);
-  height: 100dvh;
-  padding: 84px 20px 24px;
-  background: #001638;
-  box-shadow: -18px 0 40px rgba(0, 0, 0, 0.22);
-  transform: translateX(105%);
-  visibility: hidden;
-  transition: transform 220ms ease, visibility 220ms ease;
-  overflow-y: auto;
-}
-
-.navbar-drawer.is-open {
-  transform: translateX(0);
-  visibility: visible;
-}
-
-.navbar-drawer__brand {
-  padding: 0 8px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 12px;
-}
-
-.navbar-drawer__brand img {
-  width: 168px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 3px;
-}
-
-.navbar-menu--mobile {
-  display: grid;
-  gap: 4px;
-}
-
-.navbar-menu--mobile a {
-  width: 100%;
-  justify-content: flex-start;
-  min-height: 48px;
-  padding: 0 12px;
-  font-size: 0.98rem;
-}
-
-.navbar-drawer__whatsapp.wa-btn--inline {
-  width: 100%;
-  margin-top: 18px;
+/* Hamburger Menu Icon (for Mobile) */
+.hamburger {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-color);
+  transition:
+    transform var(--transition-speed) ease,
+    color var(--transition-speed) ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-@media (max-width: 480px) {
-  .navbar {
-    min-height: 66px;
-    width: min(100% - 20px, 1440px);
-  }
-
-  .navbar-brand__logo {
-    width: 142px;
-    height: 43px;
-  }
-
-  .navbar-mobile-actions .language-switcher {
-    transform: scale(0.94);
-    transform-origin: right center;
-  }
+.hamburger:hover {
+  color: var(--secondary-color);
+  transform: scale(1.05);
 }
 
-@media (min-width: 1040px) {
+.hamburger-bar {
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background-color: currentColor;
+  transition:
+    transform var(--transition-speed) ease,
+    opacity var(--transition-speed) ease;
+  transform-origin: center;
+}
+
+.hamburger.open .hamburger-bar:nth-child(1) {
+  transform: rotate(-45deg) translate(-4px, 6px);
+}
+
+.hamburger.open .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open .hamburger-bar:nth-child(3) {
+  transform: rotate(45deg) translate(-4px, -6px);
+}
+
+/* Navbar Menu List - Mobile Defaults */
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 8px;
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: min(220px, calc(100vw - 16px));
+  max-height: min(72dvh, calc(100dvh - 16px));
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(110%);
+  transition:
+    transform var(--transition-speed) ease,
+    opacity var(--transition-speed) ease;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 31, 63, 0.98),
+    rgba(0, 31, 63, 0.94)
+  );
+  z-index: 999;
+}
+
+/* Active state for Mobile Menu */
+.navbar-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.navbar-menu li {
+  width: 100%;
+}
+
+/* Navbar Menu Items & Links */
+.navbar-menu li a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all var(--transition-speed);
+  width: 100%;
+}
+
+.navbar-menu li a:hover,
+.navbar-menu li a.active {
+  color: var(--secondary-color);
+  background: rgba(218, 186, 82, 0.14);
+  border-color: rgba(218, 186, 82, 0.24);
+  transform: translateY(-1px);
+}
+
+.nav-icon {
+  font-size: 0.95rem;
+}
+
+/* WhatsApp nav CTA — sits as its own list item alongside the route
+   links so it collapses/expands with the mobile menu like everything
+   else. Per Design Audit ("Navigation Bar" section), WhatsApp's brand
+   green is intentionally kept off the primary nav bar — the site's
+   most persistently visible surface — and reserved for the floating
+   WhatsApp button, where users already expect it. This entry point
+   uses the site's own gold/navy palette instead: a gold-outline
+   treatment that reads as "part of this brand's nav," not a
+   third-party widget bolted on. */
+.navbar-whatsapp-item {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-whatsapp-btn.ui-btn--primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 2.25rem;
+  padding: 0.55rem 0.8rem;
+  border-width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    rgba(218, 186, 82, 0.16),
+    rgba(218, 186, 82, 0.28)
+  );
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  box-shadow:
+    inset 0 0 0 1px rgba(218, 186, 82, 0.16),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.navbar-whatsapp-btn.ui-btn--primary:hover {
+  background: var(--accent-color);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(218, 186, 82, 0.25);
+}
+
+.navbar-whatsapp-btn .nav-icon {
+  font-size: 1.05rem;
+  display: inline-flex;
+  min-width: 1.05rem;
+}
+
+.navbar-whatsapp-btn .nav-label {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Media Query for Larger Screens */
+@media (min-width: 768px) {
   .navbar {
-    min-height: 74px;
+    padding: 10px 36px; /* Keep the desktop bar professional and slightly thicker */
+    min-height: 56px;
   }
 
-  .navbar-desktop-actions {
+  .hamburger {
+    display: none; /* Hide hamburger when full nav is visible */
+  }
+
+  .navbar-menu {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: static;
+    gap: 20px;
+    width: auto;
+    height: auto;
+    max-height: none;
+    padding: 0;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    box-shadow: none;
+    border-radius: 0;
+    background-color: transparent; /* Remove background color on desktop */
   }
 
-  .navbar-mobile-actions,
-  .navbar-drawer,
-  .navbar-overlay {
-    display: none;
-  }
-}
-
-@media (min-width: 1280px) {
-  .navbar-brand__logo {
-    width: 186px;
-    height: 54px;
+  .navbar-menu li {
+    width: auto;
   }
 
-  .navbar-menu a {
-    padding-inline: 11px;
-    font-size: 0.9rem;
+  .navbar-menu li a {
+    padding: 0 6px;
+    border-radius: 0;
+    border: none;
+    width: auto;
+    background: transparent;
+    line-height: 1.1;
+  }
+
+  .navbar-menu li a:hover,
+  .navbar-menu li a.active {
+    color: var(--secondary-color);
+    background: transparent;
+    border-color: transparent;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .navbar-menu li {
+    margin-bottom: 0;
+  }
+
+  .navbar-logo a {
+    font-size: 1.9rem; /* Increase logo size for desktop */
+  }
+
+  .navbar-menu li a {
+    font-size: 0.98rem;
+  }
+
+  .navbar-whatsapp-item {
+    margin-left: 4px;
   }
 }

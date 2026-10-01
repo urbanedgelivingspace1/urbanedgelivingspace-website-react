@@ -1,92 +1,94 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Instagram, MapPin, Phone, Mail } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
-import { ORGANIZATION } from "../lib/seo";
-import { buildWhatsAppHref } from "./shared/WhatsAppButton";
-import { useLanguage } from "../i18n/LanguageContext";
-import "./Footer.css";
+// src/components/Footer.jsx
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import Input from './ui/Input';
+import Button from './ui/Button';
+import './Footer.css';
+
+// Same temporary hardcoded number used in NavigationBar.jsx — see the
+// comment there. Duplicated locally rather than factored into a shared
+// file, since Package 3.1 has no "Files to Create" in its Blueprint
+// scope; a shared constant belongs with the site_settings-backed
+// WhatsApp infrastructure landing in Packages 3.3/4.1.
+const WHATSAPP_NUMBER = '919408663544';
+const WHATSAPP_MESSAGE = "Hi, I'm interested in UrbanEdge Living Space properties.";
+const WHATSAPP_HREF = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 const Footer = () => {
-  const { t } = useLanguage();
-  const year = new Date().getFullYear();
-  const telHref = `tel:${ORGANIZATION.telephone.replace(/[^+\d]/g, "")}`;
-  const fullAddress = `${ORGANIZATION.streetAddress}, ${ORGANIZATION.addressLocality}, ${ORGANIZATION.addressRegion} ${ORGANIZATION.postalCode}`;
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    // Handle submit logic
+    setEmail('');
+  };
 
   return (
     <footer className="footer">
       <div className="footer-container">
-        <div className="footer-brand">
-          <Link to="/" className="footer-logo-link" aria-label="UrbanEdge Living Space home">
-            <img
-              src="/UrbanEdge_Living_Space_Logo_HD.jpg"
-              alt="UrbanEdge Living Space"
-              className="footer-logo"
-              loading="lazy"
+        <div className="footer-col">
+          <h4>Quick Links</h4>
+          <ul className="footer-links">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/about-us">About Us</Link></li>
+            <li><Link to="/properties">Properties</Link></li>
+            <li><Link to="/our-team">Our Team</Link></li>
+            <li><Link to="/blog">Blog</Link></li>
+            <li><Link to="/contact-us">Contact Us</Link></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <h4>Subscribe</h4>
+          <p>Subscribe for exclusive offers and latest news.</p>
+          <form className="footer-newsletter-form" onSubmit={handleSubscribe}>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+              className="footer-newsletter-input"
+              aria-label="Email address"
             />
-          </Link>
-          <p>{t("footer.descriptor")}</p>
-          <div className="footer-socials">
+            <Button type="submit" variant="primary" size="medium">
+              Sign Up
+            </Button>
+          </form>
+        </div>
+        <div className="footer-col">
+          <h4>Follow Us</h4>
+          <div className="social-icons">
             <a
-              href={ORGANIZATION.instagram}
+              href="https://www.facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="UrbanEdge Living Space on Instagram"
+              aria-label="Visit UrbanEdge Living Space on Facebook (opens in a new tab)"
             >
-              <Instagram size={19} aria-hidden="true" />
+              <FaFacebookF aria-hidden="true" />
             </a>
             <a
-              href={buildWhatsAppHref()}
+              href="https://www.instagram.com/urbanedgelivingspace_official/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Chat with UrbanEdge Living Space on WhatsApp"
-              className="footer-social-whatsapp"
+              aria-label="Visit UrbanEdge Living Space on Instagram (opens in a new tab)"
+            >
+              <FaInstagram aria-hidden="true" />
+            </a>
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat with UrbanEdge Living Space on WhatsApp (opens in a new tab)"
+              className="social-icon-whatsapp"
             >
               <FaWhatsapp aria-hidden="true" />
             </a>
           </div>
         </div>
-
-        <div className="footer-col">
-          <h2>{t("footer.properties")}</h2>
-          <ul className="footer-links">
-            <li><Link to="/properties?listing=buy">{t("footer.buy")}</Link></li>
-            <li><Link to="/properties?listing=rent">{t("footer.rent")}</Link></li>
-            <li><Link to="/properties">{t("footer.allProperties")}</Link></li>
-          </ul>
-        </div>
-
-        <div className="footer-col">
-          <h2>{t("footer.company")}</h2>
-          <ul className="footer-links">
-            <li><Link to="/about-us">{t("footer.about")}</Link></li>
-            <li><Link to="/our-team">{t("footer.team")}</Link></li>
-            <li><Link to="/blog">{t("footer.guides")}</Link></li>
-            <li><Link to="/contact-us">{t("footer.contact")}</Link></li>
-          </ul>
-        </div>
-
-        <div className="footer-col">
-          <h2>{t("footer.services")}</h2>
-          <ul className="footer-links">
-            <li><Link to="/guaranteed-rent">{t("footer.guaranteedRent")}</Link></li>
-            <li><Link to="/about-us">{t("footer.propertyManagement")}</Link></li>
-            <li><Link to="/about-us">{t("footer.rentalSolutions")}</Link></li>
-            <li><Link to="/about-us">{t("footer.luxuryLeasing")}</Link></li>
-          </ul>
-        </div>
-
-        <div className="footer-col footer-contact">
-          <h2>{t("footer.contact")}</h2>
-          <a href={telHref}><Phone size={16} aria-hidden="true" /> {ORGANIZATION.telephone}</a>
-          <a href={`mailto:${ORGANIZATION.email}`}><Mail size={16} aria-hidden="true" /> {ORGANIZATION.email}</a>
-          <a href={ORGANIZATION.mapsDirections} target="_blank" rel="noopener noreferrer">
-            <MapPin size={16} aria-hidden="true" /> {fullAddress}
-          </a>
-        </div>
       </div>
       <div className="footer-bottom">
-        <p>© {year} UrbanEdge Living Space. {t("footer.rights")}</p>
+        <p>© 2025 UrbanEdge Living Space. All rights reserved.</p>
       </div>
     </footer>
   );
