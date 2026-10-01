@@ -1,7 +1,6 @@
-// src/pages/Properties.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LayoutGrid, List, SearchX } from 'lucide-react';
+import { LayoutGrid, List, SearchX, RefreshCw, MessageCircle } from 'lucide-react';
 
 import { useProperties, DEFAULT_PROPERTIES_PAGE_SIZE } from '../hooks/useProperties';
 import { useFavouriteState } from '../hooks/useFavouriteState';
@@ -11,37 +10,12 @@ import PropertyFilters, {
 } from '../components/property/PropertyFilters';
 import PropertyCard from '../components/PropertyCard';
 import WhatsAppButton from '../components/shared/WhatsAppButton';
+import SEOHead from '../components/shared/SEOHead';
 import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
 import Pagination from '../components/ui/Pagination';
+import { useLanguage } from '../i18n/LanguageContext';
 import './Properties.css';
-
-/**
- * Properties (Package 4.2)
- *
- * Rebuilt listing page. Replaces the previous client-side-only
- * filter/search/sort/pagination implementation (Part A Section 3d/3e -
- * `applyFilters`, `sortProperties`, `.slice()` pagination over a single
- * unfiltered `supabase.from('properties').select('*')` call) with:
- *  - `PropertyFilters` (3.4) as the single filter UI + URL<->filter
- *    mapping, reused as-is (it already renders both the desktop sidebar
- *    and the mobile floating-trigger + bottom-sheet drawer via CSS
- *    breakpoints, so this page does not re-implement either).
- *  - `useProperties` (3.3) as the single data-fetching call, so every
- *    filter/search/sort/page combination becomes a real server-side
- *    Supabase query (`is_published`, `listing_type`, `property_type`,
- *    `bhk_min`/`max`, `locality`, `price`, full-text `search`, `sortBy`,
- *    `page`/`pageSize`) instead of an in-memory `.filter()`/`.sort()`
- *    over every row.
- *  - `Pagination` (1.3) for page-number controls instead of the
- *    hand-rolled prev/next + page-button markup.
- *
- * Listing-type tabs use the real `listing_type` column via
- * `PropertyFilters`' own `LISTING_TYPE_OPTIONS` (buy/rent/commercial),
- * not substring matching against `property_type` the way the old
- * `propertyCategory` toggle did (`.includes('rental')`) - satisfying
- * 4.2's own completion criterion on this point.
- */
 
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest First' },
@@ -55,7 +29,7 @@ const HERO_SEARCH_DEBOUNCE_MS = 400;
 
 function ResultsSkeleton({ viewMode }) {
   return (
-    <div className={`properties-grid properties-grid--${viewMode}`}>
+    <div className={`properties-grid properties-grid--${viewMode}`} aria-label="Loading properties">
       {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
         <div className="property-skeleton-card" key={i}>
           <Skeleton variant="rect" height={220} />
@@ -70,38 +44,49 @@ function ResultsSkeleton({ viewMode }) {
   );
 }
 
-function EmptyState({ onReset }) {
+function EmptyState({ onReset, t }) {
   return (
     <div className="properties-empty-state">
       <SearchX size={48} className="properties-empty-state__icon" aria-hidden="true" />
-      <h3>No properties found for your filters.</h3>
-      <p>Try adjusting or clearing your filters to see more results.</p>
-      <Button variant="primary" onClick={onReset}>
-        Reset Filters
-      </Button>
+      <h2>{t('properties.emptyTitle')}</h2>
+      <p>{t('properties.emptyText')}</p>
+      <div className="properties-state-actions">
+        <Button variant="secondary" onClick={onReset}>
+          {t('properties.adjustFilters')}
+        </Button>
+        <Button as={Link} to="/contact-us" variant="primary">
+          <MessageCircle size={17} aria-hidden="true" />
+          {t('properties.tellRequirement')}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function ErrorState({ onRetry, t }) {
+  return (
+    <div className="properties-empty-state properties-error-state" role="alert">
+      <RefreshCw size={42} className="properties-empty-state__icon" aria-hidden="true" />
+      <h2>{t('properties.errorTitle')}</h2>
+      <p>{t('properties.errorText')}</p>
+      <div className="properties-state-actions">
+        <Button variant="secondary" onClick={onRetry}>{t('properties.retry')}</Button>
+        <Button as={Link} to="/contact-us" variant="primary">{t('nav.contact')}</Button>
+      </div>
     </div>
   );
 }
 
 const Properties = () => {
+  const { t } = useLanguage();
   const [filters, setFilters] = usePropertyFiltersFromUrl();
   const [viewMode, setViewMode] = React.useState('grid');
   const [heroSearch, setHeroSearch] = React.useState(filters.search || '');
 
-  // Keep the hero search box in sync if the URL changes from elsewhere
-  // (PropertyFilters' own search field, browser back/forward, a homepage
-  // hand-off link, etc.) - same single source of truth, not a second
-  // independent piece of state.
   React.useEffect(() => {
     setHeroSearch(filters.search || '');
   }, [filters.search]);
 
-  // Live search: commits as the person types (debounced), same pattern
-  // and timing as PropertyFilters' own sidebar search field, so results
-  // update without needing to press the Search button. An empty box
-  // clears `search` entirely, which falls back to showing every
-  // property (unchanged existing behavior - see `search: heroSearch ||
-  // undefined` below).
   const heroSearchDebounceRef = React.useRef(null);
   React.useEffect(() => {
     if (heroSearchDebounceRef.current) clearTimeout(heroSearchDebounceRef.current);
@@ -114,24 +99,16 @@ const Properties = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heroSearch]);
 
-  const { data, isLoading, isFetching, error } = useProperties({
+  const { data, isLoading, isFetching, error, refetch } = useProperties({
     ...filters,
     pageSize: DEFAULT_PROPERTIES_PAGE_SIZE,
   });
 
-  // Auth & Favourites Architecture Plan §6: this was the second call
-  // site that never passed isFavourite/onToggleFavourite down to
-  // PropertyCard (the props already existed on the component, just
-  // unused). useFavouriteState picks Supabase vs localStorage based on
-  // whether the visitor is signed in.
   const { isFavourite, toggleFavourite } = useFavouriteState();
-
   const properties = data?.data ?? [];
   const totalCount = data?.count ?? 0;
   const totalPages = Math.max(1, Math.ceil(totalCount / DEFAULT_PROPERTIES_PAGE_SIZE));
 
-  // The button/Enter still works for anyone who prefers pressing search -
-  // it just commits immediately instead of waiting out the debounce above.
   const handleHeroSearchSubmit = (e) => {
     e.preventDefault();
     if (heroSearchDebounceRef.current) clearTimeout(heroSearchDebounceRef.current);
@@ -167,60 +144,57 @@ const Properties = () => {
 
   return (
     <div className="properties-page">
-      {/* Compact hero banner */}
+      <SEOHead
+        title="Properties in Gandhinagar & Ahmedabad"
+        description="Browse residential properties for sale and rent across Gandhinagar and Ahmedabad with UrbanEdge Living Space."
+        path="/properties"
+      />
+
       <header className="properties-hero" role="banner">
         <div className="hero-overlay" />
         <div className="hero-content">
           <nav className="properties-breadcrumb" aria-label="Breadcrumb">
-            <Link to="/">Home</Link>
+            <Link to="/">{t('nav.home')}</Link>
             <span aria-hidden="true">&rsaquo;</span>
-            <span aria-current="page">Properties</span>
+            <span aria-current="page">{t('properties.breadcrumb')}</span>
           </nav>
-          <h1>
-            {isLoading ? 'Properties in Gandhinagar & Ahmedabad' : `${totalCount} Propert${totalCount === 1 ? 'y' : 'ies'} in Gandhinagar & Ahmedabad`}
-          </h1>
-          <form className="hero-search" onSubmit={handleHeroSearchSubmit}>
+          <h1>{t('properties.title')}</h1>
+          <form className="hero-search" onSubmit={handleHeroSearchSubmit} role="search">
             <input
-              type="text"
-              placeholder="Search by location, type, features..."
+              type="search"
+              placeholder={t('properties.searchPlaceholder')}
               value={heroSearch}
               onChange={(e) => setHeroSearch(e.target.value)}
-              aria-label="Search properties"
+              aria-label={t('properties.searchPlaceholder')}
             />
-            <button type="submit">Search</button>
+            <button type="submit">{t('properties.search')}</button>
           </form>
         </div>
       </header>
 
       <main className="container properties-main">
-        <aside className="properties-sidebar">
+        <aside className="properties-sidebar" aria-label="Property filters">
           <PropertyFilters />
         </aside>
 
-        <section className="results-section">
+        <section className="results-section" aria-live="polite">
           <div className="results-info">
             <div className="results-count">
               {totalCount === 0 && !isLoading ? (
-                'No properties found'
+                t('properties.noResults')
               ) : (
                 <>
-                  Showing <strong>{rangeStart}-{rangeEnd}</strong> of{' '}
-                  <strong>{totalCount}</strong> propert{totalCount === 1 ? 'y' : 'ies'}
+                  {t('properties.showing')} <strong>{rangeStart}-{rangeEnd}</strong>{' '}
+                  {t('properties.of')} <strong>{totalCount}</strong>
                 </>
               )}
             </div>
             <div className="results-controls">
               <div className="results-sorting">
-                <label htmlFor="sort-options">Sort by:</label>
-                <select
-                  id="sort-options"
-                  value={filters.sortBy}
-                  onChange={handleSortChange}
-                >
+                <label htmlFor="sort-options">{t('properties.sortBy')}</label>
+                <select id="sort-options" value={filters.sortBy} onChange={handleSortChange}>
                   {SORT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
                   ))}
                 </select>
               </div>
@@ -232,7 +206,7 @@ const Properties = () => {
                   aria-pressed={viewMode === 'grid'}
                   aria-label="Grid view"
                 >
-                  <LayoutGrid size={18} />
+                  <LayoutGrid size={18} aria-hidden="true" />
                 </button>
                 <button
                   type="button"
@@ -241,7 +215,7 @@ const Properties = () => {
                   aria-pressed={viewMode === 'list'}
                   aria-label="List view"
                 >
-                  <List size={18} />
+                  <List size={18} aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -250,15 +224,11 @@ const Properties = () => {
           {isLoading ? (
             <ResultsSkeleton viewMode={viewMode} />
           ) : error ? (
-            <div className="properties-error">
-              Failed to load properties. Please try again later.
-            </div>
+            <ErrorState onRetry={() => refetch()} t={t} />
           ) : properties.length === 0 ? (
-            <EmptyState onReset={handleResetAll} />
+            <EmptyState onReset={handleResetAll} t={t} />
           ) : (
-            <div
-              className={`properties-grid properties-grid--${viewMode} ${isFetching ? 'is-refetching' : ''}`}
-            >
+            <div className={`properties-grid properties-grid--${viewMode} ${isFetching ? 'is-refetching' : ''}`}>
               {properties.map((property) => (
                 <PropertyCard
                   key={property.id}
@@ -271,12 +241,14 @@ const Properties = () => {
             </div>
           )}
 
-          <Pagination
-            currentPage={filters.page}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            className="properties-pagination"
-          />
+          {!error && properties.length > 0 && (
+            <Pagination
+              currentPage={filters.page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              className="properties-pagination"
+            />
+          )}
         </section>
       </main>
 
