@@ -17,10 +17,10 @@
   line-height: 1.2;
   white-space: nowrap;
   transition: transform var(--transition-medium) var(--ease-out-smooth),
-              box-shadow var(--transition-medium) var(--ease-out-smooth),
-              background var(--transition-medium) var(--ease-out-smooth),
-              color var(--transition-fast) ease,
-              border-color var(--transition-fast) ease;
+    box-shadow var(--transition-medium) var(--ease-out-smooth),
+    background var(--transition-medium) var(--ease-out-smooth),
+    color var(--transition-fast) ease,
+    border-color var(--transition-fast) ease;
 }
 
 .ui-btn:focus-visible {

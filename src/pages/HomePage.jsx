@@ -397,10 +397,10 @@ const HomePage = () => {
               {copy.why.map(([title, text], index) => {
                 const Icon = WHY_CHOOSE_ICONS[index];
                 return (
-                <article key={title} className="homepage-why-choose-item">
-                  <div className="homepage-why-choose-icon"><Icon size={20} aria-hidden="true" /></div>
-                  <div><h3>{title}</h3><p>{text}</p></div>
-                </article>
+                  <article key={title} className="homepage-why-choose-item">
+                    <div className="homepage-why-choose-icon"><Icon size={20} aria-hidden="true" /></div>
+                    <div><h3>{title}</h3><p>{text}</p></div>
+                  </article>
                 );
               })}
             </div>
