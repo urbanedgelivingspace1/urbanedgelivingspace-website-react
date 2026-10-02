@@ -185,7 +185,13 @@ const HeroSection = () => {
       />
       <div className="homepage-hero-overlay" />
       <div className="homepage-hero-content">
-        <p className="homepage-hero-eyebrow">UrbanEdge Living Space</p>
+        <p
+          className="homepage-hero-eyebrow homepage-hero-wordmark"
+          aria-label="Urban Edge Living Space"
+        >
+          <span className="homepage-hero-wordmark__brand">Urban Edge</span>
+          <span className="homepage-hero-wordmark__name">Living Space</span>
+        </p>
         <h1 id="homepage-hero-title">{t("hero.title")}</h1>
         <p>{t("hero.subtitle")}</p>
 

@@ -29,6 +29,29 @@
   color: var(--accent-color);
 }
 
+.homepage-hero .homepage-hero-wordmark {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.22em;
+  max-width: none;
+  margin: 0 0 18px;
+  font-family: var(--heading-font);
+  font-size: clamp(2rem, 4vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: none;
+}
+
+.homepage-hero-wordmark__brand {
+  color: var(--accent-color);
+}
+
+.homepage-hero-wordmark__name {
+  color: var(--white);
+}
+
 .homepage-section-kicker {
   color: #705800;
 }
@@ -233,6 +256,10 @@
   .homepage-hero-content {
     text-align: center;
     margin: 0 auto;
+  }
+
+  .homepage-hero .homepage-hero-wordmark {
+    justify-content: center;
   }
 
   .homepage-hero-content > p:not(.homepage-hero-eyebrow) {
