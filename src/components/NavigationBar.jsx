@@ -117,6 +117,10 @@ const NavigationBar = () => {
               alt="UrbanEdge Living Space"
               className="navbar-brand__logo"
             />
+            <span className="navbar-brand__text" aria-hidden="true">
+              <span className="navbar-brand__name">Urban Edge</span>
+              <span className="navbar-brand__tagline">Living Space</span>
+            </span>
           </Link>
 
           <div className="navbar-desktop-actions">

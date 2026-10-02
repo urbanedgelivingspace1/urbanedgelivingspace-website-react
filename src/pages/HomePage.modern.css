@@ -41,6 +41,14 @@
   margin-bottom: 18px;
 }
 
+.homepage-hero-title-location {
+  color: var(--accent-color);
+}
+
+.homepage-hero-subtitle {
+  color: var(--gray-200);
+}
+
 .homepage-hero-content > p:not(.homepage-hero-eyebrow) {
   max-width: 690px;
   margin: 0 0 30px;

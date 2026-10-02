@@ -37,6 +37,28 @@
   border-radius: 3px;
 }
 
+.navbar-brand__text {
+  display: none;
+  align-items: baseline;
+  gap: 0.22em;
+  margin-left: 12px;
+  font-family: var(--heading-font);
+  font-size: clamp(1.2rem, 1.7vw, 1.7rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.navbar-brand__name {
+  color: var(--accent-color);
+}
+
+.navbar-brand__tagline {
+  color: var(--white);
+}
+
 .navbar-desktop-actions {
   display: none;
   align-items: center;
@@ -256,6 +278,10 @@
 }
 
 @media (min-width: 1280px) {
+  .navbar-brand__text {
+    display: flex;
+  }
+
   .navbar-brand__logo {
     width: 54px;
     height: 54px;

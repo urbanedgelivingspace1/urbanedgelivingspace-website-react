@@ -185,9 +185,11 @@ const HeroSection = () => {
       />
       <div className="homepage-hero-overlay" />
       <div className="homepage-hero-content">
-        <p className="homepage-hero-eyebrow">UrbanEdge Living Space</p>
-        <h1 id="homepage-hero-title">{t("hero.title")}</h1>
-        <p>{t("hero.subtitle")}</p>
+        <h1 id="homepage-hero-title">
+          <span>{t("hero.titleLead")}</span>{" "}
+          <span className="homepage-hero-title-location">{t("hero.titleLocation")}</span>
+        </h1>
+        <p className="homepage-hero-subtitle">{t("hero.subtitle")}</p>
 
         <form className="homepage-hero-search" onSubmit={handleSearch} role="search">
           <div className="homepage-hero-tabs" aria-label="Listing type">

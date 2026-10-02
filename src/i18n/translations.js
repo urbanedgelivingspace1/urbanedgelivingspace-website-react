@@ -21,6 +21,8 @@ export const translations = {
       whatsapp: "WhatsApp",
     },
     hero: {
+      titleLead: "Find the right home in",
+      titleLocation: "Gandhinagar & Ahmedabad.",
       title: "Find the right home in Gandhinagar & Ahmedabad.",
       subtitle:
         "Explore apartments, villas, penthouses, rentals and investment opportunities with local guidance from UrbanEdge Living Space.",
@@ -114,6 +116,8 @@ export const translations = {
       whatsapp: "WhatsApp",
     },
     hero: {
+      titleLead: "યોગ્ય ઘર શોધો",
+      titleLocation: "ગાંધીનગર અને અમદાવાદમાં.",
       title: "ગાંધીનગર અને અમદાવાદમાં યોગ્ય ઘર શોધો.",
       subtitle:
         "UrbanEdge Living Space સાથે સ્થાનિક માર્ગદર્શન મેળવી ફ્લેટ, વિલા, પેન્ટહાઉસ, રેન્ટલ અને ઇન્વેસ્ટમેન્ટ પ્રોપર્ટી શોધો.",
@@ -207,6 +211,8 @@ export const translations = {
       whatsapp: "WhatsApp",
     },
     hero: {
+      titleLead: "सही घर खोजें",
+      titleLocation: "गांधीनगर और अहमदाबाद में।",
       title: "गांधीनगर और अहमदाबाद में सही घर खोजें।",
       subtitle:
         "UrbanEdge Living Space की स्थानीय सहायता के साथ फ्लैट, विला, पेंटहाउस, रेंटल और निवेश के विकल्प खोजें।",
