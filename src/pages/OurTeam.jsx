@@ -3,6 +3,7 @@ import React from "react";
 import SEOHead from "../components/shared/SEOHead";
 import { organizationSchema, breadcrumbSchema } from "../lib/seo";
 import "./OurTeam.css";
+import vpxgrowth from "../assets/vpxgrowth.png";
 import mantavya from "../assets/mantavya.jpg";
 import lawyer from "../assets/lawyer.jpg";
 import riyaM from "../assets/riyaM.jpeg";
@@ -11,7 +12,7 @@ import bhavik from "../assets/bhavik.jpeg";
 import savan from "../assets/savan.jpeg";
 import yug from "../assets/yug.jpg";
 import chetna from "../assets/chetna.jpeg";
-import { Crown, Users, Headset, Scale } from "lucide-react";
+import { Crown, Users, Headset, Code2, Scale } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
 
 /**
@@ -153,6 +154,24 @@ const teamSections = [
       },
     ],
   },
+  {
+    id: "digital-partner",
+    title: "Digital Partner",
+    tag: "Technology",
+    icon: Code2,
+    description:
+      "Web development support for UrbanEdge Living Space's public digital experience.",
+    members: [
+      {
+        id: "ved-patel-vpxgrowth",
+        name: "VED PATEL",
+        role: "VPxGrowth — Web Development Partner",
+        image: vpxgrowth,
+        description:
+          "Ved Patel represents VPxGrowth, UrbanEdge Living Space's web development partner.",
+      },
+    ],
+  },
 ];
 
 const TEAM_COPY = {
@@ -164,8 +183,9 @@ const TEAM_COPY = {
       ["જુનિયર/સિનિયર સેલ્સ ટીમ", "સેલ્સ એક્ઝિક્યુટિવ્સ", "પ્રોપર્ટી શોધ, સાઇટ વિઝિટ, વાટાઘાટ અને ફોલોઅપમાં સહાય કરતી સેલ્સ ટીમ.", "ક્લાયન્ટને સ્પષ્ટતા અને માર્કેટ સમજ સાથે પ્રોપર્ટી નિર્ણયોમાં માર્ગદર્શન આપે છે."],
       ["ક્લાયન્ટ સપોર્ટ ટીમ", "ટેલિકોલર્સ", "ક્લાયન્ટ વાતચીતને સ્પષ્ટ, સમયસર અને ગોઠવેલી રાખતી ટેલિકોલિંગ સહાય.", "સમયસર ફોલોઅપ, સ્પષ્ટ સંકલન અને ધ્યાનપૂર્વકની સેવા આપે છે."],
       ["કાનૂની નિષ્ણાત", "કાનૂની", "પ્રોપર્ટી બાબત માટે સહમત સ્કોપમાં કાનૂની સંકલન અને દસ્તાવેજ સહાય.", "સહમત વ્યાવસાયિક સ્કોપમાં દસ્તાવેજ સમીક્ષા અને કાનૂની સંકલનમાં સહાય કરે છે."],
+      ["ડિજિટલ પાર્ટનર", "ટેક્નોલોજી", "UrbanEdge Living Spaceના જાહેર ડિજિટલ અનુભવ માટે વેબ ડેવલપમેન્ટ સહાય.", "Ved Patel, UrbanEdge Living Spaceના વેબ ડેવલપમેન્ટ પાર્ટનર VPxGrowthનું પ્રતિનિધિત્વ કરે છે."],
     ],
-    roles: { "CEO & Founder": "CEO અને સ્થાપક", "Co-Founder & Senior Sales Executive": "સહ-સ્થાપક અને સિનિયર સેલ્સ એક્ઝિક્યુટિવ", "Senior Sales Executive": "સિનિયર સેલ્સ એક્ઝિક્યુટિવ", "Junior Sales Executive": "જુનિયર સેલ્સ એક્ઝિક્યુટિવ", Telecaller: "ટેલિકોલર", "Legal Expert": "કાનૂની નિષ્ણાત" },
+    roles: { "CEO & Founder": "CEO અને સ્થાપક", "Co-Founder & Senior Sales Executive": "સહ-સ્થાપક અને સિનિયર સેલ્સ એક્ઝિક્યુટિવ", "Senior Sales Executive": "સિનિયર સેલ્સ એક્ઝિક્યુટિવ", "Junior Sales Executive": "જુનિયર સેલ્સ એક્ઝિક્યુટિવ", Telecaller: "ટેલિકોલર", "Legal Expert": "કાનૂની નિષ્ણાત", "VPxGrowth — Web Development Partner": "VPxGrowth — વેબ ડેવલપમેન્ટ પાર્ટનર" },
   },
   hi: {
     title: "हमारी मुख्य टीम", subtitle: "हमारी दिशा, क्लाइंट संबंध और रोजमर्रा की सेवा संभालने वाले लोगों से मिलें।", member: "सदस्य", members: "सदस्य",
@@ -174,8 +194,9 @@ const TEAM_COPY = {
       ["जूनियर/सीनियर सेल्स टीम", "सेल्स एक्जीक्यूटिव", "प्रॉपर्टी खोज, साइट विजिट, बातचीत और फॉलो-अप में सहायता करने वाली सेल्स टीम।", "क्लाइंट को स्पष्टता और मार्केट समझ के साथ प्रॉपर्टी निर्णयों में मार्गदर्शन देते हैं।"],
       ["क्लाइंट सपोर्ट टीम", "टेलीकॉलर", "क्लाइंट संवाद को साफ, समय पर और व्यवस्थित रखने वाली टेलीकॉलिंग सहायता।", "समय पर फॉलो-अप, साफ समन्वय और ध्यानपूर्ण सेवा देते हैं।"],
       ["कानूनी विशेषज्ञ", "कानूनी", "प्रॉपर्टी मामले के सहमत दायरे में कानूनी समन्वय और दस्तावेज सहायता।", "सहमत पेशेवर दायरे में दस्तावेज समीक्षा और कानूनी समन्वय में सहायता करते हैं।"],
+      ["डिजिटल पार्टनर", "टेक्नोलॉजी", "UrbanEdge Living Space के सार्वजनिक डिजिटल अनुभव के लिए वेब डेवलपमेंट सहायता।", "Ved Patel, UrbanEdge Living Space के वेब डेवलपमेंट पार्टनर VPxGrowth का प्रतिनिधित्व करते हैं।"],
     ],
-    roles: { "CEO & Founder": "CEO और संस्थापक", "Co-Founder & Senior Sales Executive": "सह-संस्थापक और सीनियर सेल्स एक्जीक्यूटिव", "Senior Sales Executive": "सीनियर सेल्स एक्जीक्यूटिव", "Junior Sales Executive": "जूनियर सेल्स एक्जीक्यूटिव", Telecaller: "टेलीकॉलर", "Legal Expert": "कानूनी विशेषज्ञ" },
+    roles: { "CEO & Founder": "CEO और संस्थापक", "Co-Founder & Senior Sales Executive": "सह-संस्थापक और सीनियर सेल्स एक्जीक्यूटिव", "Senior Sales Executive": "सीनियर सेल्स एक्जीक्यूटिव", "Junior Sales Executive": "जूनियर सेल्स एक्जीक्यूटिव", Telecaller: "टेलीकॉलर", "Legal Expert": "कानूनी विशेषज्ञ", "VPxGrowth — Web Development Partner": "VPxGrowth — वेब डेवलपमेंट पार्टनर" },
   },
 };
 
