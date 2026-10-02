@@ -110,6 +110,27 @@
   line-height: 1.5;
 }
 
+.dashboard-empty h3,
+.dashboard-empty p,
+.dashboard-error p {
+  margin-top: 0;
+}
+
+.dashboard-empty-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.dashboard-error {
+  padding: 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fff7f7;
+  color: #7f1d1d;
+}
+
 @media (max-width: 880px) {
   .dashboard-profile-form {
     grid-template-columns: 1fr;

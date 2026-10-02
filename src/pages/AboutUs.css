@@ -25,16 +25,16 @@
 }
 
 /* ===================================
-   Hero Section with Parallax & Fade-In
+   Hero Section
 ==================================== */
 .aboutus-hero {
   position: relative;
   height: 80vh;
   background: var(
     --background-gradient,
-    url("../assets/property.jpg") center/cover no-repeat
+    url("../assets/property-hero-1600.webp") center/cover no-repeat
   );
-  background-attachment: fixed;
+  background-attachment: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -441,6 +441,10 @@
   padding: var(--section-spacing) 0;
   background-color: var(--light-color);
   text-align: center;
+}
+
+.aboutus-testimonials:not(:has(.testimonial-carousel)) {
+  display: none;
 }
 
 .aboutus-testimonial-list {

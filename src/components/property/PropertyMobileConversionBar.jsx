@@ -4,43 +4,16 @@ import { FaWhatsapp } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useProperty } from "../../hooks/useProperty";
 import { ORGANIZATION } from "../../lib/seo";
+import { useLanguage } from "../../i18n/LanguageContext";
+import {
+  buildPropertyWhatsAppMessage,
+  formatPropertyPrice,
+} from "../../lib/propertyPresentation";
 import { buildWhatsAppHref } from "../shared/WhatsAppButton";
 import "./PropertyMobileConversionBar.css";
 
-function formatPrice(property) {
-  if (!property) return null;
-  const price = typeof property.price === "number" ? property.price : Number(property.price);
-  if (!Number.isFinite(price) || price <= 0 || property.price_type === "on_request") {
-    return "Price on Request";
-  }
-  const value = `₹${price.toLocaleString("en-IN")}`;
-  return property.price_type === "starting_from" ? `From ${value}` : value;
-}
-
-function buildPropertyMessage(property) {
-  const bhk = property.bhk ||
-    (property.bhk_min != null
-      ? property.bhk_min === property.bhk_max
-        ? `${property.bhk_min} BHK`
-        : `${property.bhk_min}-${property.bhk_max} BHK`
-      : null);
-
-  return [
-    "Hello UrbanEdge Living Space,",
-    "",
-    "I'm interested in:",
-    `Property: ${property.name || property.title || "Property"}`,
-    property.location ? `Location: ${property.location}` : null,
-    bhk ? `Configuration: ${bhk}` : null,
-    property.id ? `Property ID: ${property.id}` : null,
-    "",
-    "Please share more details.",
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
-
 export default function PropertyMobileConversionBar() {
+  const { t } = useLanguage();
   const location = useLocation();
   const match = location.pathname.match(/^\/properties\/([^/]+)$/);
   const identifier = match?.[1];
@@ -49,8 +22,15 @@ export default function PropertyMobileConversionBar() {
   if (!identifier || !property) return null;
 
   const telHref = `tel:${ORGANIZATION.telephone.replace(/[^+\d]/g, "")}`;
-  const whatsappHref = buildWhatsAppHref(buildPropertyMessage(property));
-  const price = formatPrice(property);
+  const whatsappHref = buildWhatsAppHref(buildPropertyWhatsAppMessage(property));
+  const price = formatPropertyPrice(property, {
+    shortPrefix: true,
+    labels: {
+      onRequest: t("price.onRequest"),
+      startingFrom: t("price.startingFrom"),
+      from: t("price.from"),
+    },
+  });
 
   return (
     <aside className="property-mobile-bar" aria-label="Property contact actions">
@@ -58,7 +38,7 @@ export default function PropertyMobileConversionBar() {
       <div className="property-mobile-bar__actions">
         <a href={telHref} className="property-mobile-bar__action">
           <Phone size={18} aria-hidden="true" />
-          <span>Call</span>
+          <span>{t("common.call")}</span>
         </a>
         <a
           href={whatsappHref}
@@ -67,12 +47,16 @@ export default function PropertyMobileConversionBar() {
           className="property-mobile-bar__action property-mobile-bar__action--whatsapp"
         >
           <FaWhatsapp aria-hidden="true" />
-          <span>WhatsApp</span>
+          <span>{t("common.whatsapp")}</span>
         </a>
-        <a href="#pdp-inquiry" className="property-mobile-bar__action property-mobile-bar__action--visit">
+        <button
+          type="button"
+          className="property-mobile-bar__action property-mobile-bar__action--visit"
+          onClick={() => window.dispatchEvent(new CustomEvent("urbanedge:open-site-visit"))}
+        >
           <CalendarDays size={18} aria-hidden="true" />
-          <span>Enquire</span>
-        </a>
+          <span>{t("common.scheduleVisit")}</span>
+        </button>
       </div>
     </aside>
   );

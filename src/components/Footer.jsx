@@ -19,7 +19,7 @@ const Footer = () => {
         <div className="footer-brand">
           <Link to="/" className="footer-logo-link" aria-label="UrbanEdge Living Space home">
             <img
-              src="/UrbanEdge_Living_Space_Logo_HD.jpg"
+              src="/urbanedge-logo-640.webp"
               alt="UrbanEdge Living Space"
               className="footer-logo"
               loading="lazy"
@@ -63,6 +63,8 @@ const Footer = () => {
             <li><Link to="/our-team">{t("footer.team")}</Link></li>
             <li><Link to="/blog">{t("footer.guides")}</Link></li>
             <li><Link to="/contact-us">{t("footer.contact")}</Link></li>
+            <li><Link to="/privacy">{t("common.privacyPolicy")}</Link></li>
+            <li><Link to="/terms">{t("common.terms")}</Link></li>
           </ul>
         </div>
 
@@ -70,9 +72,9 @@ const Footer = () => {
           <h2>{t("footer.services")}</h2>
           <ul className="footer-links">
             <li><Link to="/guaranteed-rent">{t("footer.guaranteedRent")}</Link></li>
-            <li><Link to="/about-us">{t("footer.propertyManagement")}</Link></li>
-            <li><Link to="/about-us">{t("footer.rentalSolutions")}</Link></li>
-            <li><Link to="/about-us">{t("footer.luxuryLeasing")}</Link></li>
+            <li><Link to="/services#property-management">{t("footer.propertyManagement")}</Link></li>
+            <li><Link to="/services#rental-solutions">{t("footer.rentalSolutions")}</Link></li>
+            <li><Link to="/services#luxury-leasing">{t("footer.luxuryLeasing")}</Link></li>
           </ul>
         </div>
 

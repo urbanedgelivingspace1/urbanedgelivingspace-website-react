@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
-  Search as SearchIcon,
   SlidersHorizontal,
   X,
   ChevronDown,
@@ -17,6 +16,7 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Badge from "../ui/Badge";
 import { supabase } from "../../lib/supabaseClient";
+import { useLanguage } from "../../i18n/LanguageContext";
 import "./PropertyFilters.css";
 
 /**
@@ -66,7 +66,6 @@ export const PROPERTY_TYPE_OPTIONS = [
 export const BHK_OPTIONS = ["1", "2", "3", "4", "5", "6+"];
 
 export const DEFAULT_SORT_BY = "newest";
-const SEARCH_DEBOUNCE_MS = 400;
 
 function parseListValue(raw) {
   if (!raw) return [];
@@ -219,21 +218,21 @@ function toggleInArray(arr, value) {
  * `draft` state below.
  */
 function PropertyFilters({ className = "" }) {
+  const { t } = useLanguage();
   const [urlFilters, setUrlFilters] = usePropertyFiltersFromUrl();
 
   // Local draft mirrors the URL filters. Desktop controls commit on every
   // change (search is debounced); the mobile drawer only commits on Apply.
   const [draft, setDraft] = useState(urlFilters);
-  const [searchInput, setSearchInput] = useState(urlFilters.search || "");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [localities, setLocalities] = useState([]);
-  const searchDebounceRef = useRef(null);
+  const triggerRef = useRef(null);
+  const drawerRef = useRef(null);
 
   // Keep the draft in sync when the URL changes from outside this
   // component (back/forward navigation, a "Clear all" link elsewhere, etc.).
   useEffect(() => {
     setDraft(urlFilters);
-    setSearchInput(urlFilters.search || "");
   }, [urlFilters]);
 
   // One-off distinct-locality lookup to replace the hardcoded
@@ -265,19 +264,68 @@ function PropertyFilters({ className = "" }) {
   );
   const draftActiveCount = useMemo(() => countActiveFilters(draft), [draft]);
 
-  // Debounced free-text search: commits straight to the URL on both
-  // desktop and mobile, since typing inside an already-open drawer should
-  // still feel live rather than waiting for a separate Apply tap.
   useEffect(() => {
-    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
-    searchDebounceRef.current = setTimeout(() => {
-      if (searchInput !== (urlFilters.search || "")) {
-        setUrlFilters({ search: searchInput || undefined });
+    if (!isDrawerOpen) return undefined;
+    const drawer = drawerRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const backgroundNodes = [
+      document.querySelector(".site-header"),
+      document.querySelector(".properties-hero"),
+      document.querySelector(".results-section"),
+      document.querySelector(".footer"),
+    ].filter(Boolean);
+    const priorInert = backgroundNodes.map((node) => ({ node, inert: node.inert }));
+    backgroundNodes.forEach((node) => {
+      node.inert = true;
+    });
+
+    const getFocusable = () =>
+      Array.from(
+        drawer?.querySelectorAll(
+          'button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+        ) || [],
+      ).filter((element) => element.getClientRects().length > 0);
+
+    requestAnimationFrame(() => getFocusable()[0]?.focus());
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setDraft(urlFilters);
+        setIsDrawerOpen(false);
+        return;
       }
-    }, SEARCH_DEBOUNCE_MS);
-    return () => clearTimeout(searchDebounceRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchInput]);
+      if (event.key !== "Tab") return;
+      const focusable = getFocusable();
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      priorInert.forEach(({ node, inert }) => {
+        node.inert = inert;
+      });
+      triggerRef.current?.focus();
+    };
+  }, [isDrawerOpen, urlFilters]);
+
+  const closeDrawer = useCallback(() => {
+    setDraft(urlFilters);
+    setIsDrawerOpen(false);
+  }, [urlFilters]);
 
   const commitDraft = useCallback(() => {
     setUrlFilters(draft);
@@ -298,13 +346,10 @@ function PropertyFilters({ className = "" }) {
       sortBy: DEFAULT_SORT_BY,
     };
     setDraft((prev) => ({ ...prev, ...cleared }));
-    setSearchInput("");
-    setUrlFilters(cleared);
-  }, [setUrlFilters]);
+  }, []);
 
   const setListingType = (value) => {
     setDraft((prev) => ({ ...prev, listingType: value }));
-    setUrlFilters({ listingType: value });
   };
 
   const togglePropertyType = (type) => {
@@ -361,33 +406,30 @@ function PropertyFilters({ className = "" }) {
     </button>
   );
 
-  const panel = (
+  const renderPanel = (idPrefix) => (
     <div className="property-filters__panel">
       <div className="property-filters__panel-header">
-        <h3 className="property-filters__title">Filters</h3>
+        <h3 className="property-filters__title">{t("filters.title")}</h3>
         <button
           type="button"
           className="property-filters__drawer-close"
-          onClick={() => {
-            setDraft(urlFilters);
-            setIsDrawerOpen(false);
-          }}
-          aria-label="Close filters"
+          onClick={closeDrawer}
+          aria-label={t("filters.close")}
         >
           <X size={20} />
         </button>
       </div>
 
       <div className="property-filters__section">
-        <span className="property-filters__label">Listing Type</span>
+        <span className="property-filters__label">{t("filters.listingType")}</span>
         <div
           className="property-filters__toggle-group"
           role="group"
-          aria-label="Listing type"
+          aria-label={t("filters.listingType")}
         >
           {LISTING_TYPE_OPTIONS.map((opt) =>
             renderChip(
-              opt.label,
+              t(`filters.${opt.value}`),
               draft.listingType === opt.value,
               () => setListingType(opt.value),
               opt.value,
@@ -399,42 +441,18 @@ function PropertyFilters({ className = "" }) {
       <div className="property-filters__section">
         <label
           className="property-filters__label"
-          htmlFor="property-filters-search"
+          htmlFor={`${idPrefix}-locality`}
         >
-          Search
-        </label>
-        <div className="property-filters__search-wrap">
-          <SearchIcon
-            size={16}
-            className="property-filters__search-icon"
-            aria-hidden="true"
-          />
-          <input
-            id="property-filters-search"
-            type="text"
-            className="property-filters__search-input"
-            placeholder="Search by name, location, developer, or RERA no."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="property-filters__section">
-        <label
-          className="property-filters__label"
-          htmlFor="property-filters-locality"
-        >
-          Location
+          {t("filters.location")}
         </label>
         <div className="property-filters__select-wrap">
           <select
-            id="property-filters-locality"
+            id={`${idPrefix}-locality`}
             className="property-filters__select"
             value={draft.locality || ""}
             onChange={(e) => setLocality(e.target.value)}
           >
-            <option value="">All locations</option>
+            <option value="">{t("filters.allLocations")}</option>
             {localities.map((loc) => (
               <option key={loc} value={loc}>
                 {loc}
@@ -450,7 +468,7 @@ function PropertyFilters({ className = "" }) {
       </div>
 
       <div className="property-filters__section">
-        <span className="property-filters__label">BHK Configuration</span>
+        <span className="property-filters__label">{t("filters.bhk")}</span>
         <div className="property-filters__chip-group">
           {BHK_OPTIONS.map((bhk) =>
             renderChip(
@@ -464,7 +482,7 @@ function PropertyFilters({ className = "" }) {
       </div>
 
       <div className="property-filters__section">
-        <span className="property-filters__label">Property Type</span>
+        <span className="property-filters__label">{t("filters.propertyType")}</span>
         <div className="property-filters__chip-group">
           {PROPERTY_TYPE_OPTIONS.map((type) =>
             renderChip(
@@ -478,13 +496,14 @@ function PropertyFilters({ className = "" }) {
       </div>
 
       <div className="property-filters__section">
-        <span className="property-filters__label">Price Range (₹)</span>
+        <span className="property-filters__label">{t("filters.priceRange")}</span>
         <div className="property-filters__price-row">
           <Input
             label={null}
-            id="property-filters-min-price"
+            id={`${idPrefix}-min-price`}
             type="number"
-            placeholder="Min"
+            placeholder={t("filters.min")}
+            aria-label={t("filters.min")}
             value={draft.minPrice ?? ""}
             onChange={(e) => setMinPrice(e.target.value)}
             fullWidth={false}
@@ -494,9 +513,10 @@ function PropertyFilters({ className = "" }) {
           </span>
           <Input
             label={null}
-            id="property-filters-max-price"
+            id={`${idPrefix}-max-price`}
             type="number"
-            placeholder="Max"
+            placeholder={t("filters.max")}
+            aria-label={t("filters.max")}
             value={draft.maxPrice ?? ""}
             onChange={(e) => setMaxPrice(e.target.value)}
             fullWidth={false}
@@ -511,7 +531,7 @@ function PropertyFilters({ className = "" }) {
           onClick={clearAll}
           disabled={draftActiveCount === 0}
         >
-          Clear all
+          {t("filters.clearAll")}
         </Button>
         <Button
           variant="primary"
@@ -519,7 +539,7 @@ function PropertyFilters({ className = "" }) {
           className="property-filters__apply-btn"
           onClick={commitDraft}
         >
-          Apply Filters
+          {t("filters.apply")}
         </Button>
       </div>
     </div>
@@ -528,6 +548,7 @@ function PropertyFilters({ className = "" }) {
   return (
     <div className={`property-filters ${className}`}>
       <button
+        ref={triggerRef}
         type="button"
         className="property-filters__trigger"
         onClick={() => {
@@ -538,7 +559,7 @@ function PropertyFilters({ className = "" }) {
         aria-expanded={isDrawerOpen}
       >
         <SlidersHorizontal size={16} />
-        <span>Filters</span>
+        <span>{t("filters.title")}</span>
         {activeCount > 0 && (
           <Badge
             variant="accent"
@@ -550,22 +571,24 @@ function PropertyFilters({ className = "" }) {
         )}
       </button>
 
-      <div className="property-filters__desktop">{panel}</div>
+      <div className="property-filters__desktop">{renderPanel("desktop-property-filters")}</div>
 
       {isDrawerOpen && (
         <div
           className="property-filters__scrim"
-          onClick={() => setIsDrawerOpen(false)}
+          onClick={closeDrawer}
           aria-hidden="true"
         />
       )}
       <div
         className={`property-filters__drawer ${isDrawerOpen ? "property-filters__drawer--open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Filter properties"
+        ref={drawerRef}
+        role={isDrawerOpen ? "dialog" : undefined}
+        aria-modal={isDrawerOpen ? "true" : undefined}
+        aria-hidden={!isDrawerOpen}
+        aria-label={t("filters.dialog")}
       >
-        {panel}
+        {renderPanel("mobile-property-filters")}
       </div>
     </div>
   );

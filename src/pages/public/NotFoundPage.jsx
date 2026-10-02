@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { SearchX, Home, Building2 } from 'lucide-react';
 import SEOHead from '../../components/shared/SEOHead';
 import Button from '../../components/ui/Button';
+import WhatsAppButton from '../../components/shared/WhatsAppButton';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './NotFoundPage.css';
 
 /**
@@ -16,6 +18,7 @@ import './NotFoundPage.css';
  * index the wildcard route.
  */
 const NotFoundPage = () => {
+  const { t } = useLanguage();
   return (
     <div className="not-found-page">
       <SEOHead
@@ -40,8 +43,10 @@ const NotFoundPage = () => {
           </Button>
           <Button as={Link} to="/properties" variant="outline">
             <Building2 size={16} aria-hidden="true" />
-            Browse Properties
+            {t('common.browseProperties')}
           </Button>
+          <Button as={Link} to="/contact-us" variant="outline">{t('common.contact')}</Button>
+          <WhatsAppButton variant="inline" label={t('common.whatsapp')} />
         </div>
       </div>
     </div>

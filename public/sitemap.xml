@@ -21,6 +21,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.urbanedgelivingspace.com/services</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.urbanedgelivingspace.com/about-us</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -34,5 +39,15 @@
     <loc>https://www.urbanedgelivingspace.com/our-team</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.urbanedgelivingspace.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.urbanedgelivingspace.com/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

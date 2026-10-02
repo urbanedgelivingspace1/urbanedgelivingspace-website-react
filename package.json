@@ -20,7 +20,6 @@
     "@tiptap/starter-kit": "^3.27.1",
     "bcryptjs": "^3.0.2",
     "dompurify": "^3.4.11",
-    "framer-motion": "^12.6.3",
     "lucide-react": "^0.487.0",
     "papaparse": "^5.5.4",
     "react": "^19.1.0",
@@ -35,6 +34,7 @@
     "prebuild": "node scripts/generate-sitemap.mjs",
     "dev": "vite",
     "build": "vite build",
+    "test": "node --test tests/propertyPresentation.test.js",
     "preview": "vite preview"
   },
   "browserslist": {

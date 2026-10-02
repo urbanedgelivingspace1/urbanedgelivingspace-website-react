@@ -45,9 +45,12 @@ const STATIC_ROUTES = [
   { path: "/properties", changefreq: "daily", priority: "0.9" },
   { path: "/blog", changefreq: "daily", priority: "0.8" },
   { path: "/guaranteed-rent", changefreq: "monthly", priority: "0.7" },
+  { path: "/services", changefreq: "monthly", priority: "0.7" },
   { path: "/about-us", changefreq: "monthly", priority: "0.6" },
   { path: "/contact-us", changefreq: "monthly", priority: "0.6" },
   { path: "/our-team", changefreq: "monthly", priority: "0.5" },
+  { path: "/privacy", changefreq: "yearly", priority: "0.3" },
+  { path: "/terms", changefreq: "yearly", priority: "0.3" },
 ];
 
 function xmlEscape(value) {

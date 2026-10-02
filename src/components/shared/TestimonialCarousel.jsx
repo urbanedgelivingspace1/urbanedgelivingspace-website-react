@@ -154,19 +154,11 @@ function TestimonialCarousel({ className = '' }) {
   }
 
   if (loadError) {
-    return (
-      <div className={`testimonial-carousel testimonial-carousel--status ${className}`}>
-        <p>Unable to load testimonials right now. Please check back soon.</p>
-      </div>
-    );
+    return null;
   }
 
   if (testimonials.length === 0) {
-    return (
-      <div className={`testimonial-carousel testimonial-carousel--status ${className}`}>
-        <p>No testimonials yet — check back soon.</p>
-      </div>
-    );
+    return null;
   }
 
   return (

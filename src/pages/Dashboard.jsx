@@ -18,6 +18,9 @@ import { useFavourites } from "../hooks/useFavourites";
 import PropertyCard from "../components/PropertyCard";
 import Button from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
+import SEOHead from "../components/shared/SEOHead";
+import WhatsAppButton from "../components/shared/WhatsAppButton";
+import { useLanguage } from "../i18n/LanguageContext";
 import "./Dashboard.css";
 
 function useProfile(userId) {
@@ -55,14 +58,15 @@ function useDashboardFavourites(userId) {
 }
 
 const Dashboard = () => {
+  const { t } = useLanguage();
   const { user, signOut, isAdmin } = useAuth();
   const { toggleFavourite } = useFavourites();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const userId = user?.id;
 
-  const { data: profile, isLoading: profileLoading } = useProfile(userId);
-  const { data: favourites, isLoading: favouritesLoading } =
+  const { data: profile, isLoading: profileLoading, isError: profileError, refetch: retryProfile } = useProfile(userId);
+  const { data: favourites, isLoading: favouritesLoading, isError: favouritesError, refetch: retryFavourites } =
     useDashboardFavourites(userId);
 
   const [fullName, setFullName] = useState("");
@@ -94,7 +98,8 @@ const Dashboard = () => {
       queryClient.invalidateQueries({ queryKey: ["profile", userId] });
       setSaveMsg("Saved.");
     } catch (err) {
-      setSaveMsg(err.message || "Could not save your changes.");
+      console.error("Profile update failed:", err);
+      setSaveMsg(t("dashboard.errorTitle"));
     } finally {
       setSavingProfile(false);
       setTimeout(() => setSaveMsg(""), 3000);
@@ -117,10 +122,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-page container">
+      <SEOHead title="My Account" path="/dashboard" noindex />
       <header className="dashboard-header">
-        <h1>My Account</h1>
+        <h1>{t("dashboard.title")}</h1>
         <Button variant="outline" size="small" onClick={handleSignOut}>
-          Sign Out
+          {t("dashboard.signOut")}
         </Button>
       </header>
 
@@ -145,7 +151,7 @@ const Dashboard = () => {
       )}
 
       <section className="dashboard-profile">
-        <h2>Profile</h2>
+        <h2>{t("dashboard.profile")}</h2>
         {profileLoading ? (
           <Spinner
             size="small"
@@ -153,10 +159,18 @@ const Dashboard = () => {
             label="Loading profile…"
             showLabel
           />
+        ) : profileError ? (
+          <div className="dashboard-error" role="alert">
+            <strong>{t("dashboard.errorTitle")}</strong>
+            <p>{t("dashboard.errorText")}</p>
+            <Button type="button" variant="outline" size="small" onClick={() => retryProfile()}>
+              {t("common.retry")}
+            </Button>
+          </div>
         ) : (
           <form onSubmit={handleSaveProfile} className="dashboard-profile-form">
             <label className="dashboard-profile-field">
-              Full name
+              {t("dashboard.fullName")}
               <input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -164,7 +178,7 @@ const Dashboard = () => {
               />
             </label>
             <label className="dashboard-profile-field">
-              Phone
+              {t("dashboard.phone")}
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -172,7 +186,7 @@ const Dashboard = () => {
               />
             </label>
             <label className="dashboard-profile-field dashboard-profile-email">
-              Email
+              {t("dashboard.email")}
               <input value={user?.email || ""} disabled />
             </label>
             <div className="dashboard-profile-actions">
@@ -183,7 +197,7 @@ const Dashboard = () => {
                 fullWidth
                 loading={savingProfile}
               >
-                Save
+                {t("dashboard.save")}
               </Button>
               {saveMsg && <span className="dashboard-save-msg">{saveMsg}</span>}
             </div>
@@ -192,7 +206,7 @@ const Dashboard = () => {
       </section>
 
       <section className="dashboard-favourites">
-        <h2>Saved Properties</h2>
+        <h2>{t("dashboard.savedProperties")}</h2>
         {favouritesLoading ? (
           <Spinner
             size="small"
@@ -200,6 +214,15 @@ const Dashboard = () => {
             label="Loading saved properties…"
             showLabel
           />
+        ) : favouritesError ? (
+          <div className="dashboard-error" role="alert">
+            <strong>{t("dashboard.errorTitle")}</strong>
+            <p>{t("dashboard.errorText")}</p>
+            <div className="dashboard-empty-actions">
+              <Button type="button" variant="outline" size="small" onClick={() => retryFavourites()}>{t("common.retry")}</Button>
+              <Button as={Link} to="/properties" size="small">{t("common.browseProperties")}</Button>
+            </div>
+          </div>
         ) : favourites?.length ? (
           <div className="dashboard-favourites-grid">
             {favourites.map((property) => (
@@ -213,10 +236,14 @@ const Dashboard = () => {
             ))}
           </div>
         ) : (
-          <p className="dashboard-empty">
-            You haven't saved any properties yet. Tap the heart icon on any
-            listing to save it here.
-          </p>
+          <div className="dashboard-empty">
+            <h3>{t("dashboard.emptyTitle")}</h3>
+            <p>{t("dashboard.emptyText")}</p>
+            <div className="dashboard-empty-actions">
+              <Button as={Link} to="/properties">{t("common.browseProperties")}</Button>
+              <WhatsAppButton variant="inline" label={t("common.whatsapp")} />
+            </div>
+          </div>
         )}
       </section>
     </div>

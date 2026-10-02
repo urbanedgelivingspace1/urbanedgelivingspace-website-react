@@ -11,6 +11,8 @@ import SEOHead from '../components/shared/SEOHead';
 import { organizationSchema, breadcrumbSchema, blogPostingSchema, getSiteUrl } from '../lib/seo';
 import Skeleton from '../components/ui/Skeleton';
 import Button from '../components/ui/Button';
+import WhatsAppButton from '../components/shared/WhatsAppButton';
+import { useLanguage } from '../i18n/LanguageContext';
 import './BlogDetail.css';
 
 /**
@@ -56,6 +58,7 @@ function BlogDetailSkeleton() {
 }
 
 function BlogDetail() {
+  const { t } = useLanguage();
   const { id } = useParams();
   const { data: post, isLoading, isError } = useBlogPost(id);
 
@@ -76,7 +79,7 @@ function BlogDetail() {
           <h1>Post Not Found</h1>
           <p>This blog post may have been removed or is no longer available.</p>
           <Button as={Link} to="/blog">
-            Back to Blog
+            {t('guides.back')}
           </Button>
         </div>
       </div>
@@ -91,7 +94,7 @@ function BlogDetail() {
 
   const breadcrumbItems = [
     { name: 'Home', path: '/' },
-    { name: 'Blog', path: '/blog' },
+    { name: 'Property Guides', path: '/blog' },
     { name: post.title, path: `/blog/${identifier}` },
   ];
 
@@ -112,7 +115,7 @@ function BlogDetail() {
 
       <div className="container blog-detail-container">
         <Link to="/blog" className="blog-detail-back-link">
-          <ArrowLeft size={16} aria-hidden="true" /> Back to Blog
+          <ArrowLeft size={16} aria-hidden="true" /> {t('guides.back')}
         </Link>
 
         <nav className="blog-detail-breadcrumb" aria-label="Breadcrumb">
@@ -144,9 +147,18 @@ function BlogDetail() {
           <BlogReader post={post} shareUrl={shareUrl} />
         </article>
 
+        <section className="blog-detail-cta" aria-labelledby="blog-detail-cta-heading">
+          <h2 id="blog-detail-cta-heading">{t('guides.explore')}</h2>
+          <p>{t('home.readyText')}</p>
+          <div>
+            <Button as={Link} to="/properties">{t('common.browseProperties')}</Button>
+            <WhatsAppButton variant="inline" label={t('guides.talk')} />
+          </div>
+        </section>
+
         {relatedPosts.length > 0 && (
           <section className="blog-detail-related" aria-labelledby="related-posts-heading">
-            <h2 id="related-posts-heading">Related Posts</h2>
+            <h2 id="related-posts-heading">{t('guides.related')}</h2>
             <div className="blog-detail-related__grid">
               {relatedPosts.map((relatedPost) => (
                 <BlogCard key={relatedPost.id} post={relatedPost} />

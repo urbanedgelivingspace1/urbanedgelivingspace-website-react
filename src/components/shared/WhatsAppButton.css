@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: #25d366;
+  background-color: #087a55;
   color: var(--white);
   text-decoration: none;
   border: none;
@@ -16,7 +16,7 @@
 
 .wa-btn:hover,
 .wa-btn:focus-visible {
-  background-color: #1ebe5a;
+  background-color: #065f46;
 }
 
 .wa-btn__icon {

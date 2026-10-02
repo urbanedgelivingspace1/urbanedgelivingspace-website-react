@@ -10,9 +10,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import PasswordInput from '../../components/ui/PasswordInput';
+import SEOHead from '../../components/shared/SEOHead';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './AuthPages.css';
 
 const ResetPassword = () => {
+  const { t } = useLanguage();
   const { resetPassword, updatePassword } = useAuth();
   const navigate = useNavigate();
 
@@ -39,7 +44,8 @@ const ResetPassword = () => {
       await resetPassword(email.trim().toLowerCase());
       setSent(true);
     } catch (err) {
-      setErrorMsg(err.message || 'Could not send the reset link. Please try again.');
+      console.error('Password reset request failed:', err);
+      setErrorMsg(t('auth.resetError'));
     } finally {
       setLoading(false);
     }
@@ -54,7 +60,8 @@ const ResetPassword = () => {
       setUpdated(true);
       setTimeout(() => navigate('/login', { replace: true }), 2000);
     } catch (err) {
-      setErrorMsg(err.message || 'Could not update your password. Please try again.');
+      console.error('Password update failed:', err);
+      setErrorMsg(t('auth.updateError'));
       setLoading(false);
     }
   };
@@ -62,25 +69,29 @@ const ResetPassword = () => {
   if (mode === 'update') {
     return (
       <div className="auth-page">
+        <SEOHead title="Set a New Password" path="/reset-password" noindex />
         <div className="auth-card">
-          <h1>Set a New Password</h1>
+          <h1>{t('auth.setNew')}</h1>
           {updated ? (
-            <p className="auth-success">Password updated. Redirecting you to sign in…</p>
+            <p className="auth-success">{t('auth.updated')}</p>
           ) : (
             <>
               {errorMsg && <p className="auth-error">{errorMsg}</p>}
               <form onSubmit={handleUpdate} className="auth-form">
-                <input
-                  type="password"
-                  placeholder="New password (min. 6 characters)"
+                <PasswordInput
+                  label={t('auth.newPassword')}
+                  name="newPassword"
+                  placeholder={t('auth.newPassword')}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                   minLength={6}
                   autoComplete="new-password"
+                  showLabel={t('auth.showPassword')}
+                  hideLabel={t('auth.hidePassword')}
                 />
                 <Button type="submit" variant="primary" size="medium" fullWidth loading={loading}>
-                  Update Password
+                  {t('auth.update')}
                 </Button>
               </form>
             </>
@@ -92,33 +103,34 @@ const ResetPassword = () => {
 
   return (
     <div className="auth-page">
+      <SEOHead title="Reset Password" path="/reset-password" noindex />
       <div className="auth-card">
-        <h1>Reset Password</h1>
-        <p className="auth-subtitle">
-          Enter your email and we'll send you a link to reset your password.
-        </p>
+        <h1>{t('auth.reset')}</h1>
+        <p className="auth-subtitle">{t('auth.resetSubtitle')}</p>
         {sent ? (
-          <p className="auth-success">Check your email — a reset link is on its way.</p>
+          <p className="auth-success">{t('auth.resetSent')}</p>
         ) : (
           <>
             {errorMsg && <p className="auth-error">{errorMsg}</p>}
             <form onSubmit={handleRequest} className="auth-form">
-              <input
+              <Input
+                label={t('auth.email')}
+                name="email"
                 type="email"
-                placeholder="Email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
               />
               <Button type="submit" variant="primary" size="medium" fullWidth loading={loading}>
-                Send Reset Link
+                {t('auth.sendReset')}
               </Button>
             </form>
           </>
         )}
         <div className="auth-footer-links">
-          <Link to="/login">Back to sign in</Link>
+          <Link to="/login">{t('auth.back')}</Link>
         </div>
       </div>
     </div>

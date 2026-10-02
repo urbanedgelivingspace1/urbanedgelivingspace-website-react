@@ -1,10 +1,12 @@
 // src/components/forms/InquiryForm.jsx
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MdSend } from 'react-icons/md';
 import { supabase } from '../../lib/supabaseClient';
 import Input from '../ui/Input';
 import Textarea from '../ui/Textarea';
 import Button from '../ui/Button';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './InquiryForm.css';
 
 /**
@@ -22,6 +24,7 @@ import './InquiryForm.css';
  * own markup and component composition.
  */
 function InquiryForm({ property }) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -44,10 +47,12 @@ function InquiryForm({ property }) {
 
     try {
       if (!formData.name || !formData.phone) {
-        throw new Error('Please fill in all required fields.');
+        setErrorMessage(t('forms.required'));
+        return;
       }
       if (formData.phone.length < 8) {
-        throw new Error('Please enter a valid phone number.');
+        setErrorMessage(t('forms.invalidPhone'));
+        return;
       }
 
       const { error } = await supabase.from('form_submissions').insert([
@@ -61,53 +66,61 @@ function InquiryForm({ property }) {
       ]);
 
       if (error) {
-        throw new Error(error.message);
+        console.error('Property inquiry submission failed:', error);
+        throw new Error('submission_failed');
       }
 
-      setSuccessMessage('Thank you! We\u2019ll contact you soon with price details.');
+      setSuccessMessage(t('forms.inquirySuccess'));
       setFormData({
         name: '',
         phone: '',
         message: `I'm interested in ${property?.name || 'this property'}. Please share price details.`,
       });
     } catch (err) {
-      setErrorMessage(err.message || 'Something went wrong.');
+      console.error('Property inquiry error:', err);
+      setErrorMessage(t('forms.submitError'));
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <form className="inquiry-form" onSubmit={handleSubmit} aria-label="Property price inquiry form">
+    <form className="inquiry-form" onSubmit={handleSubmit} aria-label={t('forms.inquiryForm')}>
       <Input
-        label="Full Name"
+        label={t('forms.fullName')}
         name="name"
         value={formData.name}
         onChange={handleChange}
-        placeholder="Your full name"
+        placeholder={t('forms.namePlaceholder')}
         required
+        autoComplete="name"
       />
       <Input
-        label="Phone Number"
+        label={t('forms.phone')}
         name="phone"
         type="tel"
         value={formData.phone}
         onChange={handleChange}
-        placeholder="Your phone number"
+        placeholder={t('forms.phonePlaceholder')}
         required
+        autoComplete="tel"
       />
       <Textarea
-        label="Message"
+        label={t('forms.message')}
         name="message"
         value={formData.message}
         onChange={handleChange}
-        placeholder="Your message"
+        placeholder={t('forms.inquiryPlaceholder')}
         rows={3}
       />
 
       <Button type="submit" fullWidth loading={submitting}>
-        <MdSend /> {submitting ? 'Sending...' : 'Request Price Details'}
+        <MdSend /> {submitting ? t('forms.sending') : t('forms.requestPrice')}
       </Button>
+
+      <p className="form-privacy-notice">
+        {t('forms.privacyPrefix')} <Link to="/privacy">{t('common.privacyPolicy')}</Link>.
+      </p>
 
       {successMessage && (
         <p className="inquiry-form__success" role="alert">

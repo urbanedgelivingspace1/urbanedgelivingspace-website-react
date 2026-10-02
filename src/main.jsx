@@ -12,6 +12,10 @@ import "./styles/global.css";
 import "./styles/accessibility.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const enableVercelTelemetry =
+  import.meta.env.PROD &&
+  !["localhost", "127.0.0.1"].includes(window.location.hostname);
+
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
@@ -20,8 +24,8 @@ root.render(
           <App />
         </div>
       </LanguageProvider>
-      <SpeedInsights />
-      <Analytics />
+      {enableVercelTelemetry && <SpeedInsights />}
+      {enableVercelTelemetry && <Analytics />}
     </QueryClientProvider>
   </React.StrictMode>,
 );

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { translations, SUPPORTED_LANGUAGES } from "./translations";
+import { extendedTranslations } from "./extendedTranslations";
 
 const STORAGE_KEY = "urbanedge-language";
 const DEFAULT_LANGUAGE = "en";
@@ -20,7 +21,8 @@ function getInitialLanguage() {
 }
 
 function readTranslation(language, key) {
-  return key.split(".").reduce((value, segment) => value?.[segment], translations[language]);
+  const read = (source) => key.split(".").reduce((value, segment) => value?.[segment], source);
+  return read(extendedTranslations[language]) ?? read(translations[language]);
 }
 
 export function LanguageProvider({ children }) {

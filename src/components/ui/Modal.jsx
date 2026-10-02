@@ -48,11 +48,50 @@ function Modal({
     if (!isOpen) return undefined;
 
     previouslyFocusedRef.current = document.activeElement;
-    dialogRef.current?.focus();
+    const dialog = dialogRef.current;
+    const overlay = dialog?.closest('.ui-modal-overlay');
+    const backgroundNodes = Array.from(document.body.children).filter(
+      (node) => node !== overlay,
+    );
+    const backgroundState = backgroundNodes.map((node) => ({
+      node,
+      inert: node.inert,
+      ariaHidden: node.getAttribute('aria-hidden'),
+    }));
+    backgroundNodes.forEach((node) => {
+      node.inert = true;
+      node.setAttribute('aria-hidden', 'true');
+    });
+    dialog?.focus();
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         onCloseRef.current?.();
+        return;
+      }
+
+      if (event.key === 'Tab' && dialog) {
+        const focusable = Array.from(
+          dialog.querySelectorAll(
+            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        ).filter((element) => element.getClientRects().length > 0);
+
+        if (focusable.length === 0) {
+          event.preventDefault();
+          dialog.focus();
+          return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
 
@@ -63,6 +102,11 @@ function Modal({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = originalOverflow;
+      backgroundState.forEach(({ node, inert, ariaHidden }) => {
+        node.inert = inert;
+        if (ariaHidden === null) node.removeAttribute('aria-hidden');
+        else node.setAttribute('aria-hidden', ariaHidden);
+      });
       if (previouslyFocusedRef.current instanceof HTMLElement) {
         previouslyFocusedRef.current.focus();
       }

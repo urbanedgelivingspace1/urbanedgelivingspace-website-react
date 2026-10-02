@@ -35,7 +35,7 @@ const SANITIZE_CONFIG = {
     'table', 'thead', 'tbody', 'tr', 'th', 'td',
     'hr', 'span', 'div',
   ],
-  ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target', 'rel', 'class'],
+  ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target', 'rel', 'class', 'loading', 'decoding', 'width', 'height'],
 };
 
 function BlogReader({ post, shareUrl }) {

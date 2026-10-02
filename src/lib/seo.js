@@ -9,7 +9,7 @@ export const DEFAULT_TITLE =
 export const DEFAULT_DESCRIPTION =
   "UrbanEdge Living Space helps buyers, tenants, investors and property owners discover residential real estate across Gandhinagar and Ahmedabad with direct local support.";
 
-export const DEFAULT_LOGO_IMAGE = "/UrbanEdge_Living_Space_Logo_HD.jpg";
+export const DEFAULT_LOGO_IMAGE = "/urbanedge-logo-640.webp";
 export const DEFAULT_OG_IMAGE = DEFAULT_LOGO_IMAGE;
 
 // Canonical public business details. These values are consolidated from the

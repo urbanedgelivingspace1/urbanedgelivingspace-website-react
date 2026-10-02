@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LayoutGrid, List, SearchX, RefreshCw, MessageCircle } from 'lucide-react';
+import { LayoutGrid, List, SearchX, RefreshCw, MessageCircle, X } from 'lucide-react';
 
 import { useProperties, DEFAULT_PROPERTIES_PAGE_SIZE } from '../hooks/useProperties';
 import { useFavouriteState } from '../hooks/useFavouriteState';
@@ -15,14 +15,15 @@ import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
 import Pagination from '../components/ui/Pagination';
 import { useLanguage } from '../i18n/LanguageContext';
+import { formatCompactInr } from '../lib/propertyPresentation';
 import './Properties.css';
 import './Properties.modern.css';
 
 const SORT_OPTIONS = [
-  { value: 'newest', label: 'Newest First' },
-  { value: 'oldest', label: 'Oldest First' },
-  { value: 'price_asc', label: 'Price: Low to High' },
-  { value: 'price_desc', label: 'Price: High to Low' },
+  { value: 'newest', labelKey: 'filters.newest' },
+  { value: 'oldest', labelKey: 'filters.oldest' },
+  { value: 'price_asc', labelKey: 'filters.priceLow' },
+  { value: 'price_desc', labelKey: 'filters.priceHigh' },
 ];
 
 const SKELETON_COUNT = 6;
@@ -74,6 +75,58 @@ function ErrorState({ onRetry, t }) {
         <Button variant="secondary" onClick={onRetry}>{t('properties.retry')}</Button>
         <Button as={Link} to="/contact-us" variant="primary">{t('nav.contact')}</Button>
       </div>
+    </div>
+  );
+}
+
+function ActiveFilterChips({ filters, setFilters, t }) {
+  const chips = [];
+  const add = (key, label, patch) => chips.push({ key, label, patch });
+
+  if (filters.listingType && filters.listingType !== 'all') {
+    add('listing', t(`filters.${filters.listingType}`), { listingType: 'all' });
+  }
+  filters.propertyTypes?.forEach((type) =>
+    add(`type-${type}`, type, { propertyTypes: filters.propertyTypes.filter((item) => item !== type) }),
+  );
+  filters.bhk?.forEach((bhk) =>
+    add(`bhk-${bhk}`, `${bhk} BHK`, { bhk: filters.bhk.filter((item) => item !== bhk) }),
+  );
+  if (filters.locality) add('locality', filters.locality, { locality: undefined });
+  if (filters.city) add('city', filters.city, { city: undefined });
+  if (filters.minPrice || filters.maxPrice) {
+    const min = formatCompactInr(filters.minPrice);
+    const max = formatCompactInr(filters.maxPrice);
+    add('price', [min, max].filter(Boolean).join(' – '), { minPrice: undefined, maxPrice: undefined });
+  }
+  if (filters.isFeatured) add('featured', t('cards.featured'), { isFeatured: false });
+  if (filters.search) add('search', `“${filters.search}”`, { search: undefined });
+
+  if (!chips.length) return null;
+  return (
+    <div className="active-filter-chips" aria-label={t('filters.active')}>
+      {chips.map((chip) => (
+        <button
+          type="button"
+          className="active-filter-chip"
+          key={chip.key}
+          onClick={() => setFilters(chip.patch)}
+          aria-label={`${t('filters.remove')}: ${chip.label}`}
+        >
+          <span>{chip.label}</span><X size={14} aria-hidden="true" />
+        </button>
+      ))}
+      <button
+        type="button"
+        className="active-filter-chip active-filter-chip--clear"
+        onClick={() => setFilters({
+          listingType: 'all', propertyTypes: [], bhk: [], city: undefined,
+          locality: undefined, minPrice: undefined, maxPrice: undefined,
+          isFeatured: false, search: undefined, sortBy: DEFAULT_SORT_BY,
+        })}
+      >
+        {t('filters.clearAll')}
+      </button>
     </div>
   );
 }
@@ -173,7 +226,7 @@ const Properties = () => {
         </div>
       </header>
 
-      <main className="container properties-main">
+      <div className="container properties-main">
         <aside className="properties-sidebar" aria-label="Property filters">
           <PropertyFilters />
         </aside>
@@ -195,17 +248,17 @@ const Properties = () => {
                 <label htmlFor="sort-options">{t('properties.sortBy')}</label>
                 <select id="sort-options" value={filters.sortBy} onChange={handleSortChange}>
                   {SORT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    <option key={opt.value} value={opt.value}>{t(opt.labelKey)}</option>
                   ))}
                 </select>
               </div>
-              <div className="view-toggle" role="group" aria-label="Toggle grid or list view">
+              <div className="view-toggle" role="group" aria-label={`${t('filters.grid')} / ${t('filters.list')}`}>
                 <button
                   type="button"
                   className={`view-toggle__btn ${viewMode === 'grid' ? 'is-active' : ''}`}
                   onClick={() => setViewMode('grid')}
                   aria-pressed={viewMode === 'grid'}
-                  aria-label="Grid view"
+                  aria-label={t('filters.grid')}
                 >
                   <LayoutGrid size={18} aria-hidden="true" />
                 </button>
@@ -214,13 +267,15 @@ const Properties = () => {
                   className={`view-toggle__btn ${viewMode === 'list' ? 'is-active' : ''}`}
                   onClick={() => setViewMode('list')}
                   aria-pressed={viewMode === 'list'}
-                  aria-label="List view"
+                  aria-label={t('filters.list')}
                 >
                   <List size={18} aria-hidden="true" />
                 </button>
               </div>
             </div>
           </div>
+
+          <ActiveFilterChips filters={filters} setFilters={setFilters} t={t} />
 
           {isLoading ? (
             <ResultsSkeleton viewMode={viewMode} />
@@ -251,7 +306,7 @@ const Properties = () => {
             />
           )}
         </section>
-      </main>
+      </div>
 
       <WhatsAppButton variant="floating" />
     </div>

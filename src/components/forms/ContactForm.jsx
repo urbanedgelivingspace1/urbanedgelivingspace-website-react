@@ -1,10 +1,12 @@
 // src/components/forms/ContactForm.jsx
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MdSend } from 'react-icons/md';
 import { supabase } from '../../lib/supabaseClient';
 import Input from '../ui/Input';
 import Textarea from '../ui/Textarea';
 import Button from '../ui/Button';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './ContactForm.css';
 
 /**
@@ -34,6 +36,7 @@ function ContactForm({
   description = 'Have questions about listings, property viewings, or partnerships? Send us a message below.',
   className = '',
 }) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -58,7 +61,8 @@ function ContactForm({
 
     try {
       if (!formData.name || !formData.email || !formData.phone || !formData.message) {
-        throw new Error('Please fill in all required fields.');
+        setErrorMessage(t('forms.required'));
+        return;
       }
 
       const { error } = await supabase.from('form_submissions').insert([
@@ -72,13 +76,15 @@ function ContactForm({
       ]);
 
       if (error) {
-        throw new Error(error.message);
+        console.error('Contact form submission failed:', error);
+        throw new Error('submission_failed');
       }
 
-      setSuccessMessage('Thank you for contacting us! We will get back to you shortly.');
+      setSuccessMessage(t('forms.contactSuccess'));
       setFormData({ name: '', email: '', phone: '', subject: defaultSubject, message: '' });
     } catch (err) {
-      setErrorMessage(err.message || 'Something went wrong. Please try again.');
+      console.error('Contact form error:', err);
+      setErrorMessage(t('forms.submitError'));
     } finally {
       setSubmitting(false);
     }
@@ -89,53 +95,60 @@ function ContactForm({
       {heading && <h2 className="contact-form-card__heading">{heading}</h2>}
       {description && <p className="contact-form-card__description">{description}</p>}
 
-      <form className="contact-form-card__form" onSubmit={handleSubmit} aria-label="Contact form">
+      <form className="contact-form-card__form" onSubmit={handleSubmit} aria-label={t('forms.contactForm')}>
         <Input
-          label="Name"
+          label={t('forms.name')}
           name="name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Your full name"
+          placeholder={t('forms.namePlaceholder')}
           required
+          autoComplete="name"
         />
         <Input
-          label="Email"
+          label={t('forms.email')}
           name="email"
           type="email"
           value={formData.email}
           onChange={handleChange}
           placeholder="you@example.com"
           required
+          autoComplete="email"
         />
         <Input
-          label="Phone"
+          label={t('forms.phone')}
           name="phone"
           type="tel"
           value={formData.phone}
           onChange={handleChange}
           placeholder="+91 1234567890"
           required
+          autoComplete="tel"
         />
         <Input
-          label="Subject"
+          label={t('forms.subject')}
           name="subject"
           value={formData.subject}
           onChange={handleChange}
-          placeholder="Brief subject"
+          placeholder={t('forms.subjectPlaceholder')}
         />
         <Textarea
-          label="Message"
+          label={t('forms.message')}
           name="message"
           value={formData.message}
           onChange={handleChange}
-          placeholder="How can we help you?"
+          placeholder={t('forms.messagePlaceholder')}
           rows={5}
           required
         />
 
         <Button type="submit" fullWidth loading={submitting}>
-          <MdSend /> {submitting ? 'Sending...' : 'Send Message'}
+          <MdSend /> {submitting ? t('forms.sending') : t('forms.send')}
         </Button>
+
+        <p className="form-privacy-notice">
+          {t('forms.privacyPrefix')} <Link to="/privacy">{t('common.privacyPolicy')}</Link>.
+        </p>
 
         {successMessage && (
           <p className="contact-form-card__success" role="alert">

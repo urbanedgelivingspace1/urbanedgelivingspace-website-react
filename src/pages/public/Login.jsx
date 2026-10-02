@@ -12,9 +12,14 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePostAuthRedirect } from '../../hooks/usePostAuthRedirect';
 import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import PasswordInput from '../../components/ui/PasswordInput';
+import SEOHead from '../../components/shared/SEOHead';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './AuthPages.css';
 
 const Login = () => {
+  const { t } = useLanguage();
   // Handles the redirect once a session appears — from this form's own
   // signIn() call below, or from a Google/magic-link redirect landing
   // back on this page with a session already set.
@@ -37,10 +42,11 @@ const Login = () => {
       await signIn(email.trim().toLowerCase(), password);
       // usePostAuthRedirect takes it from here once the session lands.
     } catch (err) {
+      console.error('Sign-in failed:', err);
       setErrorMsg(
         err.message === 'Invalid login credentials'
-          ? 'Incorrect email or password.'
-          : err.message || 'An unexpected error occurred. Please try again.',
+          ? t('auth.invalidCredentials')
+          : t('auth.signInError'),
       );
       setLoading(false);
     }
@@ -48,7 +54,7 @@ const Login = () => {
 
   const handleMagicLink = async () => {
     if (!email.trim()) {
-      setErrorMsg("Enter your email above first, then tap 'Email me a link'.");
+      setErrorMsg(t('auth.enterEmail'));
       return;
     }
     setMagicLoading(true);
@@ -57,7 +63,8 @@ const Login = () => {
       await signInWithMagicLink(email.trim().toLowerCase());
       setMagicSent(true);
     } catch (err) {
-      setErrorMsg(err.message || 'Could not send the sign-in link. Please try again.');
+      console.error('Magic-link sign-in failed:', err);
+      setErrorMsg(t('auth.magicError'));
     } finally {
       setMagicLoading(false);
     }
@@ -68,44 +75,49 @@ const Login = () => {
     try {
       await signInWithGoogle();
     } catch (err) {
-      setErrorMsg(err.message || 'Could not start Google sign-in.');
+      console.error('Google sign-in failed:', err);
+      setErrorMsg(t('auth.googleError'));
     }
   };
 
   return (
     <div className="auth-page">
+      <SEOHead title="Sign In" path="/login" noindex />
       <div className="auth-card">
-        <h1>Sign In</h1>
-        <p className="auth-subtitle">
-          Save your favourite properties and pick up where you left off.
-        </p>
+        <h1>{t('auth.signIn')}</h1>
+        <p className="auth-subtitle">{t('auth.signInSubtitle')}</p>
 
         {errorMsg && <p className="auth-error">{errorMsg}</p>}
         {magicSent && (
           <p className="auth-success">
-            Check your email — we've sent you a sign-in link.
+            {t('auth.magicSent')}
           </p>
         )}
 
         <form onSubmit={handleLogin} className="auth-form">
-          <input
+          <Input
+            label={t('auth.email')}
+            name="email"
             type="email"
-            placeholder="Email"
+            placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
           />
-          <input
-            type="password"
-            placeholder="Password"
+          <PasswordInput
+            label={t('auth.password')}
+            name="password"
+            placeholder={t('auth.password')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="current-password"
+            showLabel={t('auth.showPassword')}
+            hideLabel={t('auth.hidePassword')}
           />
           <Button type="submit" variant="primary" size="medium" fullWidth loading={loading}>
-            Sign In
+            {t('auth.signIn')}
           </Button>
         </form>
 
@@ -115,20 +127,20 @@ const Login = () => {
           onClick={handleMagicLink}
           disabled={magicLoading}
         >
-          {magicLoading ? 'Sending…' : 'Email me a sign-in link instead'}
+          {magicLoading ? t('auth.sending') : t('auth.magic')}
         </button>
 
         <div className="auth-divider">
-          <span>or</span>
+          <span>{t('auth.or')}</span>
         </div>
 
         <Button variant="outline" size="medium" fullWidth onClick={handleGoogle}>
-          Continue with Google
+          {t('auth.google')}
         </Button>
 
         <div className="auth-footer-links">
-          <Link to="/reset-password">Forgot password?</Link>
-          <Link to="/signup">Create an account</Link>
+          <Link to="/reset-password">{t('auth.forgot')}</Link>
+          <Link to="/signup">{t('auth.createLink')}</Link>
         </div>
       </div>
     </div>

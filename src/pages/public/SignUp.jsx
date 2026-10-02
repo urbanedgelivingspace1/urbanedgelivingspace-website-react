@@ -10,9 +10,14 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePostAuthRedirect } from '../../hooks/usePostAuthRedirect';
 import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import PasswordInput from '../../components/ui/PasswordInput';
+import SEOHead from '../../components/shared/SEOHead';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './AuthPages.css';
 
 const Signup = () => {
+  const { t } = useLanguage();
   // Only fires the redirect if Supabase returns a session immediately
   // (i.e. email confirmation is disabled in the dashboard). If
   // confirmation is required, `session` stays null and we show the
@@ -44,7 +49,8 @@ const Signup = () => {
       }
       // If a session came back immediately, usePostAuthRedirect handles it.
     } catch (err) {
-      setErrorMsg(err.message || 'Could not create your account. Please try again.');
+      console.error('Account creation failed:', err);
+      setErrorMsg(t('auth.createError'));
       setLoading(false);
     }
   };
@@ -54,22 +60,23 @@ const Signup = () => {
     try {
       await signInWithGoogle();
     } catch (err) {
-      setErrorMsg(err.message || 'Could not start Google sign-in.');
+      console.error('Google sign-in failed:', err);
+      setErrorMsg(t('auth.googleError'));
     }
   };
 
   if (confirmSent) {
     return (
       <div className="auth-page">
+        <SEOHead title="Create Account" path="/signup" noindex />
         <div className="auth-card">
-          <h1>Almost there</h1>
+          <h1>{t('auth.almost')}</h1>
           <p className="auth-subtitle">
-            We've sent a confirmation link to <strong>{email}</strong>. Confirm
-            your email, then sign in.
+            {t('auth.confirm')} <strong>{email}</strong>
           </p>
           <Link to="/login">
             <Button variant="primary" size="medium" fullWidth>
-              Go to Sign In
+              {t('auth.goSignIn')}
             </Button>
           </Link>
         </div>
@@ -79,56 +86,65 @@ const Signup = () => {
 
   return (
     <div className="auth-page">
+      <SEOHead title="Create Account" path="/signup" noindex />
       <div className="auth-card">
-        <h1>Create Account</h1>
-        <p className="auth-subtitle">
-          Save properties you like and pick up where you left off, on any device.
-        </p>
+        <h1>{t('auth.create')}</h1>
+        <p className="auth-subtitle">{t('auth.createSubtitle')}</p>
 
         {errorMsg && <p className="auth-error">{errorMsg}</p>}
 
         <form onSubmit={handleSignup} className="auth-form">
-          <input
+          <Input
+            label={t('auth.fullName')}
+            name="fullName"
             type="text"
-            placeholder="Full name"
+            placeholder={t('auth.fullName')}
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             required
             autoComplete="name"
           />
-          <input
+          <Input
+            label={t('auth.email')}
+            name="email"
             type="email"
-            placeholder="Email"
+            placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
           />
-          <input
-            type="password"
-            placeholder="Password (min. 6 characters)"
+          <PasswordInput
+            label={t('auth.newPassword')}
+            name="password"
+            placeholder={t('auth.newPassword')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={6}
             autoComplete="new-password"
+            showLabel={t('auth.showPassword')}
+            hideLabel={t('auth.hidePassword')}
           />
           <Button type="submit" variant="primary" size="medium" fullWidth loading={loading}>
-            Create Account
+            {t('auth.create')}
           </Button>
         </form>
 
         <div className="auth-divider">
-          <span>or</span>
+          <span>{t('auth.or')}</span>
         </div>
 
         <Button variant="outline" size="medium" fullWidth onClick={handleGoogle}>
-          Continue with Google
+          {t('auth.google')}
         </Button>
 
         <div className="auth-footer-links">
-          <Link to="/login">Already have an account? Sign in</Link>
+          <Link to="/login">{t('auth.existing')}</Link>
         </div>
+        <p className="auth-privacy">
+          {t('auth.privacy')} <Link to="/terms">{t('common.terms')}</Link> · <Link to="/privacy">{t('common.privacyPolicy')}</Link>
+        </p>
       </div>
     </div>
   );

@@ -129,12 +129,16 @@ textarea {
   text-align: center;
   color: var(--white);
   overflow: hidden;
-  /* `hero-bg.jpg` exists in src/assets but is currently a 0-byte
-     placeholder file in the uploaded project — using the existing,
-     already-populated property photo instead so the hero never ships a
-     broken background. Swap back to hero-bg.jpg once a real photo is
-     added there. */
-  background: url('../assets/property.jpg') center/cover no-repeat;
+  background: #00112d;
+}
+
+.homepage-hero-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
 }
 
 .homepage-hero-overlay {

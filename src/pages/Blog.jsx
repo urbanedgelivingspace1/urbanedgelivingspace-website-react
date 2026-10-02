@@ -10,6 +10,8 @@ import SEOHead from '../components/shared/SEOHead';
 import { organizationSchema, breadcrumbSchema } from '../lib/seo';
 import Skeleton from '../components/ui/Skeleton';
 import Pagination from '../components/ui/Pagination';
+import Button from '../components/ui/Button';
+import { useLanguage } from '../i18n/LanguageContext';
 import './Blog.css';
 
 /**
@@ -49,26 +51,33 @@ function BlogSkeletonGrid() {
   );
 }
 
-function EmptyState({ hasFilters, onReset }) {
+function EmptyState({ hasFilters, onReset, t }) {
   return (
     <div className="blog-empty-state">
       <Newspaper size={44} className="blog-empty-state__icon" aria-hidden="true" />
-      <h3>{hasFilters ? 'No posts match your filters.' : 'No blog posts available yet.'}</h3>
+      <h3>{hasFilters ? t('guides.emptyFiltered') : t('guides.empty')}</h3>
       <p>
         {hasFilters
           ? 'Try a different category or search term.'
-          : 'Check back soon — new insights and market updates are on the way.'}
+          : t('home.noGuides')}
       </p>
       {hasFilters && (
         <button type="button" className="blog-empty-state__reset" onClick={onReset}>
-          Clear Filters
+          {t('filters.clearAll')}
         </button>
+      )}
+      {!hasFilters && (
+        <div className="blog-empty-actions">
+          <Button as={Link} to="/properties">{t('common.browseProperties')}</Button>
+          <Button as={Link} to="/contact-us" variant="outline">{t('common.contact')}</Button>
+        </div>
       )}
     </div>
   );
 }
 
 const Blog = () => {
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const category = searchParams.get('category') || 'all';
@@ -126,14 +135,14 @@ const Blog = () => {
   return (
     <div className="blog-page">
       <SEOHead
-        title="Blog"
+        title="Property Guides"
         description="Insights, buying guides, market trends, and area guides for real estate in Gandhinagar, Gujarat from UrbanEdge Living Space."
         path="/blog"
         jsonLd={[
           organizationSchema(),
           breadcrumbSchema([
             { name: 'Home', path: '/' },
-            { name: 'Blog', path: '/blog' },
+            { name: 'Property Guides', path: '/blog' },
           ]),
         ]}
       />
@@ -142,26 +151,26 @@ const Blog = () => {
         <div className="blog-hero__overlay" />
         <div className="blog-hero__content">
           <nav className="blog-breadcrumb" aria-label="Breadcrumb">
-            <Link to="/">Home</Link>
+            <Link to="/">{t('common.home')}</Link>
             <span aria-hidden="true">&rsaquo;</span>
-            <span aria-current="page">Blog</span>
+            <span aria-current="page">{t('guides.title')}</span>
           </nav>
-          <h1>Insights &amp; Market Trends</h1>
-          <p>Explore buying guides, market updates, and area guides for Gandhinagar real estate.</p>
+          <h1>{t('guides.title')}</h1>
+          <p>{t('guides.subtitle')}</p>
           <form className="blog-hero__search" onSubmit={handleSearchSubmit}>
             <input
               type="text"
-              placeholder="Search articles..."
+              placeholder={t('guides.searchPlaceholder')}
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              aria-label="Search blog posts"
+              aria-label={t('guides.search')}
             />
-            <button type="submit">Search</button>
+            <button type="submit">{t('filters.search')}</button>
           </form>
         </div>
       </header>
 
-      <main className="container blog-main">
+      <div className="container blog-main">
         <div className="blog-category-chips" role="group" aria-label="Filter by category">
           {CATEGORY_FILTER_OPTIONS.map((opt) => (
             <button
@@ -181,7 +190,7 @@ const Blog = () => {
         ) : error ? (
           <div className="blog-error">Failed to load blog posts. Please try again later.</div>
         ) : posts.length === 0 ? (
-          <EmptyState hasFilters={hasActiveFilters} onReset={handleResetFilters} />
+          <EmptyState hasFilters={hasActiveFilters} onReset={handleResetFilters} t={t} />
         ) : (
           <div className={`blog-grid ${isFetching ? 'is-refetching' : ''}`}>
             {posts.map((post) => (
@@ -196,7 +205,7 @@ const Blog = () => {
           onPageChange={handlePageChange}
           className="blog-pagination"
         />
-      </main>
+      </div>
     </div>
   );
 };

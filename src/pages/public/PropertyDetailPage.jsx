@@ -1,5 +1,5 @@
 // src/pages/public/PropertyDetailPage.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   MdCheckCircle,
@@ -22,8 +22,11 @@ import {
   FaRegBuilding,
   FaIdCard,
 } from "react-icons/fa";
+import { Heart, Phone } from "lucide-react";
 
 import { useProperty } from "../../hooks/useProperty";
+import { useProperties } from "../../hooks/useProperties";
+import { useFavouriteState } from "../../hooks/useFavouriteState";
 import AmenitiesGrid, {
   parseAmenities,
 } from "../../components/property/AmenitiesGrid";
@@ -32,37 +35,35 @@ import ConfigurationsTable, {
 } from "../../components/property/ConfigurationsTable";
 import InquiryForm from "../../components/forms/InquiryForm";
 import SiteVisitForm from "../../components/forms/SiteVisitForm";
-import WhatsAppButton, {
-  buildWhatsAppHref,
-} from "../../components/shared/WhatsAppButton";
+import WhatsAppButton from "../../components/shared/WhatsAppButton";
 import SEOHead from "../../components/shared/SEOHead";
 import {
   organizationSchema,
   breadcrumbSchema,
   realEstateListingSchema,
+  ORGANIZATION,
 } from "../../lib/seo";
 import Skeleton from "../../components/ui/Skeleton";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
-import defaultImage from "../../assets/property.jpg";
+import defaultImage from "../../assets/property-hero-1600.webp";
+import PropertyCard from "../../components/PropertyCard";
+import { useLanguage } from "../../i18n/LanguageContext";
+import {
+  buildPropertyWhatsAppMessage,
+  formatPropertyConfiguration,
+  formatPropertyPrice,
+  formatPropertyStatus,
+  formatPropertyType,
+  getPublicPropertyId,
+} from "../../lib/propertyPresentation";
 import "./PropertyDetailPage.css";
 
 const LISTING_TYPE_META = {
-  buy: { label: "For Sale", modifier: "buy" },
-  rent: { label: "For Rent", modifier: "rent" },
-  commercial: { label: "Commercial", modifier: "commercial" },
+  buy: { labelKey: "cards.forSale", modifier: "buy" },
+  rent: { labelKey: "cards.forRent", modifier: "rent" },
+  commercial: { labelKey: "cards.commercial", modifier: "commercial" },
 };
-
-// `property_type` is a Postgres text[] column — a property can be more
-// than one type at once (e.g. "Residential" + "Apartment"). This renders
-// whatever is there as a single display string, and also tolerates a
-// plain string in case any caller ever passes legacy/mock data through.
-function formatPropertyType(propertyType) {
-  if (Array.isArray(propertyType)) {
-    return propertyType.filter(Boolean).join(", ") || null;
-  }
-  return propertyType || null;
-}
 
 /**
  * Long-form free-text fields (`about_property`, `about_builder_company`,
@@ -109,8 +110,16 @@ function formatLongText(text) {
 function PropertyDetailPage() {
   const { id } = useParams();
   const { data: property, isLoading, isError } = useProperty(id);
+  const { t } = useLanguage();
+  const favouriteState = useFavouriteState();
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [showSiteVisitModal, setShowSiteVisitModal] = useState(false);
+
+  useEffect(() => {
+    const openSiteVisit = () => setShowSiteVisitModal(true);
+    window.addEventListener("urbanedge:open-site-visit", openSiteVisit);
+    return () => window.removeEventListener("urbanedge:open-site-visit", openSiteVisit);
+  }, []);
 
   if (isLoading) {
     return <PropertyDetailSkeleton />;
@@ -120,11 +129,13 @@ function PropertyDetailPage() {
     return (
       <div className="pdp-error-container">
         <SEOHead title="Property Not Found" noindex />
-        <h1>Property Not Found</h1>
-        <p>This property may have been removed or is no longer available.</p>
-        <Button as={Link} to="/properties">
-          Browse Properties
-        </Button>
+        <h1>{t("property.notFoundTitle")}</h1>
+        <p>{t("property.notFoundText")}</p>
+        <div className="pdp-error-actions">
+          <Button as={Link} to="/properties">{t("common.browseProperties")}</Button>
+          <Button as={Link} to="/contact-us" variant="outline">{t("common.contact")}</Button>
+          <WhatsAppButton variant="inline" label={t("common.whatsapp")} />
+        </div>
       </div>
     );
   }
@@ -134,6 +145,18 @@ function PropertyDetailPage() {
   const { truncated, isLong, fullDesc } = processDescription(property);
   const listingMeta = LISTING_TYPE_META[property.listing_type] || null;
   const identifier = property.slug || property.id;
+  const configuration = formatPropertyConfiguration(property, { includeType: true });
+  const price = formatPropertyPrice(property, {
+    labels: {
+      onRequest: t("price.onRequest"),
+      startingFrom: t("price.startingFrom"),
+      from: t("price.from"),
+    },
+  });
+  const propertyStatus = formatPropertyStatus(property);
+  const publicId = getPublicPropertyId(property);
+  const isFavourite = favouriteState.isFavourite(property.id);
+  const telHref = `tel:${ORGANIZATION.telephone.replace(/[^+\d]/g, "")}`;
 
   const breadcrumbItems = [
     { name: "Home", path: "/" },
@@ -141,10 +164,7 @@ function PropertyDetailPage() {
     { name: property.name, path: `/properties/${identifier}` },
   ];
 
-  const whatsappHref = buildWhatsAppHref(
-    `Hi, I'm interested in "${property.name}" listed on UrbanEdge Living Space. Could you share more details?`,
-  );
-
+  const propertyMessage = buildPropertyWhatsAppMessage(property);
   return (
     <div className="pdp-page">
       <SEOHead
@@ -185,14 +205,16 @@ function PropertyDetailPage() {
               <span
                 className={`pdp-listing-badge pdp-listing-badge--${listingMeta.modifier}`}
               >
-                {listingMeta.label}
+                {t(listingMeta.labelKey)}
               </span>
             )}
-            {formatPropertyType(property.property_type) && (
+            {formatPropertyType(property) && (
               <span className="pdp-property-badge">
-                {formatPropertyType(property.property_type)}
+                {formatPropertyType(property)}
               </span>
             )}
+            {publicId && <span className="pdp-property-badge">{t("property.propertyId")}: {publicId}</span>}
+            {propertyStatus && <span className="pdp-property-badge">{propertyStatus}</span>}
           </div>
           {property.google_drive_url && (
             <a
@@ -200,9 +222,9 @@ function PropertyDetailPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="pdp-gallery-btn"
-              aria-label="View property photo gallery (opens in a new tab)"
+              aria-label={t("property.gallery")}
             >
-              <MdOutlinePhotoLibrary /> View Gallery
+              <MdOutlinePhotoLibrary /> {t("property.gallery")}
             </a>
           )}
         </div>
@@ -220,16 +242,17 @@ function PropertyDetailPage() {
             )}
             <p className="pdp-location">
               <MdOutlineLocationOn aria-hidden="true" />
-              {property.location || "Location not specified"}
+              {property.location || t("property.locationMissing")}
             </p>
+            <p className="pdp-price">{price}</p>
           </div>
 
           <div className="pdp-hero-meta">
             <div className="pdp-hero-highlights">
-              {property.bhk && (
+              {configuration && (
                 <div className="pdp-highlight-item">
                   <FaBed aria-hidden="true" />
-                  <span>{property.bhk}</span>
+                  <span>{configuration}</span>
                 </div>
               )}
               {property.carpet_area && (
@@ -253,38 +276,60 @@ function PropertyDetailPage() {
                 variant="primary"
                 className="pdp-contact-btn"
               >
-                Request Price Details
+                {t("common.enquire")}
+              </Button>
+              <Button as="a" href={telHref} variant="outline" className="pdp-contact-btn">
+                <Phone size={17} aria-hidden="true" /> {t("common.call")}
               </Button>
               <WhatsAppButton
                 variant="inline"
-                message={`Hi, I'm interested in "${property.name}" listed on UrbanEdge Living Space. Could you share more details?`}
-                label="WhatsApp"
+                message={propertyMessage}
+                label={t("common.whatsapp")}
               />
+              <Button
+                type="button"
+                variant="outline"
+                className="pdp-contact-btn"
+                onClick={() => setShowSiteVisitModal(true)}
+              >
+                <MdOutlineCalendarMonth /> {t("common.scheduleVisit")}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="pdp-save-btn"
+                aria-pressed={isFavourite}
+                onClick={() => favouriteState.toggleFavourite(property.id)}
+              >
+                <Heart size={17} fill={isFavourite ? "currentColor" : "none"} aria-hidden="true" />
+                {isFavourite ? t("property.saved") : t("property.save")}
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Content Grid */}
-      <main className="pdp-main-grid">
+      <div className="pdp-main-grid">
         <div className="pdp-primary-content">
-          <Section title="About" icon={<MdHome />} initialOpen>
+          <Section title={t("property.about")} icon={<MdHome />} initialOpen>
             <DescriptionText
               fullDesc={fullDesc}
               truncated={truncated}
               isLong={isLong}
               showFullDesc={showFullDesc}
               toggle={() => setShowFullDesc(!showFullDesc)}
+              t={t}
             />
           </Section>
 
-          <Section title="Key Details" icon={<MdCheckCircle />}>
-            <QuickInfoGrid property={property} />
+          <Section title={t("property.keyDetails")} icon={<MdCheckCircle />}>
+            <QuickInfoGrid property={property} t={t} configuration={configuration} status={propertyStatus} />
           </Section>
 
           {configurations.length > 0 && (
             <Section
-              title="Floor Plans & Pricing"
+              title={t("property.floorPlans")}
               icon={<MdOutlineCalendarMonth />}
             >
               <div className="pdp-table-scroll">
@@ -294,47 +339,30 @@ function PropertyDetailPage() {
           )}
 
           {amenities.length > 0 && (
-            <Section title="Amenities & Facilities" icon={<MdFitnessCenter />}>
+            <Section title={t("property.amenities")} icon={<MdFitnessCenter />}>
               <AmenitiesGrid amenities={amenities} />
             </Section>
           )}
 
           {property.about_builder_company && (
-            <Section title="About the Developer" icon={<FaBuilding />}>
+            <Section title={t("property.developer")} icon={<FaBuilding />}>
               <p className="pdp-developer-info">
                 {formatLongText(property.about_builder_company)}
               </p>
             </Section>
           )}
 
-          {property.about_location && (
-            <Section title="Location Highlights" icon={<MdOutlineLocationOn />}>
-              <p className="pdp-location-info">
-                {formatLongText(property.about_location)}
-              </p>
-            </Section>
-          )}
-
-          {property.explore_neighbourhood && (
-            <Section
-              title="Explore the Neighbourhood"
-              icon={<MdOutlineLocationOn />}
-            >
-              <p className="pdp-location-info">
-                {formatLongText(property.explore_neighbourhood)}
-              </p>
-            </Section>
-          )}
+          <NearbyConnectivity property={property} t={t} />
         </div>
 
         <div className="pdp-secondary-content">
-          <Section title="Property Overview" variant="card">
-            <QuickFacts property={property} />
+          <Section title={t("property.overview")} variant="card">
+            <QuickFacts property={property} t={t} />
           </Section>
 
           {property.google_map_location && (
             <Section
-              title="Map Location"
+              title={t("property.map")}
               variant="card"
               icon={<MdOutlineLocationOn />}
             >
@@ -343,7 +371,7 @@ function PropertyDetailPage() {
           )}
 
           <Section
-            title="Interested in this Property?"
+            title={t("property.interested")}
             variant="card"
             icon={<MdCheckCircle />}
             id="pdp-inquiry"
@@ -359,16 +387,20 @@ function PropertyDetailPage() {
               className="pdp-site-visit-btn"
               onClick={() => setShowSiteVisitModal(true)}
             >
-              <MdOutlineCalendarMonth /> Schedule a Site Visit
+              <MdOutlineCalendarMonth /> {t("property.scheduleVisit")}
             </Button>
           </Section>
         </div>
-      </main>
+      </div>
+
+      <RelatedProperties property={property} t={t} />
+
+      <p className="pdp-disclaimer">{t("property.disclaimer")}</p>
 
       <Modal
         isOpen={showSiteVisitModal}
         onClose={() => setShowSiteVisitModal(false)}
-        title="Schedule a Site Visit"
+        title={t("property.scheduleVisit")}
       >
         <SiteVisitForm
           property={property}
@@ -376,10 +408,6 @@ function PropertyDetailPage() {
         />
       </Modal>
 
-      <WhatsAppButton
-        variant="floating"
-        message={`Hi, I'm interested in "${property.name}" listed on UrbanEdge Living Space. Could you share more details?`}
-      />
     </div>
   );
 }
@@ -406,6 +434,7 @@ const DescriptionText = ({
   isLong,
   showFullDesc,
   toggle,
+  t,
 }) => (
   <>
     <div
@@ -418,15 +447,15 @@ const DescriptionText = ({
       <button
         className="pdp-toggle-btn"
         onClick={toggle}
-        aria-label={`${showFullDesc ? "Collapse" : "Expand"} description`}
+        aria-label={showFullDesc ? t("property.showLess") : t("property.showMore")}
       >
         {showFullDesc ? (
           <>
-            <MdExpandLess /> Show Less
+            <MdExpandLess /> {t("property.showLess")}
           </>
         ) : (
           <>
-            <MdExpandMore /> Show More
+            <MdExpandMore /> {t("property.showMore")}
           </>
         )}
       </button>
@@ -434,22 +463,22 @@ const DescriptionText = ({
   </>
 );
 
-const QuickInfoGrid = ({ property }) => (
+const QuickInfoGrid = ({ property, t, configuration, status }) => (
   <div className="pdp-quick-grid">
     <InfoItem
       icon={<FaBuilding />}
-      label="Property Type"
-      value={formatPropertyType(property.property_type)}
+      label={t("property.type")}
+      value={formatPropertyType(property)}
     />
-    <InfoItem icon={<FaBed />} label="BHK Configuration" value={property.bhk} />
+    <InfoItem icon={<FaBed />} label={t("property.configuration")} value={configuration} />
     <InfoItem
       icon={<FaRuler />}
-      label="Carpet Area"
+      label={t("property.carpetArea")}
       value={property.carpet_area ? `${property.carpet_area} sq. yards` : null}
     />
     <InfoItem
       icon={<MdOutlineCalendarToday />}
-      label="Possession Date"
+      label={t("property.possession")}
       value={
         property.possession
           ? new Date(property.possession).toLocaleDateString("en-UK", {
@@ -462,74 +491,81 @@ const QuickInfoGrid = ({ property }) => (
     />
     <InfoItem
       icon={<FaBuilding />}
-      label="Total Units"
+      label={t("property.totalUnits")}
       value={property.no_of_units}
     />
     <InfoItem
       icon={<FaIdCard />}
-      label="RERA Number"
+      label={t("property.reraNumber")}
       value={property.rera_no}
     />
     <InfoItem
       icon={<FaRegBuilding />}
-      label="Developer"
+      label={t("property.developer")}
       value={property.developed_by}
     />
     <InfoItem
       icon={<FaRulerCombined />}
-      label="Project Area"
+      label={t("property.projectArea")}
       value={property.project_area}
     />
-    <InfoItem icon={<FaBuilding />} label="Towers" value={property.towers} />
-    <InfoItem icon={<FaBuilding />} label="Floors" value={property.floor} />
+    <InfoItem icon={<FaBuilding />} label={t("property.towers")} value={property.towers} />
+    <InfoItem icon={<FaBuilding />} label={t("property.floors")} value={property.floor} />
     <InfoItem
       icon={<MdOutlineLocationOn />}
-      label="View"
+      label={t("property.view")}
       value={property.property_view}
     />
     <InfoItem
       icon={<MdLocalParking />}
-      label="Alloted Parking"
+      label={t("property.parking")}
       value={property.parking}
     />
+    <InfoItem icon={<MdCheckCircle />} label={t("property.status")} value={status} />
   </div>
 );
 
-const InfoItem = ({ icon, label, value }) => (
-  <div className="pdp-info-item">
-    {icon && <span className="pdp-info-icon">{icon}</span>}
-    <div className="pdp-info-content">
-      <strong>{label}</strong>
-      <span>{value || "—"}</span>
+const InfoItem = ({ icon, label, value }) => {
+  if (value === null || value === undefined || value === "") return null;
+  return (
+    <div className="pdp-info-item">
+      {icon && <span className="pdp-info-icon">{icon}</span>}
+      <div className="pdp-info-content">
+        <strong>{label}</strong>
+        <span>{value}</span>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-const QuickFacts = ({ property }) => (
+const QuickFacts = ({ property, t }) => (
   <div className="pdp-quick-facts">
     <InfoCard
       icon={<FaBuilding />}
-      label="Property Type"
-      value={formatPropertyType(property.property_type) || "Coming Soon"}
+      label={t("property.type")}
+      value={formatPropertyType(property)}
     />
     <InfoCard
       icon={<FaRulerCombined />}
-      label="Total Area"
-      value={property.project_area || "Coming Soon"}
+      label={t("property.totalArea")}
+      value={property.project_area}
     />
-    {property.brochure_url && <BrochureDownload url={property.brochure_url} />}
+    {property.brochure_url && <BrochureDownload url={property.brochure_url} label={t("property.brochure")} />}
   </div>
 );
 
-const InfoCard = ({ icon, label, value }) => (
-  <div className="pdp-info-card">
-    <div className="pdp-info-card-icon">{icon}</div>
-    <div className="pdp-info-card-content">
-      <div className="pdp-info-card-label">{label}</div>
-      <div className="pdp-info-card-value">{value || "—"}</div>
+const InfoCard = ({ icon, label, value }) => {
+  if (value === null || value === undefined || value === "") return null;
+  return (
+    <div className="pdp-info-card">
+      <div className="pdp-info-card-icon">{icon}</div>
+      <div className="pdp-info-card-content">
+        <div className="pdp-info-card-label">{label}</div>
+        <div className="pdp-info-card-value">{value}</div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const LocationMap = ({ location }) => {
   const extractSrc = (input) => {
@@ -552,7 +588,7 @@ const LocationMap = ({ location }) => {
   );
 };
 
-const BrochureDownload = ({ url }) => (
+const BrochureDownload = ({ url, label }) => (
   <a
     href={url}
     className="pdp-brochure-download"
@@ -561,16 +597,87 @@ const BrochureDownload = ({ url }) => (
     download
   >
     <FaDownload />
-    <span>Download Property Brochure</span>
+    <span>{label}</span>
   </a>
 );
+
+function normalizeConnectivity(value) {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  if (typeof value === "object") return Object.values(value);
+  if (typeof value !== "string") return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+const NearbyConnectivity = ({ property, t }) => {
+  const structured = normalizeConnectivity(
+    property.nearby_connectivity || property.connectivity,
+  );
+  const narrative = [property.about_location, property.explore_neighbourhood]
+    .filter(Boolean)
+    .map(formatLongText);
+  if (!structured.length && !narrative.length) return null;
+
+  return (
+    <Section title={t("property.nearby")} icon={<MdOutlineLocationOn />}>
+      {structured.length > 0 && (
+        <div className="pdp-connectivity-grid">
+          {structured.map((item, index) => {
+            const landmark = item.landmark || item.name || item.title;
+            if (!landmark) return null;
+            return (
+              <article className="pdp-connectivity-item" key={`${landmark}-${index}`}>
+                <strong>{landmark}</strong>
+                {item.distance && <span>{item.distance}</span>}
+                {(item.travel_time || item.time) && <span>{item.travel_time || item.time}</span>}
+              </article>
+            );
+          })}
+        </div>
+      )}
+      {narrative.length > 0 && (
+        <div className="pdp-connectivity-narrative">
+          <p className="pdp-connectivity-intro">{t("property.nearbyIntro")}</p>
+          {narrative.map((text, index) => <p key={index}>{text}</p>)}
+        </div>
+      )}
+    </Section>
+  );
+};
+
+const RelatedProperties = ({ property, t }) => {
+  const numericBhk = Number(property.bhk_min || property.bhk);
+  const filters = {
+    locality: property.locality || undefined,
+    bhk: Number.isFinite(numericBhk) && numericBhk > 0 ? [String(numericBhk)] : [],
+    pageSize: 5,
+    sortBy: "newest",
+  };
+  const { data } = useProperties(filters, { enabled: Boolean(property.locality) });
+  const related = (data?.data || []).filter((item) => item.id !== property.id).slice(0, 4);
+  if (!related.length) return null;
+
+  return (
+    <section className="pdp-related" aria-labelledby="pdp-related-heading">
+      <h2 id="pdp-related-heading">{t("property.related")}</h2>
+      <div className="pdp-related-grid">
+        {related.map((item) => <PropertyCard key={item.id} property={item} />)}
+      </div>
+    </section>
+  );
+};
 
 const PropertyDetailSkeleton = () => (
   <div className="pdp-page">
     <div className="pdp-skeleton-hero">
       <Skeleton variant="rect" height={360} />
     </div>
-    <main className="pdp-main-grid">
+    <div className="pdp-main-grid">
       <div className="pdp-primary-content">
         <Skeleton variant="text" lines={4} />
         <Skeleton variant="rect" height={160} />
@@ -580,7 +687,7 @@ const PropertyDetailSkeleton = () => (
         <Skeleton variant="rect" height={220} />
         <Skeleton variant="rect" height={260} />
       </div>
-    </main>
+    </div>
   </div>
 );
 

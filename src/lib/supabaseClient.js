@@ -35,23 +35,40 @@ const createFallbackClient = () => {
     error: new Error("Supabase is not configured."),
   });
 
-  const queryBuilder = {
-    select: () => queryBuilder,
-    insert: async () => buildError(),
-    update: () => queryBuilder,
-    delete: () => queryBuilder,
-    eq: () => queryBuilder,
-    in: () => queryBuilder,
-    order: () => queryBuilder,
-    limit: () => queryBuilder,
-    range: () => queryBuilder,
-    single: async () => buildError(),
-    maybeSingle: async () => buildError(),
-    then: (resolve) => Promise.resolve({ data: [], error: null }).then(resolve),
-    catch: (onRejected) =>
-      Promise.resolve({ data: [], error: null }).catch(onRejected),
-    finally: (onFinally) =>
-      Promise.resolve({ data: [], error: null }).finally(onFinally),
+  const createQueryBuilder = () => {
+    let isMutation = false;
+    const readResult = { data: [], error: null, count: 0 };
+    const result = () => (isMutation ? buildError() : readResult);
+    const queryBuilder = {
+      select: () => queryBuilder,
+      insert: () => { isMutation = true; return queryBuilder; },
+      upsert: () => { isMutation = true; return queryBuilder; },
+      update: () => { isMutation = true; return queryBuilder; },
+      delete: () => { isMutation = true; return queryBuilder; },
+      eq: () => queryBuilder,
+      neq: () => queryBuilder,
+      not: () => queryBuilder,
+      is: () => queryBuilder,
+      in: () => queryBuilder,
+      contains: () => queryBuilder,
+      overlaps: () => queryBuilder,
+      ilike: () => queryBuilder,
+      like: () => queryBuilder,
+      gte: () => queryBuilder,
+      lte: () => queryBuilder,
+      gt: () => queryBuilder,
+      lt: () => queryBuilder,
+      or: () => queryBuilder,
+      order: () => queryBuilder,
+      limit: () => queryBuilder,
+      range: () => queryBuilder,
+      single: async () => (isMutation ? buildError() : { data: null, error: null }),
+      maybeSingle: async () => (isMutation ? buildError() : { data: null, error: null }),
+      then: (resolve, reject) => Promise.resolve(result()).then(resolve, reject),
+      catch: (onRejected) => Promise.resolve(result()).catch(onRejected),
+      finally: (onFinally) => Promise.resolve(result()).finally(onFinally),
+    };
+    return queryBuilder;
   };
 
   return {
@@ -64,11 +81,16 @@ const createFallbackClient = () => {
         data: { session: null },
         error: new Error("Supabase is not configured."),
       }),
+      signUp: async () => ({ data: { session: null }, error: new Error("Supabase is not configured.") }),
+      signInWithOAuth: async () => ({ data: null, error: new Error("Supabase is not configured.") }),
+      signInWithOtp: async () => ({ data: null, error: new Error("Supabase is not configured.") }),
+      resetPasswordForEmail: async () => ({ data: null, error: new Error("Supabase is not configured.") }),
+      updateUser: async () => ({ data: null, error: new Error("Supabase is not configured.") }),
       signOut: async () => ({
         error: new Error("Supabase is not configured."),
       }),
     },
-    from: () => queryBuilder,
+    from: () => createQueryBuilder(),
     storage: {
       from: () => ({
         upload: async () => buildError(),

@@ -1,0 +1,98 @@
+.services-page {
+  background: var(--off-white);
+  color: var(--gray-800);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.services-hero {
+  padding: clamp(4rem, 10vw, 7rem) 1.25rem;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, #001638, #062f62);
+}
+
+.services-hero p {
+  margin: 0 0 0.75rem;
+  color: var(--accent-color);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.services-hero h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2rem, 5vw, 3.8rem);
+}
+
+.services-hero span {
+  display: block;
+  max-width: 720px;
+  margin: 1rem auto 0;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.7;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+  gap: 1.25rem;
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.services-card {
+  scroll-margin-top: 96px;
+  padding: 1.75rem;
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.services-card > svg {
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+  color: var(--primary-color);
+  background: color-mix(in srgb, var(--accent-color) 20%, white);
+  border-radius: 12px;
+}
+
+.services-card h2 {
+  margin: 1.15rem 0 0.65rem;
+  color: var(--primary-dark);
+  font-size: 1.25rem;
+}
+
+.services-card p,
+.services-cta p {
+  line-height: 1.7;
+}
+
+.services-card a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.services-cta {
+  padding: clamp(2rem, 5vw, 3.25rem);
+  text-align: center;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.services-cta h2 {
+  margin-top: 0;
+  color: var(--primary-dark);
+}
+
+.services-cta > div {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}

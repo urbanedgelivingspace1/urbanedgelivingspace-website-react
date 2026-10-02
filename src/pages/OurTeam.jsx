@@ -3,7 +3,6 @@ import React from "react";
 import SEOHead from "../components/shared/SEOHead";
 import { organizationSchema, breadcrumbSchema } from "../lib/seo";
 import "./OurTeam.css";
-import vpxgrowth from "../assets/vpxgrowth.png";
 import mantavya from "../assets/mantavya.jpg";
 import lawyer from "../assets/lawyer.jpg";
 import riyaM from "../assets/riyaM.jpeg";
@@ -12,7 +11,8 @@ import bhavik from "../assets/bhavik.jpeg";
 import savan from "../assets/savan.jpeg";
 import yug from "../assets/yug.jpg";
 import chetna from "../assets/chetna.jpeg";
-import { Crown, Users, Headset, Code2, Scale } from "lucide-react";
+import { Crown, Users, Headset, Scale } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 /**
  * OurTeam (Package 4.5, polish pass)
@@ -55,7 +55,7 @@ const teamSections = [
     tag: "Senior Team",
     icon: Crown,
     description:
-      "Founders, senior sales leadership, and advisory expertise guiding the company forward.",
+      "Founder and business lead responsible for UrbanEdge Living Space's direction and customer service standards.",
     members: [
       {
         id: "mantavya-patel",
@@ -63,7 +63,7 @@ const teamSections = [
         role: "CEO & Founder",
         image: mantavya,
         description:
-          "Mantavya leads Urban Edge Living Space with strategic foresight, driving innovation and excellence across all ventures.",
+          "Mantavya leads UrbanEdge Living Space and coordinates the team's residential property work across Gandhinagar and Ahmedabad.",
       },
     ],
   },
@@ -141,7 +141,7 @@ const teamSections = [
     tag: "Legal",
     icon: Scale,
     description:
-      "Dedicated legal counsel ensuring every transaction is compliant, sound, and fully protected.",
+      "Legal coordination and documentation support within the scope agreed for a property matter.",
     members: [
       {
         id: "narendrasinh-m-vihol",
@@ -149,29 +149,35 @@ const teamSections = [
         role: "Legal Expert",
         image: lawyer,
         description:
-          "Narendrasinh ensures full legal compliance and provides expert counsel to protect and strengthen operations.",
-      },
-    ],
-  },
-  {
-    id: "digital-partner",
-    title: "Digital Partner",
-    tag: "Technology",
-    icon: Code2,
-    description:
-      "Technology support that strengthens the online experience for clients and visitors.",
-    members: [
-      {
-        id: "vpxgrowth",
-        name: "VPxGrowth",
-        role: "Web Development Partner",
-        image: vpxgrowth,
-        description:
-          "VPxGrowth is the digital backbone of our website, ensuring seamless performance and a premium user experience.",
+          "Narendrasinh supports documentation review and legal coordination within the agreed professional scope.",
       },
     ],
   },
 ];
+
+const TEAM_COPY = {
+  en: { title: "Our Core Team", subtitle: "Meet the people who lead our vision, client relationships and day-to-day service.", member: "Member", members: "Members" },
+  gu: {
+    title: "અમારી મુખ્ય ટીમ", subtitle: "અમારી દિશા, ક્લાયન્ટ સંબંધો અને દૈનિક સેવા સંભાળતા લોકોને મળો.", member: "સભ્ય", members: "સભ્યો",
+    sections: [
+      ["સ્થાપક અને નેતૃત્વ", "સિનિયર ટીમ", "UrbanEdge Living Spaceની દિશા અને ગ્રાહક સેવા ધોરણો માટે જવાબદાર નેતૃત્વ.", "ગાંધીનગર અને અમદાવાદમાં ટીમનું રેસિડેન્શિયલ પ્રોપર્ટી કાર્ય ગોઠવે છે."],
+      ["જુનિયર/સિનિયર સેલ્સ ટીમ", "સેલ્સ એક્ઝિક્યુટિવ્સ", "પ્રોપર્ટી શોધ, સાઇટ વિઝિટ, વાટાઘાટ અને ફોલોઅપમાં સહાય કરતી સેલ્સ ટીમ.", "ક્લાયન્ટને સ્પષ્ટતા અને માર્કેટ સમજ સાથે પ્રોપર્ટી નિર્ણયોમાં માર્ગદર્શન આપે છે."],
+      ["ક્લાયન્ટ સપોર્ટ ટીમ", "ટેલિકોલર્સ", "ક્લાયન્ટ વાતચીતને સ્પષ્ટ, સમયસર અને ગોઠવેલી રાખતી ટેલિકોલિંગ સહાય.", "સમયસર ફોલોઅપ, સ્પષ્ટ સંકલન અને ધ્યાનપૂર્વકની સેવા આપે છે."],
+      ["કાનૂની નિષ્ણાત", "કાનૂની", "પ્રોપર્ટી બાબત માટે સહમત સ્કોપમાં કાનૂની સંકલન અને દસ્તાવેજ સહાય.", "સહમત વ્યાવસાયિક સ્કોપમાં દસ્તાવેજ સમીક્ષા અને કાનૂની સંકલનમાં સહાય કરે છે."],
+    ],
+    roles: { "CEO & Founder": "CEO અને સ્થાપક", "Co-Founder & Senior Sales Executive": "સહ-સ્થાપક અને સિનિયર સેલ્સ એક્ઝિક્યુટિવ", "Senior Sales Executive": "સિનિયર સેલ્સ એક્ઝિક્યુટિવ", "Junior Sales Executive": "જુનિયર સેલ્સ એક્ઝિક્યુટિવ", Telecaller: "ટેલિકોલર", "Legal Expert": "કાનૂની નિષ્ણાત" },
+  },
+  hi: {
+    title: "हमारी मुख्य टीम", subtitle: "हमारी दिशा, क्लाइंट संबंध और रोजमर्रा की सेवा संभालने वाले लोगों से मिलें।", member: "सदस्य", members: "सदस्य",
+    sections: [
+      ["संस्थापक और नेतृत्व", "सीनियर टीम", "UrbanEdge Living Space की दिशा और ग्राहक सेवा मानकों के लिए जिम्मेदार नेतृत्व।", "गांधीनगर और अहमदाबाद में टीम के रेजिडेंशियल प्रॉपर्टी कार्य का समन्वय करते हैं।"],
+      ["जूनियर/सीनियर सेल्स टीम", "सेल्स एक्जीक्यूटिव", "प्रॉपर्टी खोज, साइट विजिट, बातचीत और फॉलो-अप में सहायता करने वाली सेल्स टीम।", "क्लाइंट को स्पष्टता और मार्केट समझ के साथ प्रॉपर्टी निर्णयों में मार्गदर्शन देते हैं।"],
+      ["क्लाइंट सपोर्ट टीम", "टेलीकॉलर", "क्लाइंट संवाद को साफ, समय पर और व्यवस्थित रखने वाली टेलीकॉलिंग सहायता।", "समय पर फॉलो-अप, साफ समन्वय और ध्यानपूर्ण सेवा देते हैं।"],
+      ["कानूनी विशेषज्ञ", "कानूनी", "प्रॉपर्टी मामले के सहमत दायरे में कानूनी समन्वय और दस्तावेज सहायता।", "सहमत पेशेवर दायरे में दस्तावेज समीक्षा और कानूनी समन्वय में सहायता करते हैं।"],
+    ],
+    roles: { "CEO & Founder": "CEO और संस्थापक", "Co-Founder & Senior Sales Executive": "सह-संस्थापक और सीनियर सेल्स एक्जीक्यूटिव", "Senior Sales Executive": "सीनियर सेल्स एक्जीक्यूटिव", "Junior Sales Executive": "जूनियर सेल्स एक्जीक्यूटिव", Telecaller: "टेलीकॉलर", "Legal Expert": "कानूनी विशेषज्ञ" },
+  },
+};
 
 function getInitials(name) {
   return name
@@ -184,6 +190,8 @@ function getInitials(name) {
 }
 
 const OurTeam = () => {
+  const { language } = useLanguage();
+  const copy = TEAM_COPY[language] || TEAM_COPY.en;
   const breadcrumbItems = [
     { name: "Home", path: "/" },
     { name: "Our Team", path: "/our-team" },
@@ -200,20 +208,20 @@ const OurTeam = () => {
 
       <div className="our-team-container">
         <div className="our-team-header">
-          <h1 className="our-team-title">Our Core Team</h1>
+          <h1 className="our-team-title">{copy.title}</h1>
           <p className="our-team-subtitle">
-            Meet the people who lead our vision, client relationships, and
-            day-to-day service.
+            {copy.subtitle}
           </p>
         </div>
 
         <div className="team-sections">
-          {teamSections.map((section) => {
+          {teamSections.map((section, sectionIndex) => {
             const TierIcon = section.icon;
+            const sectionCopy = copy.sections?.[sectionIndex];
             const memberLabel =
               section.members.length === 1
-                ? "1 Member"
-                : `${section.members.length} Members`;
+                ? `1 ${copy.member}`
+                : `${section.members.length} ${copy.members}`;
 
             return (
               <section
@@ -228,19 +236,19 @@ const OurTeam = () => {
                     </div>
                     <div className="team-group-heading-text">
                       {section.tag ? (
-                        <span className="team-group-tag">{section.tag}</span>
+                        <span className="team-group-tag">{sectionCopy?.[1] || section.tag}</span>
                       ) : null}
                       <h2
                         className="team-group-title"
                         id={`${section.id}-heading`}
                       >
-                        {section.title}
+                        {sectionCopy?.[0] || section.title}
                       </h2>
                     </div>
                     <span className="team-group-count">{memberLabel}</span>
                   </div>
                   <p className="team-group-description">
-                    {section.description}
+                    {sectionCopy?.[2] || section.description}
                   </p>
                 </div>
 
@@ -270,8 +278,8 @@ const OurTeam = () => {
                     </div>
                     <div className="team-card-details">
                       <h3 className="member-name">{member.name}</h3>
-                      <p className="member-role">{member.role}</p>
-                      <p className="member-description">{member.description}</p>
+                      <p className="member-role">{copy.roles?.[member.role] || member.role}</p>
+                      <p className="member-description">{sectionCopy?.[3] || member.description}</p>
                     </div>
                   </div>
                 ))}

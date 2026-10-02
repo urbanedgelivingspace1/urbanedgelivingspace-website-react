@@ -46,13 +46,13 @@ const ContactUs = () => {
       <section className="contact-form-section container">
         <div className="contact-page-grid">
           <div className="contact-form-card">
-            <h2>Tell us what you need</h2>
-            <p>Share your property requirement and our team can respond with the next practical step.</p>
-            <ContactForm />
+            <h2>{t('home.shareRequirement')}</h2>
+            <p>{t('contact.subtitle')}</p>
+            <ContactForm heading={null} description={null} />
           </div>
 
           <aside className="contact-details" aria-labelledby="contact-info-heading">
-            <p className="contact-section-kicker">Direct contact</p>
+            <p className="contact-section-kicker">{t('contact.information')}</p>
             <h2 id="contact-info-heading">{t('contact.information')}</h2>
 
             <div className="contact-detail-list">
@@ -92,7 +92,7 @@ const ContactUs = () => {
         <div className="contact-map-section">
           <div className="contact-map-heading">
             <div>
-              <p className="contact-section-kicker">Visit our office</p>
+              <p className="contact-section-kicker">{t('contact.office')}</p>
               <h2>{t('contact.office')}</h2>
             </div>
             <Button

@@ -1,10 +1,12 @@
 // src/components/forms/SiteVisitForm.jsx
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MdCalendarToday } from 'react-icons/md';
 import { supabase } from '../../lib/supabaseClient';
 import Input from '../ui/Input';
 import Textarea from '../ui/Textarea';
 import Button from '../ui/Button';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './SiteVisitForm.css';
 
 /**
@@ -24,6 +26,7 @@ import './SiteVisitForm.css';
  * `site_visits` table with its own status pipeline.
  */
 function SiteVisitForm({ property, onSuccess }) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -48,10 +51,12 @@ function SiteVisitForm({ property, onSuccess }) {
 
     try {
       if (!formData.name || !formData.phone || !formData.preferredDate) {
-        throw new Error('Please fill in your name, phone, and preferred date.');
+        setErrorMessage(t('forms.required'));
+        return;
       }
       if (formData.phone.length < 8) {
-        throw new Error('Please enter a valid phone number.');
+        setErrorMessage(t('forms.invalidPhone'));
+        return;
       }
 
       const visitLine = `Site visit requested for ${formData.preferredDate}${
@@ -70,14 +75,16 @@ function SiteVisitForm({ property, onSuccess }) {
       ]);
 
       if (error) {
-        throw new Error(error.message);
+        console.error('Site visit submission failed:', error);
+        throw new Error('submission_failed');
       }
 
-      setSuccessMessage('Your site visit request has been sent! We\u2019ll confirm shortly.');
+      setSuccessMessage(t('forms.visitSuccess'));
       setFormData({ name: '', phone: '', preferredDate: '', preferredTime: '', message: '' });
       onSuccess?.();
     } catch (err) {
-      setErrorMessage(err.message || 'Something went wrong.');
+      console.error('Site visit request error:', err);
+      setErrorMessage(t('forms.submitError'));
     } finally {
       setSubmitting(false);
     }
@@ -86,27 +93,29 @@ function SiteVisitForm({ property, onSuccess }) {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <form className="site-visit-form" onSubmit={handleSubmit} aria-label="Schedule a site visit form">
+    <form className="site-visit-form" onSubmit={handleSubmit} aria-label={t('forms.visitForm')}>
       <Input
-        label="Full Name"
+        label={t('forms.fullName')}
         name="name"
         value={formData.name}
         onChange={handleChange}
-        placeholder="Your full name"
+        placeholder={t('forms.namePlaceholder')}
         required
+        autoComplete="name"
       />
       <Input
-        label="Phone Number"
+        label={t('forms.phone')}
         name="phone"
         type="tel"
         value={formData.phone}
         onChange={handleChange}
-        placeholder="Your phone number"
+        placeholder={t('forms.phonePlaceholder')}
         required
+        autoComplete="tel"
       />
       <div className="site-visit-form__row">
         <Input
-          label="Preferred Date"
+          label={t('forms.preferredDate')}
           name="preferredDate"
           type="date"
           min={today}
@@ -115,7 +124,7 @@ function SiteVisitForm({ property, onSuccess }) {
           required
         />
         <Input
-          label="Preferred Time"
+          label={t('forms.preferredTime')}
           name="preferredTime"
           type="time"
           value={formData.preferredTime}
@@ -123,17 +132,21 @@ function SiteVisitForm({ property, onSuccess }) {
         />
       </div>
       <Textarea
-        label="Additional Notes"
+        label={t('forms.notes')}
         name="message"
         value={formData.message}
         onChange={handleChange}
-        placeholder="Anything else we should know?"
+        placeholder={t('forms.notesPlaceholder')}
         rows={3}
       />
 
       <Button type="submit" fullWidth loading={submitting}>
-        <MdCalendarToday /> {submitting ? 'Sending...' : 'Request Site Visit'}
+        <MdCalendarToday /> {submitting ? t('forms.sending') : t('forms.requestVisit')}
       </Button>
+
+      <p className="form-privacy-notice">
+        {t('forms.privacyPrefix')} <Link to="/privacy">{t('common.privacyPolicy')}</Link>.
+      </p>
 
       {successMessage && (
         <p className="site-visit-form__success" role="alert">

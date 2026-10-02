@@ -24,6 +24,7 @@
 html {
   font-size: 100%;
   scroll-behavior: smooth;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,6 +36,38 @@ body {
   line-height: 1.6;
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   overflow-x: hidden;
+}
+
+.form-privacy-notice {
+  margin: 0.75rem 0 0;
+  color: var(--gray-600);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.form-privacy-notice a {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.route-loading {
+  min-height: 45vh;
+  display: grid;
+  place-items: center;
+  color: var(--gray-700);
+  font-weight: 700;
 }
 
 img, video {
