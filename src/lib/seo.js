@@ -2,6 +2,7 @@
 // Shared SEO and public business constants.
 
 export const SITE_NAME = "UrbanEdge Living Space";
+export const SITE_URL = "https://www.urbanedgelivingspace.com";
 
 export const DEFAULT_TITLE =
   "UrbanEdge Living Space | Real Estate in Gandhinagar & Ahmedabad";
@@ -10,7 +11,7 @@ export const DEFAULT_DESCRIPTION =
   "UrbanEdge Living Space helps buyers, tenants, investors and property owners discover residential real estate across Gandhinagar and Ahmedabad with direct local support.";
 
 export const DEFAULT_LOGO_IMAGE = "/urbanedge-logo-640.webp";
-export const DEFAULT_OG_IMAGE = DEFAULT_LOGO_IMAGE;
+export const DEFAULT_OG_IMAGE = "/og-image.png";
 
 // Canonical public business details. These values are consolidated from the
 // contact details already used by the repository; do not duplicate them in
@@ -39,10 +40,7 @@ const DEFAULT_TWITTER_CARD = "summary_large_image";
 export function getSiteUrl() {
   const configured = import.meta.env.VITE_SITE_URL?.trim();
   if (configured) return configured.replace(/\/+$/, "");
-  if (typeof window !== "undefined" && window.location?.origin) {
-    return window.location.origin;
-  }
-  return "";
+  return SITE_URL;
 }
 
 export function resolveUrl(path) {
@@ -107,6 +105,16 @@ export function organizationSchema() {
       postalCode: ORGANIZATION.postalCode,
       addressCountry: ORGANIZATION.addressCountry,
     },
+  };
+}
+
+export function websiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    alternateName: ["UrbanEdge", "Urban Edge Living Space"],
+    url: `${getSiteUrl()}/`,
   };
 }
 

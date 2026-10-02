@@ -56,12 +56,14 @@ function SEOHead({
       <meta property="og:description" content={meta.description} />
       <meta property="og:url" content={meta.canonical} />
       {meta.image && <meta property="og:image" content={meta.image} />}
+      {meta.image && <meta property="og:image:alt" content={meta.title} />}
 
       {/* Twitter Card */}
       <meta name="twitter:card" content={meta.twitterCard} />
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
       {meta.image && <meta name="twitter:image" content={meta.image} />}
+      {meta.image && <meta name="twitter:image:alt" content={meta.title} />}
 
       {/* Structured data */}
       {schemas.map((schema, index) => (

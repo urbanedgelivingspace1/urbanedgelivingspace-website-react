@@ -28,7 +28,7 @@ import SEOHead from "../components/shared/SEOHead";
 import Badge from "../components/ui/Badge";
 import Button from "../components/ui/Button";
 import Skeleton from "../components/ui/Skeleton";
-import { ORGANIZATION, organizationSchema } from "../lib/seo";
+import { ORGANIZATION, organizationSchema, websiteSchema } from "../lib/seo";
 import { useLanguage } from "../i18n/LanguageContext";
 import { supabase } from "../lib/supabaseClient";
 import "./HomePage.css";
@@ -358,7 +358,7 @@ const HomePage = () => {
         title="Residential Real Estate in Gandhinagar & Ahmedabad"
         description="Find apartments, villas, penthouses, rentals and residential property opportunities in Gandhinagar and Ahmedabad with local support from UrbanEdge Living Space."
         path="/"
-        jsonLd={organizationSchema()}
+        jsonLd={[organizationSchema(), websiteSchema()]}
       />
       <HeroSection />
 
