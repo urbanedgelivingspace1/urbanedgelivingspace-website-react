@@ -85,19 +85,16 @@ const NavigationBar = () => {
   }, [menuOpen]);
 
   const primaryLinks = [
-    { to: "/properties?listing=buy", label: t("nav.buy") },
-    { to: "/properties?listing=rent", label: t("nav.rent") },
-    { to: "/properties", label: t("nav.properties") },
+    { to: "/properties", label: t("nav.exploreProperties") },
     { to: "/services", label: t("nav.services") },
     { to: "/blog", label: t("nav.guides") },
-    { to: "/contact-us", label: t("nav.contact") },
   ];
   const mobileLinks = [
     { to: "/", label: t("nav.home"), end: true },
-    ...primaryLinks.slice(0, 5),
+    ...primaryLinks,
     { to: "/about-us", label: t("nav.about") },
     { to: "/our-team", label: t("navigation.team") },
-    primaryLinks[5],
+    { to: "/contact-us", label: t("nav.contact") },
   ];
 
   return (
@@ -124,7 +121,7 @@ const NavigationBar = () => {
 
           <div className="navbar-desktop-actions">
             <ul className="navbar-menu navbar-menu--desktop">
-              {primaryLinks.slice(0, 5).map(({ to, label, end }) => (
+              {primaryLinks.map(({ to, label, end }) => (
                 <li key={to}>
                   <NavLink
                     to={to}
