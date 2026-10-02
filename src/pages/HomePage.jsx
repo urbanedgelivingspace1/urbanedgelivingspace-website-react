@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  Search,
   Phone,
   ArrowRight,
   Building2,
+  MapPin,
   Home,
   KeyRound,
   Handshake,
@@ -130,6 +132,7 @@ const HeroSection = () => {
   const [activeListingType, setActiveListingType] = useState(
     HERO_LISTING_TABS[0]?.value ?? "buy",
   );
+  const [keyword, setKeyword] = useState("");
   const [locality, setLocality] = useState("");
   const [bhk, setBhk] = useState("");
   const [budgetIndex, setBudgetIndex] = useState("");
@@ -158,6 +161,7 @@ const HeroSection = () => {
     const budget = budgetIndex === "" ? {} : HERO_BUDGET_OPTIONS[Number(budgetIndex)] || {};
     const params = propertyFiltersToParams({
       listingType: activeListingType,
+      search: keyword.trim() || undefined,
       locality: locality || undefined,
       bhk: bhk ? [bhk] : [],
       ...budget,
@@ -181,7 +185,7 @@ const HeroSection = () => {
       />
       <div className="homepage-hero-overlay" />
       <div className="homepage-hero-content">
-        <p className="homepage-hero-eyebrow">{t("hero.eyebrow")}</p>
+        <p className="homepage-hero-eyebrow">UrbanEdge Living Space</p>
         <h1 id="homepage-hero-title">{t("hero.title")}</h1>
         <p>{t("hero.subtitle")}</p>
 
@@ -215,9 +219,34 @@ const HeroSection = () => {
               <option value="">{t("filters.anyBudget")}</option>
               {HERO_BUDGET_OPTIONS.map((item, index) => <option value={index} key={index}>{item.label[language] || item.label.en}</option>)}
             </select>
+            <div className="homepage-hero-keyword">
+              <Search size={18} aria-hidden="true" />
+              <input
+                type="search"
+                value={keyword}
+                onChange={(event) => setKeyword(event.target.value)}
+                placeholder={t("hero.searchPlaceholder")}
+                aria-label={t("hero.searchPlaceholder")}
+              />
+            </div>
             <Button type="submit" variant="primary">{t("hero.search")}</Button>
           </div>
         </form>
+
+        <div className="homepage-hero-stats" aria-label="UrbanEdge service highlights">
+          <div className="homepage-hero-stat">
+            <MapPin className="homepage-hero-stat-icon-svg" aria-hidden="true" />
+            <span className="homepage-hero-stat-label">{t("hero.local")}</span>
+          </div>
+          <div className="homepage-hero-stat">
+            <MessagesSquare className="homepage-hero-stat-icon-svg" aria-hidden="true" />
+            <span className="homepage-hero-stat-label">{t("hero.guidance")}</span>
+          </div>
+          <div className="homepage-hero-stat">
+            <CalendarCheck2 className="homepage-hero-stat-icon-svg" aria-hidden="true" />
+            <span className="homepage-hero-stat-label">{t("common.scheduleVisit")}</span>
+          </div>
+        </div>
       </div>
     </section>
   );
